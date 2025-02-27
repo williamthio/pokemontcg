@@ -77,55 +77,76 @@ def calculate_card_distribution(all_cards, deck_count):
     return distributions
 
 
-def generate_html_report(card_distributions, deck_info):
-    html_content = """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Card Distribution Report</title>
-        <style>
-            body { font-family: Arial, sans-serif; }
-            .container { max-width: 1280px; margin: 0 auto; padding: 20px; }
-            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-            th { background-color: #f2f2f2; }
-            .card-table { width: 30%; display: inline-block; vertical-align: top; margin-right: 2%; margin-bottom: 20px; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Card Distribution Report</h1>
-    """
+def generate_markdown_report(card_distributions, deck_info):
+    markdown_content = """
+# Pokémon TCG Deck Analysis
 
-    for section_type, cards in card_distributions.items():
-        html_content += f"<div class='card-table'><h2>{section_type}</h2><table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
-        for card, distribution in cards.items():
-            card_name, card_url = card.split(" (")
-            card_url = card_url.rstrip(")")
-            html_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
-            for i, (count, percentage) in enumerate(sorted(distribution.items(), key=lambda x: -x[1])):
-                if i > 0:
-                    html_content += "<tr>"
-                html_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
-        html_content += "</table></div>"
+This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information.
 
-    html_content += """
-            <h2>Deck Information</h2>
-            <table>
-                <tr><th>Tournament URL</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck URL</th><th>Rank</th></tr>
-    """
+## Card Distribution Report
+
+The card distribution report is generated from the tournament decks data. You can view the report below:
+
+<div style="display: flex;">
+<div style="flex: 1; margin-right: 20px;">
+"""
+
+    # Pokémon Table
+    markdown_content += "\n\n### Pokémon\n\n"
+    markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
+    for card, distribution in card_distributions["Pokémon"].items():
+        card_name, card_url = card.split(" (")
+        card_url = card_url.rstrip(")")
+        markdown_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
+        for i, (count, percentage) in enumerate(sorted(distribution.items(), key=lambda x: -x[1])):
+            if i > 0:
+                markdown_content += "<tr>"
+            markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
+    markdown_content += "</table>\n"
+
+    # Energy Table
+    markdown_content += "\n\n### Energy\n\n"
+    markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
+    for card, distribution in card_distributions["Energy"].items():
+        card_name, card_url = card.split(" (")
+        card_url = card_url.rstrip(")")
+        markdown_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
+        for i, (count, percentage) in enumerate(sorted(distribution.items(), key=lambda x: -x[1])):
+            if i > 0:
+                markdown_content += "<tr>"
+            markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
+    markdown_content += "</table>\n"
+
+    markdown_content += "</div><div style='flex: 1;'>"
+
+    # Trainer Table
+    markdown_content += "\n\n### Trainer\n\n"
+    markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
+    for card, distribution in card_distributions["Trainer"].items():
+        card_name, card_url = card.split(" (")
+        card_url = card_url.rstrip(")")
+        markdown_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
+        for i, (count, percentage) in enumerate(sorted(distribution.items(), key=lambda x: -x[1])):
+            if i > 0:
+                markdown_content += "<tr>"
+            markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
+    markdown_content += "</table>\n"
+
+    markdown_content += "</div></div>"
+
+    markdown_content += """
+
+## Deck Information
+
+<table>
+<tr><th>Rank</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck URL</th></tr>
+"""
     for info in deck_info:
-        html_content += f"<tr><td><a href='{info[0]}'>{info[0]}</a></td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>{info[4]}</a></td><td>{info[5]}</td></tr>"
+        markdown_content += f"<tr><td>{info[5]}</td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>{info[4]}</a></td></tr>"
 
-    html_content += """
-            </table>
-        </div>
-    </body>
-    </html>
-    """
-    return html_content
+    markdown_content += "</table>"
+
+    return markdown_content
 
 
 if __name__ == "__main__":
@@ -134,7 +155,7 @@ if __name__ == "__main__":
 
     all_cards, deck_count, deck_info = parse_decks(file_content, MAIN_POKEMON, SECONDARY_POKEMON, MIN_RANK)
     card_distributions = calculate_card_distribution(all_cards, deck_count)
-    html_report = generate_html_report(card_distributions, deck_info)
+    markdown_report = generate_markdown_report(card_distributions, deck_info)
 
-    with open("card_distribution_report.html", "w", encoding="utf-8") as f:
-        f.write(html_report)
+    with open("README.md", "w", encoding="utf-8") as f:
+        f.write(markdown_report)
