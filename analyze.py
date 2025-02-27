@@ -2,8 +2,8 @@ import csv
 from collections import defaultdict, Counter
 
 MAIN_POKEMON = "charizard"
-SECONDARY_POKEMON = "dudunsparce"
-MIN_RANK = 4
+SECONDARY_POKEMON = None
+MIN_RANK = 16
 
 def parse_deck_section(cards):
     parsed_cards = []
