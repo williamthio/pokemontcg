@@ -1,6 +1,9 @@
 import csv
 from collections import defaultdict, Counter
 
+MAIN_POKEMON = "charizard"
+SECONDARY_POKEMON = "dudunsparse"
+MIN_RANK = 4
 
 def parse_deck_section(cards):
     parsed_cards = []
@@ -74,24 +77,10 @@ def calculate_card_distribution(all_cards, deck_count):
 
 
 if __name__ == "__main__":
-    mainpokemon_filter = None
-    secondarypokemon_filter = None
-
-    # mainpokemon_filter = 'noctowl'
-    mainpokemon_filter = 'charizard'
-    # mainpokemon_filter = 'dragapult'
-    # secondarypokemon_filter = 'charizard'
-    # secondarypokemon_filter = 'noctowl'
-    # secondarypokemon_filter = 'pidgeot'
-    # secondarypokemon_filter = 'dusknoir'
-    secondarypokemon_filter = 'dudunsparse'
-
-    min_rank = 4
-
     with open("tournament_decks.csv", "r", encoding="utf-8") as f:
         file_content = f.read()
 
-    all_cards, deck_count = parse_decks(file_content, mainpokemon_filter, secondarypokemon_filter, min_rank)
+    all_cards, deck_count = parse_decks(file_content, MAIN_POKEMON, SECONDARY_POKEMON, MIN_RANK)
     card_distributions = calculate_card_distribution(all_cards, deck_count)
 
     for section_type, cards in card_distributions.items():
