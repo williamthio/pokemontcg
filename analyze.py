@@ -104,10 +104,12 @@ The card distribution report is generated from the tournament decks data. You ca
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    # Energy Table
-    markdown_content += "\n\n### Energy\n\n"
+    markdown_content += "</div><div style='flex: 1;'>"
+
+     # Trainer Table
+    markdown_content += "\n\n### Trainer\n\n"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
-    for card, distribution in card_distributions["Energy"].items():
+    for card, distribution in card_distributions["Trainer"].items():
         card_name, card_url = card.split(" (")
         card_url = card_url.rstrip(")")
         markdown_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
@@ -119,10 +121,10 @@ The card distribution report is generated from the tournament decks data. You ca
 
     markdown_content += "</div><div style='flex: 1;'>"
 
-    # Trainer Table
-    markdown_content += "\n\n### Trainer\n\n"
+    # Energy Table
+    markdown_content += "\n\n### Energy\n\n"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
-    for card, distribution in card_distributions["Trainer"].items():
+    for card, distribution in card_distributions["Energy"].items():
         card_name, card_url = card.split(" (")
         card_url = card_url.rstrip(")")
         markdown_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
