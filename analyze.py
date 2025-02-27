@@ -23,6 +23,7 @@ def parse_decks(file_content, main_pokemon=None, secondary_pokemon=None, min_ran
         "Energy": defaultdict(list)
     }
     deck_count = 0
+    deck_info = []
 
     for row in reader:
         if main_pokemon and secondary_pokemon and (row['mainpokemon'].lower() != main_pokemon.lower() or row['secondarypokemon'].lower() != secondary_pokemon.lower()):
@@ -32,7 +33,7 @@ def parse_decks(file_content, main_pokemon=None, secondary_pokemon=None, min_ran
         if min_rank and int(row['rank']) > min_rank:
             continue
 
-        print([v for k, v in row.items() if k != 'cards'])
+        deck_info.append([v for k, v in row.items() if k != 'cards'])
 
         deck_count += 1
         deck_cards = {
@@ -50,9 +51,9 @@ def parse_decks(file_content, main_pokemon=None, secondary_pokemon=None, min_ran
                 count = deck_cards[section_type][card_name]
                 all_cards[section_type][card_name].append(count)
     
-    print(f"\nFound {deck_count} decks")
+    print(f"Found {deck_count} decks")
 
-    return all_cards, deck_count
+    return all_cards, deck_count, deck_info
 
 
 def calculate_card_distribution(all_cards, deck_count):
@@ -76,17 +77,64 @@ def calculate_card_distribution(all_cards, deck_count):
     return distributions
 
 
+def generate_html_report(card_distributions, deck_info):
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Card Distribution Report</title>
+        <style>
+            body { font-family: Arial, sans-serif; }
+            .container { max-width: 1280px; margin: 0 auto; padding: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f2f2f2; }
+            .card-table { width: 30%; display: inline-block; vertical-align: top; margin-right: 2%; margin-bottom: 20px; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Card Distribution Report</h1>
+    """
+
+    for section_type, cards in card_distributions.items():
+        html_content += f"<div class='card-table'><h2>{section_type}</h2><table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
+        for card, distribution in cards.items():
+            card_name, card_url = card.split(" (")
+            card_url = card_url.rstrip(")")
+            html_content += f"<tr><td rowspan='{len(distribution)}'><a href='{card_url}'>{card_name}</a></td>"
+            for i, (count, percentage) in enumerate(sorted(distribution.items(), key=lambda x: -x[1])):
+                if i > 0:
+                    html_content += "<tr>"
+                html_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
+        html_content += "</table></div>"
+
+    html_content += """
+            <h2>Deck Information</h2>
+            <table>
+                <tr><th>Tournament URL</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck URL</th><th>Rank</th></tr>
+    """
+    for info in deck_info:
+        html_content += f"<tr><td><a href='{info[0]}'>{info[0]}</a></td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>{info[4]}</a></td><td>{info[5]}</td></tr>"
+
+    html_content += """
+            </table>
+        </div>
+    </body>
+    </html>
+    """
+    return html_content
+
+
 if __name__ == "__main__":
     with open("tournament_decks.csv", "r", encoding="utf-8") as f:
         file_content = f.read()
 
-    all_cards, deck_count = parse_decks(file_content, MAIN_POKEMON, SECONDARY_POKEMON, MIN_RANK)
+    all_cards, deck_count, deck_info = parse_decks(file_content, MAIN_POKEMON, SECONDARY_POKEMON, MIN_RANK)
     card_distributions = calculate_card_distribution(all_cards, deck_count)
+    html_report = generate_html_report(card_distributions, deck_info)
 
-    for section_type, cards in card_distributions.items():
-        print(f"\n{section_type}:")
-        for card, distribution in cards.items():
-            print(card)
-            for count, percentage in sorted(distribution.items(),
-                                            key=lambda x: -x[1]):
-                print(f"  - {percentage:.3f} use {count}")
+    with open("card_distribution_report.html", "w", encoding="utf-8") as f:
+        f.write(html_report)
