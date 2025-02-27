@@ -22,7 +22,7 @@ def parse_decks(file_content, main_pokemon=None, secondary_pokemon=None, min_ran
     deck_count = 0
 
     for row in reader:
-        if main_pokemon and row['mainpokemon'].lower() != main_pokemon.lower() and secondary_pokemon and row['secondarypokemon'].lower() != secondary_pokemon.lower():
+        if main_pokemon and secondary_pokemon and (row['mainpokemon'].lower() != main_pokemon.lower() or row['secondarypokemon'].lower() != secondary_pokemon.lower()):
             continue
         if main_pokemon and row['mainpokemon'].lower() != main_pokemon.lower() and row['secondarypokemon'].lower() != main_pokemon.lower():
             continue
@@ -84,6 +84,7 @@ if __name__ == "__main__":
     # secondarypokemon_filter = 'noctowl'
     # secondarypokemon_filter = 'pidgeot'
     # secondarypokemon_filter = 'dusknoir'
+    secondarypokemon_filter = 'dudunsparse'
 
     min_rank = 4
 
