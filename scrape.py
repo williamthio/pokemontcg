@@ -92,10 +92,14 @@ def main():
     num_threads = os.cpu_count() or 5  # Use max threads available
 
     completed_tournaments = load_progress()
+
+    file_exists = os.path.isfile("tournament_decks.csv")
     
     with open("tournament_decks.csv", "a", newline="", encoding="utf-8") as csv_file:
         csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(["tournamenturl", "playername", "mainpokemon", "secondarypokemon", "deckurl", "rank", "cards"])
+
+        if not file_exists:
+            csv_writer.writerow(["tournamenturl", "playername", "mainpokemon", "secondarypokemon", "deckurl", "rank", "cards"])
         
         tournament_ids = [tid for tid in range(start_tournament_id, end_tournament_id + 1) if tid not in completed_tournaments]
         
