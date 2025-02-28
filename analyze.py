@@ -1,3 +1,4 @@
+import os
 import csv
 from collections import defaultdict, Counter
 
@@ -158,7 +159,9 @@ if __name__ == "__main__":
     all_cards, deck_count, deck_info = parse_decks(file_content, MAIN_POKEMON, SECONDARY_POKEMON, MIN_RANK)
     card_distributions = calculate_card_distribution(all_cards, deck_count)
     markdown_report = generate_markdown_report(card_distributions, deck_info)
+
     report_file = f"reports/{MAIN_POKEMON}_{SECONDARY_POKEMON}_{MIN_RANK}.md"
+    os.makedirs(os.path.dirname(report_file), exist_ok=True)
 
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(markdown_report)
