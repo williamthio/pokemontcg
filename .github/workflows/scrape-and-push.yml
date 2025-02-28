@@ -6,7 +6,9 @@ on:
       end_tournament_id:
         description: 'End Tournament ID'
         required: true
-        default: 2107
+
+permissions:
+  contents: write
 
 jobs:
   run-scrape:
