@@ -3,6 +3,7 @@
 This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information.
 
 ## Available Reports
+- [None_None_4.md](reports/None_None_4.md)
 - [charizard_None_16.md](reports/charizard_None_16.md)
 - [charizard_pidgeot_4.md](reports/charizard_pidgeot_4.md)
 - [dragapult_dusknoir_4.md](reports/dragapult_dusknoir_4.md)
