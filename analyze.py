@@ -4,7 +4,7 @@ from collections import defaultdict, Counter
 
 MAIN_POKEMON = "noctowl"
 SECONDARY_POKEMON = "charizard"
-MIN_RANK = 4
+MIN_RANK = 8
 
 def parse_deck_section(cards):
     parsed_cards = []
