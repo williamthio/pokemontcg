@@ -24,8 +24,19 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Generate README
+    - name: Generate report
       run: python analyze.py
+
+    - name: Update README with report links
+      run: |
+        echo "# Pokémon TCG Deck Analysis" > README.md
+        echo "" >> README.md
+        echo "This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information." >> README.md
+        echo "" >> README.md
+        echo "## Available Reports" >> README.md
+        for file in reports/*.md; do
+          echo "- [$(basename $file)]($file)" >> README.md
+        done
 
     - name: Commit and push changes
       run: |

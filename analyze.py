@@ -80,14 +80,6 @@ def calculate_card_distribution(all_cards, deck_count):
 
 def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
-# Pokémon TCG Deck Analysis
-
-This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information.
-
-## Card Distribution Report
-
-The card distribution report is generated from the tournament decks data. You can view the report below:
-
 <div style="display: flex;">
 <div style="flex: 1; margin-right: 10px;">
 """
@@ -161,7 +153,6 @@ if __name__ == "__main__":
     markdown_report = generate_markdown_report(card_distributions, deck_info)
 
     report_file = f"reports/{MAIN_POKEMON}_{SECONDARY_POKEMON}_{MIN_RANK}.md"
-    os.makedirs(os.path.dirname(report_file), exist_ok=True)
 
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(markdown_report)

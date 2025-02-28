@@ -38,9 +38,6 @@ def scrape_tournament(tournament_id):
         ranking = columns[0].text.strip()
         player_name = columns[1].text.strip()
         deck_link = columns[2].find("a")
-
-        # if int(ranking) > 8:
-        #     break
         
         if not deck_link:
             continue
