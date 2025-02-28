@@ -104,7 +104,7 @@ The card distribution report is generated from the tournament decks data. You ca
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1;'>"
+    markdown_content += "</div><div style='flex: 1; margin-right: 20px;'>"
 
      # Trainer Table
     markdown_content += "\n\n### Trainer\n\n"
@@ -119,7 +119,7 @@ The card distribution report is generated from the tournament decks data. You ca
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1;'>"
+    markdown_content += "</div><div style='flex: 1; margin-right: 20px;'>"
 
     # Energy Table
     markdown_content += "\n\n### Energy\n\n"
