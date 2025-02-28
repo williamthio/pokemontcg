@@ -36,3 +36,5 @@ jobs:
         git add tournament_decks.csv progress.txt
         git commit -m 'Update tournament decks and progress'
         git push origin main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
