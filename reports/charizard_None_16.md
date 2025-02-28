@@ -1,12 +1,4 @@
 
-# Pokémon TCG Deck Analysis
-
-This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information.
-
-## Card Distribution Report
-
-The card distribution report is generated from the tournament decks data. You can view the report below:
-
 <div style="display: flex;">
 <div style="flex: 1; margin-right: 10px;">
 
