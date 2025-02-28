@@ -81,11 +81,11 @@ def calculate_card_distribution(all_cards, deck_count):
 def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
 <div style="display: flex;">
-<div style="flex: 1; margin-right: 10px;">
+<div style="flex: 1; margin-right: 10px;"><table><tr><td>
 """
 
     # Pokémon Table
-    markdown_content += "<span>Pokémon</span>"
+    markdown_content += "<h3>Pokémon</h3>"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Pokémon"].items():
         card_name, card_url = card.split(" (")
@@ -97,10 +97,10 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div></td><td><div style='flex: 1; margin-right: 10px;'>"
 
      # Trainer Table
-    markdown_content += "<span>Trainer</span>"
+    markdown_content += "<h3>Trainer</h3>"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Trainer"].items():
         card_name, card_url = card.split(" (")
@@ -112,10 +112,10 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div></td><td><div style='flex: 1; margin-right: 10px;'>"
 
     # Energy Table
-    markdown_content += "<span>Energy</span>"
+    markdown_content += "<h3>Energy</h3>"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Energy"].items():
         card_name, card_url = card.split(" (")
@@ -127,7 +127,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div></div>"
+    markdown_content += "</div></td></tr></table></div>"
 
     markdown_content += """
 
