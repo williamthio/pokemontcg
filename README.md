@@ -1,5 +1,5 @@
 
-# Pokémon TCG Deck Analysis
+# Pokémon TCG Deck Analysis Test
 
 This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information.
 
