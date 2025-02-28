@@ -81,7 +81,7 @@ def calculate_card_distribution(all_cards, deck_count):
 def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
 <div style="display: flex;">
-<div style="flex: 1; margin-right: 10px;"><table><tr><td>
+<div style="flex: 1; margin-right: 10px;">
 """
 
     # Pokémon Table
@@ -97,7 +97,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div></td><td><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
 
      # Trainer Table
     markdown_content += "<h3>Trainer</h3>"
@@ -112,7 +112,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div></td><td><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
 
     # Energy Table
     markdown_content += "<h3>Energy</h3>"
@@ -127,7 +127,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div></td></tr></table></div>"
+    markdown_content += "</div></div>"
 
     markdown_content += """
 
@@ -137,7 +137,7 @@ def generate_markdown_report(card_distributions, deck_info):
 <tr><th>Rank</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck URL</th></tr>
 """
     for info in deck_info:
-        markdown_content += f"<tr><td>{info[5]}</td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>{info[4]}</a></td></tr>"
+        markdown_content += f"<tr><td>{info[5]}</td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>link</a></td></tr>"
 
     markdown_content += "</table>"
 
