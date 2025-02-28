@@ -4,6 +4,7 @@ import csv
 from concurrent.futures import ThreadPoolExecutor
 import os
 from tenacity import retry, stop_after_attempt, wait_fixed
+import sys
 
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))
 def get_with_retry(url):
@@ -84,8 +85,12 @@ def load_progress():
         return set(int(line.strip()) for line in f)
 
 def main():
+    if len(sys.argv) < 2:
+        print("Usage: python scrape.py <end_tournament_id>")
+        sys.exit(1)
+    
+    end_tournament_id = int(sys.argv[1])
     start_tournament_id = 1839
-    end_tournament_id = 2107
     num_threads = os.cpu_count() or 5  # Use max threads available
 
     completed_tournaments = load_progress()
