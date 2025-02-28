@@ -1,4 +1,4 @@
-name: Generate Markdown
+name: Generate Reports
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add *.md
+        git add reports/*.md
         git commit -m "Add or update markdown file"
         git push
       env:
