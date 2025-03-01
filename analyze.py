@@ -1,10 +1,7 @@
 import os
 import csv
+import argparse
 from collections import defaultdict, Counter
-
-MAIN_POKEMON = "noctowl"
-SECONDARY_POKEMON = "charizard"
-MIN_RANK = 4
 
 def parse_deck_section(cards):
     parsed_cards = []
@@ -145,14 +142,21 @@ def generate_markdown_report(card_distributions, deck_info):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Analyze Pokémon TCG decks.")
+    parser.add_argument("--main_pokemon", type=str, default=None, help="Main Pokémon to filter decks.")
+    parser.add_argument("--secondary_pokemon", type=str, default=None, help="Secondary Pokémon to filter decks.")
+    parser.add_argument("--min_rank", type=int, default=None, help="Minimum rank to filter decks.")
+
+    args = parser.parse_args()
+
     with open("tournament_decks.csv", "r", encoding="utf-8") as f:
         file_content = f.read()
 
-    all_cards, deck_count, deck_info = parse_decks(file_content, MAIN_POKEMON, SECONDARY_POKEMON, MIN_RANK)
+    all_cards, deck_count, deck_info = parse_decks(file_content, args.main_pokemon, args.secondary_pokemon, args.min_rank)
     card_distributions = calculate_card_distribution(all_cards, deck_count)
     markdown_report = generate_markdown_report(card_distributions, deck_info)
 
-    report_file = f"reports/{MAIN_POKEMON}_{SECONDARY_POKEMON}_{MIN_RANK}.md"
+    report_file = f"reports/{args.main_pokemon}_{args.secondary_pokemon}_{args.min_rank}.md"
 
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(markdown_report)

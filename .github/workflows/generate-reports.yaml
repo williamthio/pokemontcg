@@ -1,9 +1,20 @@
 name: Generate Reports
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      main_pokemon:
+        description: 'Main Pokémon to filter decks'
+        required: false
+        default: ''
+      secondary_pokemon:
+        description: 'Secondary Pokémon to filter decks'
+        required: false
+        default: ''
+      min_rank:
+        description: 'Minimum rank to filter decks'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -25,7 +36,8 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Generate report
-      run: python analyze.py
+      run: |
+        python analyze.py --main_pokemon "${{ github.event.inputs.main_pokemon }}" --secondary_pokemon "${{ github.event.inputs.secondary_pokemon }}" --min_rank "${{ github.event.inputs.min_rank }}"
 
     - name: Update README with report links
       run: |
