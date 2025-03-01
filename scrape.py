@@ -84,6 +84,17 @@ def load_progress():
     with open("progress.txt") as f:
         return set(int(line.strip()) for line in f)
 
+def sort_csv(file_path):
+    with open(file_path, newline='', encoding="utf-8") as csv_file:
+        reader = csv.reader(csv_file)
+        header = next(reader)
+        sorted_rows = sorted(reader, key=lambda row: (row[0], int(row[5])))
+
+    with open(file_path, 'w', newline='', encoding="utf-8") as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(header)
+        writer.writerows(sorted_rows)
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python scrape.py <end_tournament_id>")
@@ -113,6 +124,8 @@ def main():
                     for row in result:
                         csv_writer.writerow(row)
                     save_progress(tournament_id)
+    
+    sort_csv("tournament_decks.csv")
 
 if __name__ == "__main__":
     main()
