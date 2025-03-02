@@ -6,6 +6,7 @@ This project analyzes Pokémon TCG decks and generates a report on card distribu
 - [Noctowl_Charizard_16.md](reports/Noctowl_Charizard_16.md)
 - [Noctowl_Charizard_4.md](reports/Noctowl_Charizard_4.md)
 - [Noctowl_Charizard_8.md](reports/Noctowl_Charizard_8.md)
+- [Noctowl_None_4.md](reports/Noctowl_None_4.md)
 - [None_None_4.md](reports/None_None_4.md)
 - [None_None_None.md](reports/None_None_None.md)
 - [charizard_None_16.md](reports/charizard_None_16.md)
