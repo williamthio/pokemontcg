@@ -20,7 +20,8 @@
 			"settings": {},
 			"extensions": [
 				"streetsidesoftware.code-spell-checker",
-				"github.copilot"
+				"github.copilot",
+				"vscodevim.vim"
 			]
 		}
 	}
