@@ -162,5 +162,8 @@ if __name__ == "__main__":
 
     report_file = f"reports/{main_pokemon}_{secondary_pokemon}_{min_rank:02d}.md"
 
+    if not os.path.exists("reports"):
+        os.makedirs("reports")
+
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(markdown_report)
