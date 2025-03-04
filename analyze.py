@@ -149,9 +149,9 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    main_pokemon = args.main_pokemon if args.main_pokemon != '' else None
-    secondary_pokemon = args.secondary_pokemon if args.secondary_pokemon != '' else None
-    min_rank = int(args.min_rank) if args.min_rank and args.min_rank != '' else None
+    main_pokemon = args.main_pokemon.strip() if args.main_pokemon != '' else None
+    secondary_pokemon = args.secondary_pokemon.strip() if args.secondary_pokemon != '' else None
+    min_rank = int(args.min_rank.strip()) if args.min_rank and args.min_rank != '' else None
 
     with open("tournament_decks.csv", "r", encoding="utf-8") as f:
         file_content = f.read()
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     card_distributions = calculate_card_distribution(all_cards, deck_count)
     markdown_report = generate_markdown_report(card_distributions, deck_info)
 
-    report_file = f"reports/{main_pokemon}_{secondary_pokemon}_{min_rank}.md"
+    report_file = f"reports/{main_pokemon}_{secondary_pokemon}_{min_rank:02d}.md"
 
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(markdown_report)
