@@ -5,3 +5,4 @@ This project analyzes Pokémon TCG decks and generates a report on card distribu
 ## Available Reports
 - [Charizard_Noctowl_04.md](reports/Charizard_Noctowl_04.md)
 - [Charizard_Noctowl_08.md](reports/Charizard_Noctowl_08.md)
+- [Noctowl_None_04.md](reports/Noctowl_None_04.md)
