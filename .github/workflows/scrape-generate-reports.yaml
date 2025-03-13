@@ -28,6 +28,9 @@ jobs:
 
     - name: Run scrape.py
       run: python scrape.py ${{ github.event.inputs.end_tournament_id }}
+    
+    - name: Remove old reports
+      run: rm -rf reports/*
 
     - name: Generate reports from CSV
       run: |
