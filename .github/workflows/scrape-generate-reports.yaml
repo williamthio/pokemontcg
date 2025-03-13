@@ -1,32 +1,23 @@
-name: Generate Reports
+name: Scrape and Generate Reports
 
 on:
   workflow_dispatch:
     inputs:
-      main_pokemon:
-        description: 'Main Pokémon to filter decks'
-        required: false
-        default: ''
-      secondary_pokemon:
-        description: 'Secondary Pokémon to filter decks'
-        required: false
-        default: ''
-      min_rank:
-        description: 'Minimum rank to filter decks'
-        required: false
-        default: ''
+      end_tournament_id:
+        description: 'End Tournament ID'
+        required: true
 
 permissions:
   contents: write
 
 jobs:
-  build:
+  run-scrape-and-generate-reports:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
+      
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
@@ -35,9 +26,16 @@ jobs:
     - name: Install dependencies
       run: pip install -r requirements.txt
 
-    - name: Generate report
+    - name: Run scrape.py
+      run: python scrape.py ${{ github.event.inputs.end_tournament_id }}
+
+    - name: Generate reports from CSV
       run: |
-        python analyze.py --main_pokemon "${{ github.event.inputs.main_pokemon }}" --secondary_pokemon "${{ github.event.inputs.secondary_pokemon }}" --min_rank "${{ github.event.inputs.min_rank }}"
+        while IFS=',' read -r main_pokemon secondary_pokemon min_rank; do
+          if [[ "$main_pokemon" != "mainpokemon" ]]; then
+            python analyze.py --main_pokemon "$main_pokemon" --secondary_pokemon "$secondary_pokemon" --min_rank "$min_rank"
+          fi
+        done < reportrequirements.csv
 
     - name: Update README with report links
       run: |
@@ -54,10 +52,11 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add tournament_decks.csv progress.txt
         git add README.md
         git add reports/*.md
         if [ -n "$(git status --porcelain)" ]; then
-          git commit -m "Add or update markdown file"
+          git commit -m "Add or update markdown files and README"
           git push
         else
           echo "No changes to commit"
