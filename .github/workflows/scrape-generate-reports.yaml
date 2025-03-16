@@ -46,6 +46,7 @@ jobs:
 
     - name: Update README with report links
       run: |
+        touch docs/README.md
         echo "# Pokémon TCG Deck Analysis" > docs/README.md
         echo "" >> docs/README.md
         echo "This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information." >> docs/README.md
