@@ -79,7 +79,7 @@ def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
 ## Deck Analysis
 
-<div style="display: flex;">
+<div style="display: flex; flex-wrap: wrap;">
 <div style="flex: 1; margin-right: 10px;">
 """
 
