@@ -13,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "reports"
   cancel-in-progress: false
 
 jobs:
@@ -58,6 +58,7 @@ jobs:
         done
 
     - name: Commit and push changes
+      id: commit_and_push
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -67,17 +68,16 @@ jobs:
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push
+          echo "changes"
         else
           echo "No changes to commit"
-        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-github-pages:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    needs: run-scrape-and-generate-reports
     runs-on: ubuntu-latest
+    if: steps.commit_and_push.outputs.changes == 'changes'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
