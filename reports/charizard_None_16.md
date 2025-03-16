@@ -1,7 +1,7 @@
 
 ## Deck Analysis
 
-<div style="display: flex;">
+<div style="display: flex; flex-wrap: wrap;">
 <div style="flex: 1; margin-right: 10px;">
 
 
