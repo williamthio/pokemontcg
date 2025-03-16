@@ -77,8 +77,34 @@ def calculate_card_distribution(all_cards, deck_count):
 
 def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
-    <div style="display: flex; flex-wrap: wrap;">
-    <div style="flex: 1; margin-right: 10px;">
+    <style>
+    .report-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .report-column {
+        flex: 1;
+        margin-right: 10px;
+    }
+    @media (max-width: 767px) {
+        .report-column {
+            flex: 1 1 100%;
+            margin-right: 0;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .report-column {
+            flex: 1 1 50%;
+        }
+    }
+    @media (min-width: 1024px) {
+        .report-column {
+            flex: 1 1 33%;
+        }
+    }
+    </style>
+    <div class="report-container">
+    <div class="report-column">
     """
 
     # Pokémon Table
@@ -94,7 +120,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div><div class='report-column'>"
 
     # Trainer Table
     markdown_content += "<h3>Trainer</h3>"
@@ -109,7 +135,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div><div class='report-column'>"
 
     # Energy Table
     markdown_content += "<h3>Energy</h3>"
