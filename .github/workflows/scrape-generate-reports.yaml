@@ -20,6 +20,9 @@ jobs:
   run-scrape-and-generate-reports:
     runs-on: ubuntu-latest
 
+    outputs:
+      changes: ${{ steps.commit-and-push.outputs.changes }}
+
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -68,10 +71,10 @@ jobs:
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push
-          echo "::set-output name=changes::true"
+          echo "changes=true" >> "$GITHUB_OUTPUT"
         else
           echo "No changes to commit"
-          echo "::set-output name=changes::false"
+          echo "changes=false" >> "$GITHUB_OUTPUT"
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
