@@ -163,10 +163,10 @@ if __name__ == "__main__":
     card_distributions = calculate_card_distribution(all_cards, deck_count)
     markdown_report = generate_markdown_report(card_distributions, deck_info)
 
-    report_file = f"reports/{main_pokemon}_{secondary_pokemon}_{min_rank:02d}.md"
+    report_file = f"docs/reports/{main_pokemon}_{secondary_pokemon}_{min_rank:02d}.md"
 
-    if not os.path.exists("reports"):
-        os.makedirs("reports")
+    if not os.path.exists("docs/reports"):
+        os.makedirs("docs/reports")
 
     with open(report_file, "w", encoding="utf-8") as f:
         f.write(markdown_report)

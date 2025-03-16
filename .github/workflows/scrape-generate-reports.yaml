@@ -46,13 +46,13 @@ jobs:
 
     - name: Update README with report links
       run: |
-        echo "# Pokémon TCG Deck Analysis" > README.md
-        echo "" >> README.md
-        echo "This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information." >> README.md
-        echo "" >> README.md
-        echo "## Available Reports" >> README.md
-        for file in reports/*.md; do
-          echo "- [$(basename $file)]($file)" >> README.md
+        echo "# Pokémon TCG Deck Analysis" > docs/README.md
+        echo "" >> docs/README.md
+        echo "This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information." >> docs/README.md
+        echo "" >> docs/README.md
+        echo "## Available Reports" >> docs/README.md
+        for file in docs/reports/*.md; do
+          echo "- [$(basename $file)]($file)" >> docs/README.md
         done
 
     - name: Commit and push changes
@@ -61,7 +61,7 @@ jobs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add tournament_decks.csv progress.txt
         git add README.md
-        git add -A reports/
+        git add -A docs/reports/
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push
