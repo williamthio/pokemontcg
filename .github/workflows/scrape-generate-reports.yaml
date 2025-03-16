@@ -58,6 +58,7 @@ jobs:
         done
 
     - name: Commit and push changes
+      id: commit-and-push
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -67,13 +68,17 @@ jobs:
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push
+          echo "::set-output name=changes::true"
         else
           echo "No changes to commit"
+          echo "::set-output name=changes::false"
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   deploy-github-pages:
+    needs: run-scrape-and-generate-reports
+    if: needs.run-scrape-and-generate-reports.outputs.changes == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
