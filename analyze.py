@@ -77,9 +77,35 @@ def calculate_card_distribution(all_cards, deck_count):
 
 def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
-<div style="display: flex;">
-<div style="flex: 1; margin-right: 10px;">
-"""
+    <style>
+    .report-container {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .report-column {
+        flex: 1;
+        margin-right: 10px;
+    }
+    @media (max-width: 767px) {
+        .report-column {
+            flex: 1 1 100%;
+            margin-right: 0;
+        }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .report-column {
+            flex: 1 1 50%;
+        }
+    }
+    @media (min-width: 1024px) {
+        .report-column {
+            flex: 1 1 33%;
+        }
+    }
+    </style>
+    <div class="report-container">
+    <div class="report-column">
+    """
 
     # Pokémon Table
     markdown_content += "<h3>Pokémon</h3>"
@@ -94,9 +120,9 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div><div class='report-column'>"
 
-     # Trainer Table
+    # Trainer Table
     markdown_content += "<h3>Trainer</h3>"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Trainer"].items():
@@ -109,7 +135,7 @@ def generate_markdown_report(card_distributions, deck_info):
             markdown_content += f"<td>{count}</td><td>{percentage:.3f}</td></tr>"
     markdown_content += "</table>\n"
 
-    markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
+    markdown_content += "</div><div class='report-column'>"
 
     # Energy Table
     markdown_content += "<h3>Energy</h3>"
@@ -127,13 +153,11 @@ def generate_markdown_report(card_distributions, deck_info):
     markdown_content += "</div></div>"
 
     markdown_content += """
-
-## Deck Information
-
-<div style="display: flex;">
-<table>
-<tr><th>Tournament</th><th>Rank</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck</th></tr>
-"""
+    <div style="margin-top: 20px;">
+    <h3>Deck Information</h3>
+    <table>
+    <tr><th>Tournament</th><th>Rank</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck</th></tr>
+    """
     for info in deck_info:
         tournament_url = info[0]
         tournament_id = tournament_url.split("/")[-1]
