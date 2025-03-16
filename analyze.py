@@ -82,7 +82,7 @@ def generate_markdown_report(card_distributions, deck_info):
 """
 
     # Pokémon Table
-    markdown_content += "<h3>Pokémon</h3>"
+    markdown_content += "\n\n### Pokémon\n\n"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Pokémon"].items():
         card_name, card_url = card.split(" (")
@@ -97,7 +97,7 @@ def generate_markdown_report(card_distributions, deck_info):
     markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
 
      # Trainer Table
-    markdown_content += "<h3>Trainer</h3>"
+    markdown_content += "\n\n### Trainer\n\n"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Trainer"].items():
         card_name, card_url = card.split(" (")
@@ -112,7 +112,7 @@ def generate_markdown_report(card_distributions, deck_info):
     markdown_content += "</div><div style='flex: 1; margin-right: 10px;'>"
 
     # Energy Table
-    markdown_content += "<h3>Energy</h3>"
+    markdown_content += "\n\n### Energy\n\n"
     markdown_content += "<table><tr><th>Card</th><th>Count</th><th>Percentage</th></tr>"
     for card, distribution in card_distributions["Energy"].items():
         card_name, card_url = card.split(" (")
@@ -130,7 +130,6 @@ def generate_markdown_report(card_distributions, deck_info):
 
 ## Deck Information
 
-<div style="display: flex;">
 <table>
 <tr><th>Tournament</th><th>Rank</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck</th></tr>
 """
@@ -139,7 +138,7 @@ def generate_markdown_report(card_distributions, deck_info):
         tournament_id = tournament_url.split("/")[-1]
         markdown_content += f"<tr><td><a href='{tournament_url}'>{tournament_id}</a></td><td>{info[5]}</td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>link</a></td></tr>"
 
-    markdown_content += "</table></div>"
+    markdown_content += "</table>"
 
     return markdown_content
 
