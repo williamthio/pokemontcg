@@ -77,6 +77,8 @@ def calculate_card_distribution(all_cards, deck_count):
 
 def generate_markdown_report(card_distributions, deck_info):
     markdown_content = """
+## Deck Analysis
+
 <div style="display: flex;">
 <div style="flex: 1; margin-right: 10px;">
 """
