@@ -8,9 +8,7 @@ on:
         required: true
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 concurrency:
   group: "pages"
@@ -19,9 +17,6 @@ concurrency:
 jobs:
   run-scrape-and-generate-reports:
     runs-on: ubuntu-latest
-
-    outputs:
-      changes: ${{ steps.commit-and-push.outputs.changes }}
 
     steps:
     - name: Checkout repository
@@ -61,7 +56,6 @@ jobs:
         done
 
     - name: Commit and push changes
-      id: commit-and-push
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
@@ -71,31 +65,8 @@ jobs:
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push
-          echo "changes=true" >> "$GITHUB_OUTPUT"
         else
           echo "No changes to commit"
-          echo "changes=false" >> "$GITHUB_OUTPUT"
         fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  deploy-github-pages:
-    needs: run-scrape-and-generate-reports
-    if: needs.run-scrape-and-generate-reports.outputs.changes == 'true'
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: '.'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
