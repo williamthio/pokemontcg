@@ -133,12 +133,12 @@ def generate_markdown_report(card_distributions, deck_info):
 ## Deck Information
 
 <table>
-<tr><th>Tournament</th><th>Rank</th><th>Player Name</th><th>Main Pokémon</th><th>Secondary Pokémon</th><th>Deck</th></tr>
+<tr><th>TID</th><th>#</th><th>Main</th><th>Secondary</th><th>Deck</th></tr>
 """
     for info in deck_info:
         tournament_url = info[0]
         tournament_id = tournament_url.split("/")[-1]
-        markdown_content += f"<tr><td><a href='{tournament_url}'>{tournament_id}</a></td><td>{info[5]}</td><td>{info[1]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>link</a></td></tr>"
+        markdown_content += f"<tr><td><a href='{tournament_url}'>{tournament_id}</a></td><td>{info[5]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>link</a></td></tr>"
 
     markdown_content += "</table>"
 
