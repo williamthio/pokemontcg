@@ -138,7 +138,7 @@ def generate_markdown_report(card_distributions, deck_info):
     for info in deck_info:
         tournament_url = info[0]
         tournament_id = tournament_url.split("/")[-1]
-        markdown_content += f"<tr><td><a href='{tournament_url}'>{tournament_id}</a></td><td>{info[5]}</td><td>{info[2]}</td><td>{info[3]}</td><td><a href='{info[4]}'>link</a></td></tr>"
+        markdown_content += f"<tr><td><a href='{tournament_url}'>{tournament_id}</a></td><td>{info[5]}</td><td><a href='{info[4]}'>{info[2]}</a></td><td><a href='{info[4]}'>{info[3]}</a></td></tr>"
 
     markdown_content += "</table>"
 
