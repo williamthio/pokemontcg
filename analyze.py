@@ -133,7 +133,7 @@ def generate_markdown_report(card_distributions, deck_info):
 ## Deck Information
 
 <table>
-<tr><th>TID</th><th>#</th><th>Main</th><th>Secondary</th><th>Deck</th></tr>
+<tr><th>TID</th><th>#</th><th>Main</th><th>Secondary</th></tr>
 """
     for info in deck_info:
         tournament_url = info[0]
