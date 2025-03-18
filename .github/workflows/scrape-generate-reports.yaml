@@ -32,29 +32,9 @@ jobs:
 
     - name: Run scrape.py
       run: python scrape.py ${{ github.event.inputs.end_tournament_id }}
-    
-    - name: Remove old reports
-      run: rm -rf reports/*
 
     - name: Generate reports from CSV
-      run: |
-        while IFS=',' read -r main_pokemon secondary_pokemon min_rank; do
-          if [[ "$main_pokemon" != "mainpokemon" ]]; then
-            python analyze.py --main_pokemon "$main_pokemon" --secondary_pokemon "$secondary_pokemon" --min_rank "$min_rank"
-          fi
-        done < reportrequirements.csv
-
-    - name: Update README with report links
-      run: |
-        touch README.md
-        echo "# Pokémon TCG Deck Analysis" > README.md
-        echo "" >> README.md
-        echo "This project analyzes Pokémon TCG decks and generates a report on card distributions and deck information." >> README.md
-        echo "" >> README.md
-        echo "## Available Reports" >> README.md
-        for file in reports/*.md; do
-          echo "- [$(basename $file)]($file)" >> README.md
-        done
+      run: python analyze.py
 
     - name: Commit and push changes
       run: |
