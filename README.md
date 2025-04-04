@@ -2,4089 +2,454 @@
 
 ## Cluster Analysis
 
-
-<script>
-function filterTable() {
-    const meanRankMin = parseFloat(document.getElementById('meanRankMin').value) || -Infinity;
-    const meanRankMax = parseFloat(document.getElementById('meanRankMax').value) || Infinity;
-    const deckCountMin = parseInt(document.getElementById('deckCountMin').value) || -Infinity;
-    const deckCountMax = parseInt(document.getElementById('deckCountMax').value) || Infinity;
-    const mainPokemonFilter = document.getElementById('mainPokemonFilter').value.toLowerCase();
-    const secondaryPokemonFilter = document.getElementById('secondaryPokemonFilter').value.toLowerCase();
-
-    const rows = document.querySelectorAll('#clusterTable tbody tr');
-    rows.forEach(row => {
-        const meanRank = parseFloat(row.dataset.meanRank);
-        const deckCount = parseInt(row.dataset.deckCount);
-        const mainPokemon = row.dataset.mainPokemon.toLowerCase();
-        const secondaryPokemon = row.dataset.secondaryPokemon.toLowerCase();
-
-        const matchesFilters =
-            meanRank >= meanRankMin &&
-            meanRank <= meanRankMax &&
-            deckCount >= deckCountMin &&
-            deckCount <= deckCountMax &&
-            mainPokemon.includes(mainPokemonFilter) &&
-            secondaryPokemon.includes(secondaryPokemonFilter);
-
-        row.style.display = matchesFilters ? '' : 'none';
-    });
-}
-</script>
-
-<div>
-    <label>Mean Rank Min: <input type="number" id="meanRankMin" oninput="filterTable()"></label>
-    <label>Mean Rank Max: <input type="number" id="meanRankMax" oninput="filterTable()"></label>
-    <label>Deck Count Min: <input type="number" id="deckCountMin" oninput="filterTable()"></label>
-    <label>Deck Count Max: <input type="number" id="deckCountMax" oninput="filterTable()"></label>
-    <label>Main Pokémon: <input type="text" id="mainPokemonFilter" oninput="filterTable()"></label>
-    <label>Secondary Pokémon: <input type="text" id="secondaryPokemonFilter" oninput="filterTable()"></label>
-</div>
-
-<table id="clusterTable" border="1">
-    <thead>
-        <tr>
-            <th>Cluster</th>
-            <th>Mean Rank</th>
-            <th>Main Pokémon</th>
-            <th>Secondary Pokémon</th>
-            <th>Deck Count</th>
-            <th>Link</th>
-        </tr>
-    </thead>
-    <tbody>
-
-        <tr data-mean-rank="1.0" data-deck-count="1" data-main-pokemon="lugia" data-secondary-pokemon="archeops">
-            <td>22</td>
-            <td>1.00</td>
-            <td>lugia</td>
-            <td>archeops</td>
-            <td>1</td>
-            <td><a href="reports/cluster_22.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="1.0" data-deck-count="1" data-main-pokemon="alakazam" data-secondary-pokemon="xatu">
-            <td>39</td>
-            <td>1.00</td>
-            <td>alakazam</td>
-            <td>xatu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_39.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="1.0" data-deck-count="1" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>265</td>
-            <td>1.00</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>1</td>
-            <td><a href="reports/cluster_265.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.0" data-deck-count="1" data-main-pokemon="pecharunt" data-secondary-pokemon="okidogi">
-            <td>91</td>
-            <td>2.00</td>
-            <td>pecharunt</td>
-            <td>okidogi</td>
-            <td>1</td>
-            <td><a href="reports/cluster_91.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.0" data-deck-count="1" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>148</td>
-            <td>2.00</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_148.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.0" data-deck-count="1" data-main-pokemon="gardevoir" data-secondary-pokemon="munkidori">
-            <td>236</td>
-            <td>2.00</td>
-            <td>gardevoir</td>
-            <td>munkidori</td>
-            <td>1</td>
-            <td><a href="reports/cluster_236.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.0" data-deck-count="1" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>238</td>
-            <td>2.00</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_238.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.0" data-deck-count="1" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>368</td>
-            <td>2.00</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_368.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.0" data-deck-count="1" data-main-pokemon="hydrapple" data-secondary-pokemon="ogerpon">
-            <td>437</td>
-            <td>2.00</td>
-            <td>hydrapple</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_437.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="2.5" data-deck-count="2" data-main-pokemon="roaring-moon" data-secondary-pokemon="flutter-mane">
-            <td>152</td>
-            <td>2.50</td>
-            <td>roaring-moon</td>
-            <td>flutter-mane</td>
-            <td>2</td>
-            <td><a href="reports/cluster_152.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="charizard">
-            <td>57</td>
-            <td>3.00</td>
-            <td>noctowl</td>
-            <td>charizard</td>
-            <td>1</td>
-            <td><a href="reports/cluster_57.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="typhlosion" data-secondary-pokemon="skeledirge">
-            <td>72</td>
-            <td>3.00</td>
-            <td>typhlosion</td>
-            <td>skeledirge</td>
-            <td>1</td>
-            <td><a href="reports/cluster_72.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="None">
-            <td>93</td>
-            <td>3.00</td>
-            <td>ceruledge</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_93.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="hydrapple" data-secondary-pokemon="thwackey">
-            <td>146</td>
-            <td>3.00</td>
-            <td>hydrapple</td>
-            <td>thwackey</td>
-            <td>1</td>
-            <td><a href="reports/cluster_146.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="tyranitar" data-secondary-pokemon="None">
-            <td>160</td>
-            <td>3.00</td>
-            <td>tyranitar</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_160.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="yanmega" data-secondary-pokemon="dudunsparce">
-            <td>167</td>
-            <td>3.00</td>
-            <td>yanmega</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_167.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="farigiraf" data-secondary-pokemon="milotic">
-            <td>217</td>
-            <td>3.00</td>
-            <td>farigiraf</td>
-            <td>milotic</td>
-            <td>1</td>
-            <td><a href="reports/cluster_217.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="armarouge" data-secondary-pokemon="ho-oh">
-            <td>245</td>
-            <td>3.00</td>
-            <td>armarouge</td>
-            <td>ho-oh</td>
-            <td>1</td>
-            <td><a href="reports/cluster_245.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>276</td>
-            <td>3.00</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_276.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>279</td>
-            <td>3.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_279.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="2" data-main-pokemon="palafin" data-secondary-pokemon="pecharunt">
-            <td>103</td>
-            <td>3.00</td>
-            <td>palafin</td>
-            <td>pecharunt</td>
-            <td>2</td>
-            <td><a href="reports/cluster_103.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="3.0" data-deck-count="3" data-main-pokemon="crustle" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>306</td>
-            <td>3.00</td>
-            <td>crustle</td>
-            <td>ogerpon-cornerstone</td>
-            <td>3</td>
-            <td><a href="reports/cluster_306.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>101</td>
-            <td>4.00</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_101.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="dragapult" data-secondary-pokemon="None">
-            <td>105</td>
-            <td>4.00</td>
-            <td>dragapult</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_105.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="crustle" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>112</td>
-            <td>4.00</td>
-            <td>crustle</td>
-            <td>ogerpon-cornerstone</td>
-            <td>1</td>
-            <td><a href="reports/cluster_112.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>130</td>
-            <td>4.00</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_130.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="dipplin" data-secondary-pokemon="thwackey">
-            <td>139</td>
-            <td>4.00</td>
-            <td>dipplin</td>
-            <td>thwackey</td>
-            <td>1</td>
-            <td><a href="reports/cluster_139.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>159</td>
-            <td>4.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_159.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="scovillain" data-secondary-pokemon="ogerpon">
-            <td>169</td>
-            <td>4.00</td>
-            <td>scovillain</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_169.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>194</td>
-            <td>4.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_194.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>195</td>
-            <td>4.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_195.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>263</td>
-            <td>4.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_263.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>273</td>
-            <td>4.00</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_273.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="conkeldurr" data-secondary-pokemon="pidgeot">
-            <td>311</td>
-            <td>4.00</td>
-            <td>conkeldurr</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_311.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="blissey" data-secondary-pokemon="pecharunt">
-            <td>412</td>
-            <td>4.00</td>
-            <td>blissey</td>
-            <td>pecharunt</td>
-            <td>1</td>
-            <td><a href="reports/cluster_412.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.0" data-deck-count="1" data-main-pokemon="froslass" data-secondary-pokemon="espathra">
-            <td>441</td>
-            <td>4.00</td>
-            <td>froslass</td>
-            <td>espathra</td>
-            <td>1</td>
-            <td><a href="reports/cluster_441.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.5" data-deck-count="2" data-main-pokemon="metagross" data-secondary-pokemon="clefairy">
-            <td>409</td>
-            <td>4.50</td>
-            <td>metagross</td>
-            <td>clefairy</td>
-            <td>2</td>
-            <td><a href="reports/cluster_409.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="4.75" data-deck-count="4" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>446</td>
-            <td>4.75</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>4</td>
-            <td><a href="reports/cluster_446.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="flygon" data-secondary-pokemon="pidgeot">
-            <td>37</td>
-            <td>5.00</td>
-            <td>flygon</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_37.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="metagross" data-secondary-pokemon="tatsugiri">
-            <td>48</td>
-            <td>5.00</td>
-            <td>metagross</td>
-            <td>tatsugiri</td>
-            <td>1</td>
-            <td><a href="reports/cluster_48.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="miraidon" data-secondary-pokemon="None">
-            <td>99</td>
-            <td>5.00</td>
-            <td>miraidon</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_99.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="glaceon" data-secondary-pokemon="None">
-            <td>187</td>
-            <td>5.00</td>
-            <td>glaceon</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_187.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="noctowl">
-            <td>198</td>
-            <td>5.00</td>
-            <td>charizard</td>
-            <td>noctowl</td>
-            <td>1</td>
-            <td><a href="reports/cluster_198.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="magneton">
-            <td>200</td>
-            <td>5.00</td>
-            <td>noctowl</td>
-            <td>magneton</td>
-            <td>1</td>
-            <td><a href="reports/cluster_200.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="iron-thorns" data-secondary-pokemon="None">
-            <td>206</td>
-            <td>5.00</td>
-            <td>iron-thorns</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_206.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="aegislash" data-secondary-pokemon="dodrio">
-            <td>250</td>
-            <td>5.00</td>
-            <td>aegislash</td>
-            <td>dodrio</td>
-            <td>1</td>
-            <td><a href="reports/cluster_250.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>254</td>
-            <td>5.00</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>1</td>
-            <td><a href="reports/cluster_254.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="mimikyu" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>289</td>
-            <td>5.00</td>
-            <td>mimikyu</td>
-            <td>ogerpon-cornerstone</td>
-            <td>1</td>
-            <td><a href="reports/cluster_289.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="palafin" data-secondary-pokemon="dudunsparce">
-            <td>325</td>
-            <td>5.00</td>
-            <td>palafin</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_325.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="miraidon" data-secondary-pokemon="magneton">
-            <td>326</td>
-            <td>5.00</td>
-            <td>miraidon</td>
-            <td>magneton</td>
-            <td>1</td>
-            <td><a href="reports/cluster_326.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>411</td>
-            <td>5.00</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_411.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.0" data-deck-count="2" data-main-pokemon="iron-valiant" data-secondary-pokemon="ogerpon">
-            <td>285</td>
-            <td>5.00</td>
-            <td>iron-valiant</td>
-            <td>ogerpon</td>
-            <td>2</td>
-            <td><a href="reports/cluster_285.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.333333333333333" data-deck-count="3" data-main-pokemon="grimmsnarl" data-secondary-pokemon="morpeko">
-            <td>423</td>
-            <td>5.33</td>
-            <td>grimmsnarl</td>
-            <td>morpeko</td>
-            <td>3</td>
-            <td><a href="reports/cluster_423.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.5" data-deck-count="2" data-main-pokemon="roaring-moon" data-secondary-pokemon="flutter-mane">
-            <td>71</td>
-            <td>5.50</td>
-            <td>roaring-moon</td>
-            <td>flutter-mane</td>
-            <td>2</td>
-            <td><a href="reports/cluster_71.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.5" data-deck-count="2" data-main-pokemon="aegislash" data-secondary-pokemon="tatsugiri">
-            <td>156</td>
-            <td>5.50</td>
-            <td>aegislash</td>
-            <td>tatsugiri</td>
-            <td>2</td>
-            <td><a href="reports/cluster_156.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.5" data-deck-count="2" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>316</td>
-            <td>5.50</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>2</td>
-            <td><a href="reports/cluster_316.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.571428571428571" data-deck-count="7" data-main-pokemon="zacian-crowned" data-secondary-pokemon="cramorant">
-            <td>46</td>
-            <td>5.57</td>
-            <td>zacian-crowned</td>
-            <td>cramorant</td>
-            <td>7</td>
-            <td><a href="reports/cluster_46.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.6" data-deck-count="10" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>360</td>
-            <td>5.60</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>10</td>
-            <td><a href="reports/cluster_360.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.625" data-deck-count="16" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>210</td>
-            <td>5.62</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>16</td>
-            <td><a href="reports/cluster_210.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.666666666666667" data-deck-count="3" data-main-pokemon="great-tusk" data-secondary-pokemon="great-tusk">
-            <td>144</td>
-            <td>5.67</td>
-            <td>great-tusk</td>
-            <td>great-tusk</td>
-            <td>3</td>
-            <td><a href="reports/cluster_144.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.666666666666667" data-deck-count="3" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>225</td>
-            <td>5.67</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>3</td>
-            <td><a href="reports/cluster_225.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="5.6923076923076925" data-deck-count="13" data-main-pokemon="ogerpon" data-secondary-pokemon="noctowl">
-            <td>227</td>
-            <td>5.69</td>
-            <td>ogerpon</td>
-            <td>noctowl</td>
-            <td>13</td>
-            <td><a href="reports/cluster_227.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="tinkaton" data-secondary-pokemon="dudunsparce">
-            <td>47</td>
-            <td>6.00</td>
-            <td>tinkaton</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_47.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="garchomp">
-            <td>52</td>
-            <td>6.00</td>
-            <td>mamoswine</td>
-            <td>garchomp</td>
-            <td>1</td>
-            <td><a href="reports/cluster_52.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="dipplin" data-secondary-pokemon="None">
-            <td>76</td>
-            <td>6.00</td>
-            <td>dipplin</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_76.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>104</td>
-            <td>6.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_104.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="great-tusk" data-secondary-pokemon="None">
-            <td>117</td>
-            <td>6.00</td>
-            <td>great-tusk</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_117.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="wugtrio" data-secondary-pokemon="ceruledge">
-            <td>127</td>
-            <td>6.00</td>
-            <td>wugtrio</td>
-            <td>ceruledge</td>
-            <td>1</td>
-            <td><a href="reports/cluster_127.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="dodrio" data-secondary-pokemon="ursaluna-bloodmoon">
-            <td>168</td>
-            <td>6.00</td>
-            <td>dodrio</td>
-            <td>ursaluna-bloodmoon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_168.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="xatu" data-secondary-pokemon="slowking">
-            <td>177</td>
-            <td>6.00</td>
-            <td>xatu</td>
-            <td>slowking</td>
-            <td>1</td>
-            <td><a href="reports/cluster_177.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="dragapult" data-secondary-pokemon="lycanroc">
-            <td>226</td>
-            <td>6.00</td>
-            <td>dragapult</td>
-            <td>lycanroc</td>
-            <td>1</td>
-            <td><a href="reports/cluster_226.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="milotic" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>241</td>
-            <td>6.00</td>
-            <td>milotic</td>
-            <td>ogerpon-cornerstone</td>
-            <td>1</td>
-            <td><a href="reports/cluster_241.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="squawkabilly">
-            <td>341</td>
-            <td>6.00</td>
-            <td>ceruledge</td>
-            <td>squawkabilly</td>
-            <td>1</td>
-            <td><a href="reports/cluster_341.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="2" data-main-pokemon="palafin" data-secondary-pokemon="dudunsparce">
-            <td>34</td>
-            <td>6.00</td>
-            <td>palafin</td>
-            <td>dudunsparce</td>
-            <td>2</td>
-            <td><a href="reports/cluster_34.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="2" data-main-pokemon="greninja" data-secondary-pokemon="pidgeot">
-            <td>87</td>
-            <td>6.00</td>
-            <td>greninja</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_87.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="2" data-main-pokemon="froslass" data-secondary-pokemon="espathra">
-            <td>221</td>
-            <td>6.00</td>
-            <td>froslass</td>
-            <td>espathra</td>
-            <td>2</td>
-            <td><a href="reports/cluster_221.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="2" data-main-pokemon="gholdengo" data-secondary-pokemon="scizor">
-            <td>302</td>
-            <td>6.00</td>
-            <td>gholdengo</td>
-            <td>scizor</td>
-            <td>2</td>
-            <td><a href="reports/cluster_302.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="2" data-main-pokemon="armarouge" data-secondary-pokemon="ho-oh">
-            <td>402</td>
-            <td>6.00</td>
-            <td>armarouge</td>
-            <td>ho-oh</td>
-            <td>2</td>
-            <td><a href="reports/cluster_402.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.0" data-deck-count="3" data-main-pokemon="dipplin" data-secondary-pokemon="thwackey">
-            <td>312</td>
-            <td>6.00</td>
-            <td>dipplin</td>
-            <td>thwackey</td>
-            <td>3</td>
-            <td><a href="reports/cluster_312.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.2" data-deck-count="5" data-main-pokemon="noivern" data-secondary-pokemon="squawkabilly">
-            <td>128</td>
-            <td>6.20</td>
-            <td>noivern</td>
-            <td>squawkabilly</td>
-            <td>5</td>
-            <td><a href="reports/cluster_128.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.333333333333333" data-deck-count="3" data-main-pokemon="mimikyu" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>126</td>
-            <td>6.33</td>
-            <td>mimikyu</td>
-            <td>ogerpon-cornerstone</td>
-            <td>3</td>
-            <td><a href="reports/cluster_126.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.333333333333333" data-deck-count="3" data-main-pokemon="dudunsparce" data-secondary-pokemon="tyranitar">
-            <td>432</td>
-            <td>6.33</td>
-            <td>dudunsparce</td>
-            <td>tyranitar</td>
-            <td>3</td>
-            <td><a href="reports/cluster_432.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.428571428571429" data-deck-count="7" data-main-pokemon="noctowl" data-secondary-pokemon="azumarill">
-            <td>235</td>
-            <td>6.43</td>
-            <td>noctowl</td>
-            <td>azumarill</td>
-            <td>7</td>
-            <td><a href="reports/cluster_235.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.5" data-deck-count="2" data-main-pokemon="scovillain" data-secondary-pokemon="ogerpon">
-            <td>143</td>
-            <td>6.50</td>
-            <td>scovillain</td>
-            <td>ogerpon</td>
-            <td>2</td>
-            <td><a href="reports/cluster_143.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.5" data-deck-count="4" data-main-pokemon="espathra" data-secondary-pokemon="xatu">
-            <td>208</td>
-            <td>6.50</td>
-            <td>espathra</td>
-            <td>xatu</td>
-            <td>4</td>
-            <td><a href="reports/cluster_208.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.6" data-deck-count="5" data-main-pokemon="okidogi" data-secondary-pokemon="mimikyu">
-            <td>434</td>
-            <td>6.60</td>
-            <td>okidogi</td>
-            <td>mimikyu</td>
-            <td>5</td>
-            <td><a href="reports/cluster_434.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.6" data-deck-count="10" data-main-pokemon="aegislash" data-secondary-pokemon="squawkabilly">
-            <td>55</td>
-            <td>6.60</td>
-            <td>aegislash</td>
-            <td>squawkabilly</td>
-            <td>10</td>
-            <td><a href="reports/cluster_55.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.666666666666667" data-deck-count="3" data-main-pokemon="froslass" data-secondary-pokemon="milotic">
-            <td>332</td>
-            <td>6.67</td>
-            <td>froslass</td>
-            <td>milotic</td>
-            <td>3</td>
-            <td><a href="reports/cluster_332.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.666666666666667" data-deck-count="12" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>17</td>
-            <td>6.67</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>12</td>
-            <td><a href="reports/cluster_17.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.8" data-deck-count="5" data-main-pokemon="archaludon" data-secondary-pokemon="scizor">
-            <td>344</td>
-            <td>6.80</td>
-            <td>archaludon</td>
-            <td>scizor</td>
-            <td>5</td>
-            <td><a href="reports/cluster_344.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="6.8" data-deck-count="5" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>362</td>
-            <td>6.80</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>5</td>
-            <td><a href="reports/cluster_362.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="forretress" data-secondary-pokemon="noctowl">
-            <td>95</td>
-            <td>7.00</td>
-            <td>forretress</td>
-            <td>noctowl</td>
-            <td>1</td>
-            <td><a href="reports/cluster_95.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>106</td>
-            <td>7.00</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_106.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="regidrago" data-secondary-pokemon="ogerpon">
-            <td>113</td>
-            <td>7.00</td>
-            <td>regidrago</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_113.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="dragapult" data-secondary-pokemon="charizard">
-            <td>136</td>
-            <td>7.00</td>
-            <td>dragapult</td>
-            <td>charizard</td>
-            <td>1</td>
-            <td><a href="reports/cluster_136.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="magneton" data-secondary-pokemon="miraidon">
-            <td>147</td>
-            <td>7.00</td>
-            <td>magneton</td>
-            <td>miraidon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_147.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="raging-bolt" data-secondary-pokemon="ho-oh">
-            <td>185</td>
-            <td>7.00</td>
-            <td>raging-bolt</td>
-            <td>ho-oh</td>
-            <td>1</td>
-            <td><a href="reports/cluster_185.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="mimikyu" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>284</td>
-            <td>7.00</td>
-            <td>mimikyu</td>
-            <td>ogerpon-cornerstone</td>
-            <td>1</td>
-            <td><a href="reports/cluster_284.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>293</td>
-            <td>7.00</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>1</td>
-            <td><a href="reports/cluster_293.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="dudunsparce">
-            <td>377</td>
-            <td>7.00</td>
-            <td>noctowl</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_377.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="1" data-main-pokemon="espathra" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>444</td>
-            <td>7.00</td>
-            <td>espathra</td>
-            <td>ogerpon-cornerstone</td>
-            <td>1</td>
-            <td><a href="reports/cluster_444.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="2" data-main-pokemon="baxcalibur" data-secondary-pokemon="baxcalibur">
-            <td>292</td>
-            <td>7.00</td>
-            <td>baxcalibur</td>
-            <td>baxcalibur</td>
-            <td>2</td>
-            <td><a href="reports/cluster_292.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="2" data-main-pokemon="charizard" data-secondary-pokemon="cramorant">
-            <td>304</td>
-            <td>7.00</td>
-            <td>charizard</td>
-            <td>cramorant</td>
-            <td>2</td>
-            <td><a href="reports/cluster_304.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="2" data-main-pokemon="noctowl" data-secondary-pokemon="flareon">
-            <td>400</td>
-            <td>7.00</td>
-            <td>noctowl</td>
-            <td>flareon</td>
-            <td>2</td>
-            <td><a href="reports/cluster_400.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="2" data-main-pokemon="bellibolt" data-secondary-pokemon="kilowattrel">
-            <td>416</td>
-            <td>7.00</td>
-            <td>bellibolt</td>
-            <td>kilowattrel</td>
-            <td>2</td>
-            <td><a href="reports/cluster_416.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="3" data-main-pokemon="armarouge" data-secondary-pokemon="clefairy">
-            <td>205</td>
-            <td>7.00</td>
-            <td>armarouge</td>
-            <td>clefairy</td>
-            <td>3</td>
-            <td><a href="reports/cluster_205.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="3" data-main-pokemon="ogerpon" data-secondary-pokemon="armarouge">
-            <td>259</td>
-            <td>7.00</td>
-            <td>ogerpon</td>
-            <td>armarouge</td>
-            <td>3</td>
-            <td><a href="reports/cluster_259.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="3" data-main-pokemon="ogerpon" data-secondary-pokemon="brute-bonnet">
-            <td>282</td>
-            <td>7.00</td>
-            <td>ogerpon</td>
-            <td>brute-bonnet</td>
-            <td>3</td>
-            <td><a href="reports/cluster_282.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="6" data-main-pokemon="dragapult" data-secondary-pokemon="dudunsparce">
-            <td>389</td>
-            <td>7.00</td>
-            <td>dragapult</td>
-            <td>dudunsparce</td>
-            <td>6</td>
-            <td><a href="reports/cluster_389.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="14" data-main-pokemon="noctowl" data-secondary-pokemon="ogerpon">
-            <td>361</td>
-            <td>7.00</td>
-            <td>noctowl</td>
-            <td>ogerpon</td>
-            <td>14</td>
-            <td><a href="reports/cluster_361.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0" data-deck-count="16" data-main-pokemon="okidogi" data-secondary-pokemon="munkidori">
-            <td>182</td>
-            <td>7.00</td>
-            <td>okidogi</td>
-            <td>munkidori</td>
-            <td>16</td>
-            <td><a href="reports/cluster_182.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.0476190476190474" data-deck-count="21" data-main-pokemon="froslass" data-secondary-pokemon="espathra">
-            <td>387</td>
-            <td>7.05</td>
-            <td>froslass</td>
-            <td>espathra</td>
-            <td>21</td>
-            <td><a href="reports/cluster_387.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.055555555555555" data-deck-count="18" data-main-pokemon="milotic" data-secondary-pokemon="farigiraf">
-            <td>384</td>
-            <td>7.06</td>
-            <td>milotic</td>
-            <td>farigiraf</td>
-            <td>18</td>
-            <td><a href="reports/cluster_384.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.076923076923077" data-deck-count="13" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>415</td>
-            <td>7.08</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>13</td>
-            <td><a href="reports/cluster_415.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.1" data-deck-count="20" data-main-pokemon="blissey" data-secondary-pokemon="munkidori">
-            <td>133</td>
-            <td>7.10</td>
-            <td>blissey</td>
-            <td>munkidori</td>
-            <td>20</td>
-            <td><a href="reports/cluster_133.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.142857142857143" data-deck-count="7" data-main-pokemon="iron-valiant" data-secondary-pokemon="zacian-crowned">
-            <td>219</td>
-            <td>7.14</td>
-            <td>iron-valiant</td>
-            <td>zacian-crowned</td>
-            <td>7</td>
-            <td><a href="reports/cluster_219.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.142857142857143" data-deck-count="14" data-main-pokemon="typhlosion" data-secondary-pokemon="dudunsparce">
-            <td>253</td>
-            <td>7.14</td>
-            <td>typhlosion</td>
-            <td>dudunsparce</td>
-            <td>14</td>
-            <td><a href="reports/cluster_253.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.153846153846154" data-deck-count="13" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>61</td>
-            <td>7.15</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>13</td>
-            <td><a href="reports/cluster_61.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.208333333333333" data-deck-count="24" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>209</td>
-            <td>7.21</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>24</td>
-            <td><a href="reports/cluster_209.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.333333333333333" data-deck-count="3" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>134</td>
-            <td>7.33</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>3</td>
-            <td><a href="reports/cluster_134.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.333333333333333" data-deck-count="3" data-main-pokemon="dragapult" data-secondary-pokemon="charizard">
-            <td>336</td>
-            <td>7.33</td>
-            <td>dragapult</td>
-            <td>charizard</td>
-            <td>3</td>
-            <td><a href="reports/cluster_336.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.333333333333333" data-deck-count="12" data-main-pokemon="typhlosion" data-secondary-pokemon="dudunsparce">
-            <td>375</td>
-            <td>7.33</td>
-            <td>typhlosion</td>
-            <td>dudunsparce</td>
-            <td>12</td>
-            <td><a href="reports/cluster_375.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.4" data-deck-count="5" data-main-pokemon="galvantula" data-secondary-pokemon="miraidon">
-            <td>138</td>
-            <td>7.40</td>
-            <td>galvantula</td>
-            <td>miraidon</td>
-            <td>5</td>
-            <td><a href="reports/cluster_138.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.425" data-deck-count="40" data-main-pokemon="gardevoir" data-secondary-pokemon="munkidori">
-            <td>20</td>
-            <td>7.42</td>
-            <td>gardevoir</td>
-            <td>munkidori</td>
-            <td>40</td>
-            <td><a href="reports/cluster_20.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.454545454545454" data-deck-count="11" data-main-pokemon="archaludon" data-secondary-pokemon="revavroom">
-            <td>281</td>
-            <td>7.45</td>
-            <td>archaludon</td>
-            <td>revavroom</td>
-            <td>11</td>
-            <td><a href="reports/cluster_281.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.5" data-deck-count="2" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>74</td>
-            <td>7.50</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_74.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.5" data-deck-count="2" data-main-pokemon="azumarill" data-secondary-pokemon="noctowl">
-            <td>243</td>
-            <td>7.50</td>
-            <td>azumarill</td>
-            <td>noctowl</td>
-            <td>2</td>
-            <td><a href="reports/cluster_243.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.5" data-deck-count="2" data-main-pokemon="ceruledge" data-secondary-pokemon="pikachu">
-            <td>430</td>
-            <td>7.50</td>
-            <td>ceruledge</td>
-            <td>pikachu</td>
-            <td>2</td>
-            <td><a href="reports/cluster_430.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.5" data-deck-count="6" data-main-pokemon="mimikyu" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>140</td>
-            <td>7.50</td>
-            <td>mimikyu</td>
-            <td>ogerpon-cornerstone</td>
-            <td>6</td>
-            <td><a href="reports/cluster_140.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.571428571428571" data-deck-count="7" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>291</td>
-            <td>7.57</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>7</td>
-            <td><a href="reports/cluster_291.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.588235294117647" data-deck-count="68" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>1</td>
-            <td>7.59</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>68</td>
-            <td><a href="reports/cluster_1.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.607843137254902" data-deck-count="102" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>11</td>
-            <td>7.61</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>102</td>
-            <td><a href="reports/cluster_11.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.608695652173913" data-deck-count="23" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>23</td>
-            <td>7.61</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>23</td>
-            <td><a href="reports/cluster_23.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.62962962962963" data-deck-count="27" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>395</td>
-            <td>7.63</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>27</td>
-            <td><a href="reports/cluster_395.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.653061224489796" data-deck-count="49" data-main-pokemon="typhlosion" data-secondary-pokemon="typhlosion">
-            <td>239</td>
-            <td>7.65</td>
-            <td>typhlosion</td>
-            <td>typhlosion</td>
-            <td>49</td>
-            <td><a href="reports/cluster_239.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.666666666666667" data-deck-count="3" data-main-pokemon="archaludon" data-secondary-pokemon="None">
-            <td>49</td>
-            <td>7.67</td>
-            <td>archaludon</td>
-            <td>None</td>
-            <td>3</td>
-            <td><a href="reports/cluster_49.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.666666666666667" data-deck-count="6" data-main-pokemon="dusknoir" data-secondary-pokemon="darmanitan">
-            <td>443</td>
-            <td>7.67</td>
-            <td>dusknoir</td>
-            <td>darmanitan</td>
-            <td>6</td>
-            <td><a href="reports/cluster_443.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.6875" data-deck-count="16" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>323</td>
-            <td>7.69</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>16</td>
-            <td><a href="reports/cluster_323.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.702127659574468" data-deck-count="94" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>390</td>
-            <td>7.70</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>94</td>
-            <td><a href="reports/cluster_390.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.714285714285714" data-deck-count="7" data-main-pokemon="archaludon" data-secondary-pokemon="zacian-crowned">
-            <td>234</td>
-            <td>7.71</td>
-            <td>archaludon</td>
-            <td>zacian-crowned</td>
-            <td>7</td>
-            <td><a href="reports/cluster_234.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.75" data-deck-count="20" data-main-pokemon="garchomp" data-secondary-pokemon="froslass">
-            <td>67</td>
-            <td>7.75</td>
-            <td>garchomp</td>
-            <td>froslass</td>
-            <td>20</td>
-            <td><a href="reports/cluster_67.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.75" data-deck-count="328" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>31</td>
-            <td>7.75</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>328</td>
-            <td><a href="reports/cluster_31.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.791666666666667" data-deck-count="48" data-main-pokemon="milotic" data-secondary-pokemon="farigiraf">
-            <td>40</td>
-            <td>7.79</td>
-            <td>milotic</td>
-            <td>farigiraf</td>
-            <td>48</td>
-            <td><a href="reports/cluster_40.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.8" data-deck-count="10" data-main-pokemon="yanmega" data-secondary-pokemon="dudunsparce">
-            <td>410</td>
-            <td>7.80</td>
-            <td>yanmega</td>
-            <td>dudunsparce</td>
-            <td>10</td>
-            <td><a href="reports/cluster_410.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.8133333333333335" data-deck-count="75" data-main-pokemon="noctowl" data-secondary-pokemon="charizard">
-            <td>435</td>
-            <td>7.81</td>
-            <td>noctowl</td>
-            <td>charizard</td>
-            <td>75</td>
-            <td><a href="reports/cluster_435.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.867924528301887" data-deck-count="53" data-main-pokemon="feraligatr" data-secondary-pokemon="munkidori">
-            <td>6</td>
-            <td>7.87</td>
-            <td>feraligatr</td>
-            <td>munkidori</td>
-            <td>53</td>
-            <td><a href="reports/cluster_6.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.901639344262295" data-deck-count="61" data-main-pokemon="dragapult" data-secondary-pokemon="iron-thorns">
-            <td>262</td>
-            <td>7.90</td>
-            <td>dragapult</td>
-            <td>iron-thorns</td>
-            <td>61</td>
-            <td><a href="reports/cluster_262.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.909090909090909" data-deck-count="11" data-main-pokemon="garchomp" data-secondary-pokemon="froslass">
-            <td>381</td>
-            <td>7.91</td>
-            <td>garchomp</td>
-            <td>froslass</td>
-            <td>11</td>
-            <td><a href="reports/cluster_381.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.913043478260869" data-deck-count="23" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>122</td>
-            <td>7.91</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>23</td>
-            <td><a href="reports/cluster_122.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.91358024691358" data-deck-count="81" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>429</td>
-            <td>7.91</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>81</td>
-            <td><a href="reports/cluster_429.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.947368421052632" data-deck-count="19" data-main-pokemon="ceruledge" data-secondary-pokemon="squawkabilly">
-            <td>131</td>
-            <td>7.95</td>
-            <td>ceruledge</td>
-            <td>squawkabilly</td>
-            <td>19</td>
-            <td><a href="reports/cluster_131.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="7.976190476190476" data-deck-count="84" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>314</td>
-            <td>7.98</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>84</td>
-            <td><a href="reports/cluster_314.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="dragapult" data-secondary-pokemon="None">
-            <td>19</td>
-            <td>8.00</td>
-            <td>dragapult</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_19.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="magnezone" data-secondary-pokemon="miraidon">
-            <td>97</td>
-            <td>8.00</td>
-            <td>magnezone</td>
-            <td>miraidon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_97.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="ogerpon">
-            <td>183</td>
-            <td>8.00</td>
-            <td>noctowl</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_183.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>222</td>
-            <td>8.00</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>1</td>
-            <td><a href="reports/cluster_222.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>223</td>
-            <td>8.00</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>1</td>
-            <td><a href="reports/cluster_223.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="None">
-            <td>244</td>
-            <td>8.00</td>
-            <td>ceruledge</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_244.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="flareon" data-secondary-pokemon="jolteon">
-            <td>303</td>
-            <td>8.00</td>
-            <td>flareon</td>
-            <td>jolteon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_303.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>315</td>
-            <td>8.00</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>1</td>
-            <td><a href="reports/cluster_315.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="1" data-main-pokemon="metagross" data-secondary-pokemon="dudunsparce">
-            <td>436</td>
-            <td>8.00</td>
-            <td>metagross</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_436.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="2" data-main-pokemon="hydreigon" data-secondary-pokemon="pidgeot">
-            <td>75</td>
-            <td>8.00</td>
-            <td>hydreigon</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_75.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="2" data-main-pokemon="gardevoir" data-secondary-pokemon="munkidori">
-            <td>96</td>
-            <td>8.00</td>
-            <td>gardevoir</td>
-            <td>munkidori</td>
-            <td>2</td>
-            <td><a href="reports/cluster_96.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="2" data-main-pokemon="iron-crown" data-secondary-pokemon="iron-crown">
-            <td>355</td>
-            <td>8.00</td>
-            <td>iron-crown</td>
-            <td>iron-crown</td>
-            <td>2</td>
-            <td><a href="reports/cluster_355.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="2" data-main-pokemon="great-tusk" data-secondary-pokemon="squawkabilly">
-            <td>392</td>
-            <td>8.00</td>
-            <td>great-tusk</td>
-            <td>squawkabilly</td>
-            <td>2</td>
-            <td><a href="reports/cluster_392.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="2" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>397</td>
-            <td>8.00</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>2</td>
-            <td><a href="reports/cluster_397.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="4" data-main-pokemon="dipplin" data-secondary-pokemon="thwackey">
-            <td>299</td>
-            <td>8.00</td>
-            <td>dipplin</td>
-            <td>thwackey</td>
-            <td>4</td>
-            <td><a href="reports/cluster_299.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="7" data-main-pokemon="froslass" data-secondary-pokemon="munkidori">
-            <td>329</td>
-            <td>8.00</td>
-            <td>froslass</td>
-            <td>munkidori</td>
-            <td>7</td>
-            <td><a href="reports/cluster_329.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="9" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>347</td>
-            <td>8.00</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>9</td>
-            <td><a href="reports/cluster_347.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.0" data-deck-count="11" data-main-pokemon="milotic" data-secondary-pokemon="noivern">
-            <td>29</td>
-            <td>8.00</td>
-            <td>milotic</td>
-            <td>noivern</td>
-            <td>11</td>
-            <td><a href="reports/cluster_29.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.028301886792454" data-deck-count="212" data-main-pokemon="ogerpon" data-secondary-pokemon="noctowl">
-            <td>56</td>
-            <td>8.03</td>
-            <td>ogerpon</td>
-            <td>noctowl</td>
-            <td>212</td>
-            <td><a href="reports/cluster_56.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.041666666666666" data-deck-count="24" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>382</td>
-            <td>8.04</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>24</td>
-            <td><a href="reports/cluster_382.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.042168674698795" data-deck-count="166" data-main-pokemon="charizard" data-secondary-pokemon="noctowl">
-            <td>5</td>
-            <td>8.04</td>
-            <td>charizard</td>
-            <td>noctowl</td>
-            <td>166</td>
-            <td><a href="reports/cluster_5.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.046153846153846" data-deck-count="65" data-main-pokemon="gardevoir" data-secondary-pokemon="munkidori">
-            <td>271</td>
-            <td>8.05</td>
-            <td>gardevoir</td>
-            <td>munkidori</td>
-            <td>65</td>
-            <td><a href="reports/cluster_271.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.064814814814815" data-deck-count="324" data-main-pokemon="gardevoir" data-secondary-pokemon="munkidori">
-            <td>32</td>
-            <td>8.06</td>
-            <td>gardevoir</td>
-            <td>munkidori</td>
-            <td>324</td>
-            <td><a href="reports/cluster_32.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.071428571428571" data-deck-count="14" data-main-pokemon="hydrapple" data-secondary-pokemon="ogerpon">
-            <td>174</td>
-            <td>8.07</td>
-            <td>hydrapple</td>
-            <td>ogerpon</td>
-            <td>14</td>
-            <td><a href="reports/cluster_174.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.090909090909092" data-deck-count="33" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>351</td>
-            <td>8.09</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>33</td>
-            <td><a href="reports/cluster_351.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.105263157894736" data-deck-count="19" data-main-pokemon="garchomp" data-secondary-pokemon="roserade">
-            <td>9</td>
-            <td>8.11</td>
-            <td>garchomp</td>
-            <td>roserade</td>
-            <td>19</td>
-            <td><a href="reports/cluster_9.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.142857142857142" data-deck-count="28" data-main-pokemon="feraligatr" data-secondary-pokemon="munkidori">
-            <td>407</td>
-            <td>8.14</td>
-            <td>feraligatr</td>
-            <td>munkidori</td>
-            <td>28</td>
-            <td><a href="reports/cluster_407.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.152317880794701" data-deck-count="151" data-main-pokemon="archaludon" data-secondary-pokemon="squawkabilly">
-            <td>356</td>
-            <td>8.15</td>
-            <td>archaludon</td>
-            <td>squawkabilly</td>
-            <td>151</td>
-            <td><a href="reports/cluster_356.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.16256157635468" data-deck-count="406" data-main-pokemon="ogerpon" data-secondary-pokemon="ogerpon">
-            <td>92</td>
-            <td>8.16</td>
-            <td>ogerpon</td>
-            <td>ogerpon</td>
-            <td>406</td>
-            <td><a href="reports/cluster_92.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.1875" data-deck-count="128" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>428</td>
-            <td>8.19</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>128</td>
-            <td><a href="reports/cluster_428.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.2" data-deck-count="10" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>442</td>
-            <td>8.20</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>10</td>
-            <td><a href="reports/cluster_442.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.205673758865249" data-deck-count="141" data-main-pokemon="dragapult" data-secondary-pokemon="xatu">
-            <td>137</td>
-            <td>8.21</td>
-            <td>dragapult</td>
-            <td>xatu</td>
-            <td>141</td>
-            <td><a href="reports/cluster_137.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.21900826446281" data-deck-count="242" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>13</td>
-            <td>8.22</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>242</td>
-            <td><a href="reports/cluster_13.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.25" data-deck-count="4" data-main-pokemon="archaludon" data-secondary-pokemon="budew">
-            <td>404</td>
-            <td>8.25</td>
-            <td>archaludon</td>
-            <td>budew</td>
-            <td>4</td>
-            <td><a href="reports/cluster_404.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.25" data-deck-count="4" data-main-pokemon="archaludon" data-secondary-pokemon="revavroom">
-            <td>439</td>
-            <td>8.25</td>
-            <td>archaludon</td>
-            <td>revavroom</td>
-            <td>4</td>
-            <td><a href="reports/cluster_439.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.25" data-deck-count="8" data-main-pokemon="iron-crown" data-secondary-pokemon="iron-hands">
-            <td>216</td>
-            <td>8.25</td>
-            <td>iron-crown</td>
-            <td>iron-hands</td>
-            <td>8</td>
-            <td><a href="reports/cluster_216.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.266272189349113" data-deck-count="169" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>151</td>
-            <td>8.27</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>169</td>
-            <td><a href="reports/cluster_151.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.275" data-deck-count="40" data-main-pokemon="noctowl" data-secondary-pokemon="flareon">
-            <td>193</td>
-            <td>8.28</td>
-            <td>noctowl</td>
-            <td>flareon</td>
-            <td>40</td>
-            <td><a href="reports/cluster_193.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.285714285714286" data-deck-count="21" data-main-pokemon="froslass" data-secondary-pokemon="espathra">
-            <td>38</td>
-            <td>8.29</td>
-            <td>froslass</td>
-            <td>espathra</td>
-            <td>21</td>
-            <td><a href="reports/cluster_38.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.293103448275861" data-deck-count="58" data-main-pokemon="charizard" data-secondary-pokemon="dudunsparce">
-            <td>129</td>
-            <td>8.29</td>
-            <td>charizard</td>
-            <td>dudunsparce</td>
-            <td>58</td>
-            <td><a href="reports/cluster_129.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.31390134529148" data-deck-count="446" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>359</td>
-            <td>8.31</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>446</td>
-            <td><a href="reports/cluster_359.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.333333333333334" data-deck-count="15" data-main-pokemon="garchomp" data-secondary-pokemon="munkidori">
-            <td>8</td>
-            <td>8.33</td>
-            <td>garchomp</td>
-            <td>munkidori</td>
-            <td>15</td>
-            <td><a href="reports/cluster_8.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.35195530726257" data-deck-count="179" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>350</td>
-            <td>8.35</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>179</td>
-            <td><a href="reports/cluster_350.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.352941176470589" data-deck-count="34" data-main-pokemon="roaring-moon" data-secondary-pokemon="pecharunt">
-            <td>257</td>
-            <td>8.35</td>
-            <td>roaring-moon</td>
-            <td>pecharunt</td>
-            <td>34</td>
-            <td><a href="reports/cluster_257.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.432432432432432" data-deck-count="37" data-main-pokemon="zacian-crowned" data-secondary-pokemon="snorlax">
-            <td>339</td>
-            <td>8.43</td>
-            <td>zacian-crowned</td>
-            <td>snorlax</td>
-            <td>37</td>
-            <td><a href="reports/cluster_339.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.4375" data-deck-count="16" data-main-pokemon="ceruledge" data-secondary-pokemon="revavroom">
-            <td>86</td>
-            <td>8.44</td>
-            <td>ceruledge</td>
-            <td>revavroom</td>
-            <td>16</td>
-            <td><a href="reports/cluster_86.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.438223938223938" data-deck-count="518" data-main-pokemon="noctowl" data-secondary-pokemon="ogerpon">
-            <td>0</td>
-            <td>8.44</td>
-            <td>noctowl</td>
-            <td>ogerpon</td>
-            <td>518</td>
-            <td><a href="reports/cluster_0.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.444444444444445" data-deck-count="9" data-main-pokemon="aegislash" data-secondary-pokemon="tatsugiri">
-            <td>278</td>
-            <td>8.44</td>
-            <td>aegislash</td>
-            <td>tatsugiri</td>
-            <td>9</td>
-            <td><a href="reports/cluster_278.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.466666666666667" data-deck-count="30" data-main-pokemon="froslass" data-secondary-pokemon="munkidori">
-            <td>313</td>
-            <td>8.47</td>
-            <td>froslass</td>
-            <td>munkidori</td>
-            <td>30</td>
-            <td><a href="reports/cluster_313.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.46875" data-deck-count="32" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>164</td>
-            <td>8.47</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>32</td>
-            <td><a href="reports/cluster_164.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.476190476190476" data-deck-count="21" data-main-pokemon="ceruledge" data-secondary-pokemon="revavroom">
-            <td>431</td>
-            <td>8.48</td>
-            <td>ceruledge</td>
-            <td>revavroom</td>
-            <td>21</td>
-            <td><a href="reports/cluster_431.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.477611940298507" data-deck-count="67" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>15</td>
-            <td>8.48</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>67</td>
-            <td><a href="reports/cluster_15.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.478260869565217" data-deck-count="23" data-main-pokemon="bellibolt" data-secondary-pokemon="kilowattrel">
-            <td>16</td>
-            <td>8.48</td>
-            <td>bellibolt</td>
-            <td>kilowattrel</td>
-            <td>23</td>
-            <td><a href="reports/cluster_16.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.5" data-deck-count="2" data-main-pokemon="gholdengo" data-secondary-pokemon="dragapult">
-            <td>275</td>
-            <td>8.50</td>
-            <td>gholdengo</td>
-            <td>dragapult</td>
-            <td>2</td>
-            <td><a href="reports/cluster_275.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.5" data-deck-count="2" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>331</td>
-            <td>8.50</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>2</td>
-            <td><a href="reports/cluster_331.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.5" data-deck-count="2" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>345</td>
-            <td>8.50</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_345.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.524" data-deck-count="250" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>178</td>
-            <td>8.52</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>250</td>
-            <td><a href="reports/cluster_178.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.538461538461538" data-deck-count="13" data-main-pokemon="ceruledge" data-secondary-pokemon="drilbur">
-            <td>294</td>
-            <td>8.54</td>
-            <td>ceruledge</td>
-            <td>drilbur</td>
-            <td>13</td>
-            <td><a href="reports/cluster_294.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.615384615384615" data-deck-count="13" data-main-pokemon="mimikyu" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>417</td>
-            <td>8.62</td>
-            <td>mimikyu</td>
-            <td>ogerpon-cornerstone</td>
-            <td>13</td>
-            <td><a href="reports/cluster_417.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.620689655172415" data-deck-count="29" data-main-pokemon="feraligatr" data-secondary-pokemon="milotic">
-            <td>371</td>
-            <td>8.62</td>
-            <td>feraligatr</td>
-            <td>milotic</td>
-            <td>29</td>
-            <td><a href="reports/cluster_371.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.666666666666666" data-deck-count="3" data-main-pokemon="banette" data-secondary-pokemon="banette">
-            <td>114</td>
-            <td>8.67</td>
-            <td>banette</td>
-            <td>banette</td>
-            <td>3</td>
-            <td><a href="reports/cluster_114.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.666666666666666" data-deck-count="3" data-main-pokemon="jolteon" data-secondary-pokemon="flareon">
-            <td>419</td>
-            <td>8.67</td>
-            <td>jolteon</td>
-            <td>flareon</td>
-            <td>3</td>
-            <td><a href="reports/cluster_419.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.666666666666666" data-deck-count="6" data-main-pokemon="dipplin" data-secondary-pokemon="dipplin">
-            <td>27</td>
-            <td>8.67</td>
-            <td>dipplin</td>
-            <td>dipplin</td>
-            <td>6</td>
-            <td><a href="reports/cluster_27.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.666666666666666" data-deck-count="36" data-main-pokemon="noctowl" data-secondary-pokemon="terapagos">
-            <td>202</td>
-            <td>8.67</td>
-            <td>noctowl</td>
-            <td>terapagos</td>
-            <td>36</td>
-            <td><a href="reports/cluster_202.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.68" data-deck-count="50" data-main-pokemon="ceruledge" data-secondary-pokemon="noctowl">
-            <td>338</td>
-            <td>8.68</td>
-            <td>ceruledge</td>
-            <td>noctowl</td>
-            <td>50</td>
-            <td><a href="reports/cluster_338.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.74074074074074" data-deck-count="27" data-main-pokemon="gholdengo" data-secondary-pokemon="dragapult">
-            <td>2</td>
-            <td>8.74</td>
-            <td>gholdengo</td>
-            <td>dragapult</td>
-            <td>27</td>
-            <td><a href="reports/cluster_2.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.75" data-deck-count="4" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>260</td>
-            <td>8.75</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>4</td>
-            <td><a href="reports/cluster_260.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.755555555555556" data-deck-count="45" data-main-pokemon="flareon" data-secondary-pokemon="sylveon">
-            <td>62</td>
-            <td>8.76</td>
-            <td>flareon</td>
-            <td>sylveon</td>
-            <td>45</td>
-            <td><a href="reports/cluster_62.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.777777777777779" data-deck-count="81" data-main-pokemon="archaludon" data-secondary-pokemon="scizor">
-            <td>98</td>
-            <td>8.78</td>
-            <td>archaludon</td>
-            <td>scizor</td>
-            <td>81</td>
-            <td><a href="reports/cluster_98.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.777777777777779" data-deck-count="135" data-main-pokemon="dragapult" data-secondary-pokemon="charizard">
-            <td>84</td>
-            <td>8.78</td>
-            <td>dragapult</td>
-            <td>charizard</td>
-            <td>135</td>
-            <td><a href="reports/cluster_84.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.795918367346939" data-deck-count="49" data-main-pokemon="iron-crown" data-secondary-pokemon="iron-hands">
-            <td>25</td>
-            <td>8.80</td>
-            <td>iron-crown</td>
-            <td>iron-hands</td>
-            <td>49</td>
-            <td><a href="reports/cluster_25.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.8" data-deck-count="5" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>327</td>
-            <td>8.80</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>5</td>
-            <td><a href="reports/cluster_327.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.818181818181818" data-deck-count="11" data-main-pokemon="dragapult" data-secondary-pokemon="blaziken">
-            <td>445</td>
-            <td>8.82</td>
-            <td>dragapult</td>
-            <td>blaziken</td>
-            <td>11</td>
-            <td><a href="reports/cluster_445.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.828729281767956" data-deck-count="181" data-main-pokemon="gholdengo" data-secondary-pokemon="dragapult">
-            <td>58</td>
-            <td>8.83</td>
-            <td>gholdengo</td>
-            <td>dragapult</td>
-            <td>181</td>
-            <td><a href="reports/cluster_58.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.875" data-deck-count="40" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>352</td>
-            <td>8.88</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>40</td>
-            <td><a href="reports/cluster_352.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.882352941176471" data-deck-count="17" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>320</td>
-            <td>8.88</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>17</td>
-            <td><a href="reports/cluster_320.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.909090909090908" data-deck-count="11" data-main-pokemon="archaludon" data-secondary-pokemon="scizor">
-            <td>403</td>
-            <td>8.91</td>
-            <td>archaludon</td>
-            <td>scizor</td>
-            <td>11</td>
-            <td><a href="reports/cluster_403.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.925925925925926" data-deck-count="27" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>190</td>
-            <td>8.93</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>27</td>
-            <td><a href="reports/cluster_190.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.933333333333334" data-deck-count="90" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>73</td>
-            <td>8.93</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>90</td>
-            <td><a href="reports/cluster_73.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.9375" data-deck-count="128" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>231</td>
-            <td>8.94</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>128</td>
-            <td><a href="reports/cluster_231.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.973451327433628" data-deck-count="113" data-main-pokemon="gholdengo" data-secondary-pokemon="scizor">
-            <td>283</td>
-            <td>8.97</td>
-            <td>gholdengo</td>
-            <td>scizor</td>
-            <td>113</td>
-            <td><a href="reports/cluster_283.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="8.994444444444444" data-deck-count="180" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>154</td>
-            <td>8.99</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>180</td>
-            <td><a href="reports/cluster_154.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="quaquaval">
-            <td>4</td>
-            <td>9.00</td>
-            <td>mamoswine</td>
-            <td>quaquaval</td>
-            <td>1</td>
-            <td><a href="reports/cluster_4.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="comfey" data-secondary-pokemon="None">
-            <td>21</td>
-            <td>9.00</td>
-            <td>comfey</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_21.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="chandelure" data-secondary-pokemon="totodile">
-            <td>54</td>
-            <td>9.00</td>
-            <td>chandelure</td>
-            <td>totodile</td>
-            <td>1</td>
-            <td><a href="reports/cluster_54.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="hydreigon" data-secondary-pokemon="pidgeot">
-            <td>109</td>
-            <td>9.00</td>
-            <td>hydreigon</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_109.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="tyranitar" data-secondary-pokemon="pidgeot">
-            <td>120</td>
-            <td>9.00</td>
-            <td>tyranitar</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_120.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>150</td>
-            <td>9.00</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_150.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="garchomp" data-secondary-pokemon="toedscruel">
-            <td>153</td>
-            <td>9.00</td>
-            <td>garchomp</td>
-            <td>toedscruel</td>
-            <td>1</td>
-            <td><a href="reports/cluster_153.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="squawkabilly">
-            <td>176</td>
-            <td>9.00</td>
-            <td>ceruledge</td>
-            <td>squawkabilly</td>
-            <td>1</td>
-            <td><a href="reports/cluster_176.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="iron-crown" data-secondary-pokemon="iron-hands">
-            <td>251</td>
-            <td>9.00</td>
-            <td>iron-crown</td>
-            <td>iron-hands</td>
-            <td>1</td>
-            <td><a href="reports/cluster_251.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="ho-oh" data-secondary-pokemon="armarouge">
-            <td>261</td>
-            <td>9.00</td>
-            <td>ho-oh</td>
-            <td>armarouge</td>
-            <td>1</td>
-            <td><a href="reports/cluster_261.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="ogerpon" data-secondary-pokemon="noctowl">
-            <td>287</td>
-            <td>9.00</td>
-            <td>ogerpon</td>
-            <td>noctowl</td>
-            <td>1</td>
-            <td><a href="reports/cluster_287.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>335</td>
-            <td>9.00</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>1</td>
-            <td><a href="reports/cluster_335.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>353</td>
-            <td>9.00</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_353.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="1" data-main-pokemon="thwackey" data-secondary-pokemon="seaking">
-            <td>386</td>
-            <td>9.00</td>
-            <td>thwackey</td>
-            <td>seaking</td>
-            <td>1</td>
-            <td><a href="reports/cluster_386.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="2" data-main-pokemon="dipplin" data-secondary-pokemon="dipplin">
-            <td>396</td>
-            <td>9.00</td>
-            <td>dipplin</td>
-            <td>dipplin</td>
-            <td>2</td>
-            <td><a href="reports/cluster_396.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="3" data-main-pokemon="charizard" data-secondary-pokemon="charizard">
-            <td>340</td>
-            <td>9.00</td>
-            <td>charizard</td>
-            <td>charizard</td>
-            <td>3</td>
-            <td><a href="reports/cluster_340.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="6" data-main-pokemon="froslass" data-secondary-pokemon="lycanroc">
-            <td>121</td>
-            <td>9.00</td>
-            <td>froslass</td>
-            <td>lycanroc</td>
-            <td>6</td>
-            <td><a href="reports/cluster_121.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="7" data-main-pokemon="metang" data-secondary-pokemon="zacian">
-            <td>125</td>
-            <td>9.00</td>
-            <td>metang</td>
-            <td>zacian</td>
-            <td>7</td>
-            <td><a href="reports/cluster_125.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="9" data-main-pokemon="gouging-fire" data-secondary-pokemon="pecharunt">
-            <td>277</td>
-            <td>9.00</td>
-            <td>gouging-fire</td>
-            <td>pecharunt</td>
-            <td>9</td>
-            <td><a href="reports/cluster_277.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="12" data-main-pokemon="dragapult" data-secondary-pokemon="xatu">
-            <td>295</td>
-            <td>9.00</td>
-            <td>dragapult</td>
-            <td>xatu</td>
-            <td>12</td>
-            <td><a href="reports/cluster_295.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="20" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>301</td>
-            <td>9.00</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>20</td>
-            <td><a href="reports/cluster_301.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="21" data-main-pokemon="hydreigon" data-secondary-pokemon="pidgeot">
-            <td>378</td>
-            <td>9.00</td>
-            <td>hydreigon</td>
-            <td>pidgeot</td>
-            <td>21</td>
-            <td><a href="reports/cluster_378.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.0" data-deck-count="22" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>171</td>
-            <td>9.00</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>22</td>
-            <td><a href="reports/cluster_171.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.051282051282051" data-deck-count="156" data-main-pokemon="archaludon" data-secondary-pokemon="zacian-crowned">
-            <td>12</td>
-            <td>9.05</td>
-            <td>archaludon</td>
-            <td>zacian-crowned</td>
-            <td>156</td>
-            <td><a href="reports/cluster_12.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.095238095238095" data-deck-count="21" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>201</td>
-            <td>9.10</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>21</td>
-            <td><a href="reports/cluster_201.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.096774193548388" data-deck-count="31" data-main-pokemon="gardevoir" data-secondary-pokemon="scream-tail">
-            <td>300</td>
-            <td>9.10</td>
-            <td>gardevoir</td>
-            <td>scream-tail</td>
-            <td>31</td>
-            <td><a href="reports/cluster_300.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.1" data-deck-count="10" data-main-pokemon="blissey" data-secondary-pokemon="ogerpon">
-            <td>166</td>
-            <td>9.10</td>
-            <td>blissey</td>
-            <td>ogerpon</td>
-            <td>10</td>
-            <td><a href="reports/cluster_166.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.1" data-deck-count="40" data-main-pokemon="flareon" data-secondary-pokemon="sylveon">
-            <td>358</td>
-            <td>9.10</td>
-            <td>flareon</td>
-            <td>sylveon</td>
-            <td>40</td>
-            <td><a href="reports/cluster_358.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.142857142857142" data-deck-count="7" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>280</td>
-            <td>9.14</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>7</td>
-            <td><a href="reports/cluster_280.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.166666666666666" data-deck-count="6" data-main-pokemon="dodrio" data-secondary-pokemon="dodrio">
-            <td>141</td>
-            <td>9.17</td>
-            <td>dodrio</td>
-            <td>dodrio</td>
-            <td>6</td>
-            <td><a href="reports/cluster_141.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.170454545454545" data-deck-count="88" data-main-pokemon="noctowl" data-secondary-pokemon="charizard">
-            <td>385</td>
-            <td>9.17</td>
-            <td>noctowl</td>
-            <td>charizard</td>
-            <td>88</td>
-            <td><a href="reports/cluster_385.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.23076923076923" data-deck-count="13" data-main-pokemon="conkeldurr" data-secondary-pokemon="pidgeot">
-            <td>53</td>
-            <td>9.23</td>
-            <td>conkeldurr</td>
-            <td>pidgeot</td>
-            <td>13</td>
-            <td><a href="reports/cluster_53.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.25" data-deck-count="4" data-main-pokemon="iron-thorns" data-secondary-pokemon="None">
-            <td>364</td>
-            <td>9.25</td>
-            <td>iron-thorns</td>
-            <td>None</td>
-            <td>4</td>
-            <td><a href="reports/cluster_364.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.25" data-deck-count="4" data-main-pokemon="magcargo" data-secondary-pokemon="ho-oh">
-            <td>369</td>
-            <td>9.25</td>
-            <td>magcargo</td>
-            <td>ho-oh</td>
-            <td>4</td>
-            <td><a href="reports/cluster_369.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.25" data-deck-count="24" data-main-pokemon="crustle" data-secondary-pokemon="munkidori">
-            <td>310</td>
-            <td>9.25</td>
-            <td>crustle</td>
-            <td>munkidori</td>
-            <td>24</td>
-            <td><a href="reports/cluster_310.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.333333333333334" data-deck-count="6" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>354</td>
-            <td>9.33</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>6</td>
-            <td><a href="reports/cluster_354.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.333333333333334" data-deck-count="12" data-main-pokemon="garchomp" data-secondary-pokemon="froslass">
-            <td>421</td>
-            <td>9.33</td>
-            <td>garchomp</td>
-            <td>froslass</td>
-            <td>12</td>
-            <td><a href="reports/cluster_421.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.344827586206897" data-deck-count="29" data-main-pokemon="garchomp" data-secondary-pokemon="roserade">
-            <td>398</td>
-            <td>9.34</td>
-            <td>garchomp</td>
-            <td>roserade</td>
-            <td>29</td>
-            <td><a href="reports/cluster_398.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.379310344827585" data-deck-count="29" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>3</td>
-            <td>9.38</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>29</td>
-            <td><a href="reports/cluster_3.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.384615384615385" data-deck-count="78" data-main-pokemon="gholdengo" data-secondary-pokemon="typhlosion">
-            <td>65</td>
-            <td>9.38</td>
-            <td>gholdengo</td>
-            <td>typhlosion</td>
-            <td>78</td>
-            <td><a href="reports/cluster_65.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.473684210526315" data-deck-count="19" data-main-pokemon="hydreigon" data-secondary-pokemon="pidgeot">
-            <td>180</td>
-            <td>9.47</td>
-            <td>hydreigon</td>
-            <td>pidgeot</td>
-            <td>19</td>
-            <td><a href="reports/cluster_180.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.5" data-deck-count="2" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>123</td>
-            <td>9.50</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_123.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.5" data-deck-count="2" data-main-pokemon="froslass" data-secondary-pokemon="munkidori">
-            <td>372</td>
-            <td>9.50</td>
-            <td>froslass</td>
-            <td>munkidori</td>
-            <td>2</td>
-            <td><a href="reports/cluster_372.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.5" data-deck-count="6" data-main-pokemon="miraidon" data-secondary-pokemon="pikachu">
-            <td>18</td>
-            <td>9.50</td>
-            <td>miraidon</td>
-            <td>pikachu</td>
-            <td>6</td>
-            <td><a href="reports/cluster_18.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.5" data-deck-count="10" data-main-pokemon="grimmsnarl" data-secondary-pokemon="morpeko">
-            <td>41</td>
-            <td>9.50</td>
-            <td>grimmsnarl</td>
-            <td>morpeko</td>
-            <td>10</td>
-            <td><a href="reports/cluster_41.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.571428571428571" data-deck-count="14" data-main-pokemon="gholdengo" data-secondary-pokemon="togekiss">
-            <td>94</td>
-            <td>9.57</td>
-            <td>gholdengo</td>
-            <td>togekiss</td>
-            <td>14</td>
-            <td><a href="reports/cluster_94.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.6" data-deck-count="5" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>422</td>
-            <td>9.60</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>5</td>
-            <td><a href="reports/cluster_422.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.6" data-deck-count="5" data-main-pokemon="armarouge" data-secondary-pokemon="ho-oh">
-            <td>426</td>
-            <td>9.60</td>
-            <td>armarouge</td>
-            <td>ho-oh</td>
-            <td>5</td>
-            <td><a href="reports/cluster_426.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.6" data-deck-count="10" data-main-pokemon="archaludon" data-secondary-pokemon="dudunsparce">
-            <td>399</td>
-            <td>9.60</td>
-            <td>archaludon</td>
-            <td>dudunsparce</td>
-            <td>10</td>
-            <td><a href="reports/cluster_399.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.666666666666666" data-deck-count="3" data-main-pokemon="dudunsparce" data-secondary-pokemon="roaring-moon">
-            <td>33</td>
-            <td>9.67</td>
-            <td>dudunsparce</td>
-            <td>roaring-moon</td>
-            <td>3</td>
-            <td><a href="reports/cluster_33.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.666666666666666" data-deck-count="3" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>59</td>
-            <td>9.67</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>3</td>
-            <td><a href="reports/cluster_59.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.666666666666666" data-deck-count="3" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>89</td>
-            <td>9.67</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>3</td>
-            <td><a href="reports/cluster_89.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.666666666666666" data-deck-count="3" data-main-pokemon="metagross" data-secondary-pokemon="munkidori">
-            <td>157</td>
-            <td>9.67</td>
-            <td>metagross</td>
-            <td>munkidori</td>
-            <td>3</td>
-            <td><a href="reports/cluster_157.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.666666666666666" data-deck-count="3" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>249</td>
-            <td>9.67</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>3</td>
-            <td><a href="reports/cluster_249.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.714285714285714" data-deck-count="7" data-main-pokemon="blaziken" data-secondary-pokemon="munkidori">
-            <td>124</td>
-            <td>9.71</td>
-            <td>blaziken</td>
-            <td>munkidori</td>
-            <td>7</td>
-            <td><a href="reports/cluster_124.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.714285714285714" data-deck-count="7" data-main-pokemon="milotic" data-secondary-pokemon="farigiraf">
-            <td>328</td>
-            <td>9.71</td>
-            <td>milotic</td>
-            <td>farigiraf</td>
-            <td>7</td>
-            <td><a href="reports/cluster_328.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.75" data-deck-count="4" data-main-pokemon="tyranitar" data-secondary-pokemon="budew">
-            <td>85</td>
-            <td>9.75</td>
-            <td>tyranitar</td>
-            <td>budew</td>
-            <td>4</td>
-            <td><a href="reports/cluster_85.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.818181818181818" data-deck-count="11" data-main-pokemon="magneton" data-secondary-pokemon="miraidon">
-            <td>425</td>
-            <td>9.82</td>
-            <td>magneton</td>
-            <td>miraidon</td>
-            <td>11</td>
-            <td><a href="reports/cluster_425.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.875" data-deck-count="16" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>175</td>
-            <td>9.88</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>16</td>
-            <td><a href="reports/cluster_175.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="9.916666666666666" data-deck-count="12" data-main-pokemon="archaludon" data-secondary-pokemon="scizor">
-            <td>414</td>
-            <td>9.92</td>
-            <td>archaludon</td>
-            <td>scizor</td>
-            <td>12</td>
-            <td><a href="reports/cluster_414.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="tinkaton" data-secondary-pokemon="gardevoir">
-            <td>50</td>
-            <td>10.00</td>
-            <td>tinkaton</td>
-            <td>gardevoir</td>
-            <td>1</td>
-            <td><a href="reports/cluster_50.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="gholdengo" data-secondary-pokemon="None">
-            <td>60</td>
-            <td>10.00</td>
-            <td>gholdengo</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_60.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="slaking" data-secondary-pokemon="pidgeot">
-            <td>68</td>
-            <td>10.00</td>
-            <td>slaking</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_68.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="meowscarada" data-secondary-pokemon="pidgeot">
-            <td>78</td>
-            <td>10.00</td>
-            <td>meowscarada</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_78.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>100</td>
-            <td>10.00</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_100.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="dudunsparce" data-secondary-pokemon="exeggutor-alola">
-            <td>102</td>
-            <td>10.00</td>
-            <td>dudunsparce</td>
-            <td>exeggutor-alola</td>
-            <td>1</td>
-            <td><a href="reports/cluster_102.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="armarouge" data-secondary-pokemon="ho-oh">
-            <td>110</td>
-            <td>10.00</td>
-            <td>armarouge</td>
-            <td>ho-oh</td>
-            <td>1</td>
-            <td><a href="reports/cluster_110.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="ursaluna-bloodmoon" data-secondary-pokemon="maractus">
-            <td>132</td>
-            <td>10.00</td>
-            <td>ursaluna-bloodmoon</td>
-            <td>maractus</td>
-            <td>1</td>
-            <td><a href="reports/cluster_132.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="greninja" data-secondary-pokemon="noctowl">
-            <td>145</td>
-            <td>10.00</td>
-            <td>greninja</td>
-            <td>noctowl</td>
-            <td>1</td>
-            <td><a href="reports/cluster_145.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="aegislash" data-secondary-pokemon="iron-thorns">
-            <td>162</td>
-            <td>10.00</td>
-            <td>aegislash</td>
-            <td>iron-thorns</td>
-            <td>1</td>
-            <td><a href="reports/cluster_162.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="ogerpon">
-            <td>186</td>
-            <td>10.00</td>
-            <td>noctowl</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_186.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="seaking" data-secondary-pokemon="thwackey">
-            <td>220</td>
-            <td>10.00</td>
-            <td>seaking</td>
-            <td>thwackey</td>
-            <td>1</td>
-            <td><a href="reports/cluster_220.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="okidogi" data-secondary-pokemon="ogerpon-cornerstone">
-            <td>224</td>
-            <td>10.00</td>
-            <td>okidogi</td>
-            <td>ogerpon-cornerstone</td>
-            <td>1</td>
-            <td><a href="reports/cluster_224.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>264</td>
-            <td>10.00</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_264.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="greninja" data-secondary-pokemon="xatu">
-            <td>324</td>
-            <td>10.00</td>
-            <td>greninja</td>
-            <td>xatu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_324.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="1" data-main-pokemon="maractus" data-secondary-pokemon="froslass">
-            <td>394</td>
-            <td>10.00</td>
-            <td>maractus</td>
-            <td>froslass</td>
-            <td>1</td>
-            <td><a href="reports/cluster_394.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="2" data-main-pokemon="milotic" data-secondary-pokemon="noivern">
-            <td>207</td>
-            <td>10.00</td>
-            <td>milotic</td>
-            <td>noivern</td>
-            <td>2</td>
-            <td><a href="reports/cluster_207.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="2" data-main-pokemon="froslass" data-secondary-pokemon="munkidori">
-            <td>334</td>
-            <td>10.00</td>
-            <td>froslass</td>
-            <td>munkidori</td>
-            <td>2</td>
-            <td><a href="reports/cluster_334.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="3" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>212</td>
-            <td>10.00</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>3</td>
-            <td><a href="reports/cluster_212.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="3" data-main-pokemon="roaring-moon" data-secondary-pokemon="munkidori">
-            <td>321</td>
-            <td>10.00</td>
-            <td>roaring-moon</td>
-            <td>munkidori</td>
-            <td>3</td>
-            <td><a href="reports/cluster_321.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.0" data-deck-count="4" data-main-pokemon="magcargo" data-secondary-pokemon="ho-oh">
-            <td>66</td>
-            <td>10.00</td>
-            <td>magcargo</td>
-            <td>ho-oh</td>
-            <td>4</td>
-            <td><a href="reports/cluster_66.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.071428571428571" data-deck-count="14" data-main-pokemon="dipplin" data-secondary-pokemon="dipplin">
-            <td>408</td>
-            <td>10.07</td>
-            <td>dipplin</td>
-            <td>dipplin</td>
-            <td>14</td>
-            <td><a href="reports/cluster_408.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.117647058823529" data-deck-count="34" data-main-pokemon="clefairy" data-secondary-pokemon="ogerpon">
-            <td>309</td>
-            <td>10.12</td>
-            <td>clefairy</td>
-            <td>ogerpon</td>
-            <td>34</td>
-            <td><a href="reports/cluster_309.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.153846153846153" data-deck-count="13" data-main-pokemon="grimmsnarl" data-secondary-pokemon="morpeko">
-            <td>330</td>
-            <td>10.15</td>
-            <td>grimmsnarl</td>
-            <td>morpeko</td>
-            <td>13</td>
-            <td><a href="reports/cluster_330.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.2" data-deck-count="10" data-main-pokemon="raging-bolt" data-secondary-pokemon="ogerpon">
-            <td>268</td>
-            <td>10.20</td>
-            <td>raging-bolt</td>
-            <td>ogerpon</td>
-            <td>10</td>
-            <td><a href="reports/cluster_268.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.222222222222221" data-deck-count="9" data-main-pokemon="hydrapple" data-secondary-pokemon="ogerpon">
-            <td>69</td>
-            <td>10.22</td>
-            <td>hydrapple</td>
-            <td>ogerpon</td>
-            <td>9</td>
-            <td><a href="reports/cluster_69.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.222222222222221" data-deck-count="9" data-main-pokemon="armarouge" data-secondary-pokemon="ho-oh">
-            <td>79</td>
-            <td>10.22</td>
-            <td>armarouge</td>
-            <td>ho-oh</td>
-            <td>9</td>
-            <td><a href="reports/cluster_79.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.225" data-deck-count="40" data-main-pokemon="bellibolt" data-secondary-pokemon="kilowattrel">
-            <td>270</td>
-            <td>10.22</td>
-            <td>bellibolt</td>
-            <td>kilowattrel</td>
-            <td>40</td>
-            <td><a href="reports/cluster_270.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.25" data-deck-count="24" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>420</td>
-            <td>10.25</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>24</td>
-            <td><a href="reports/cluster_420.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.285714285714286" data-deck-count="7" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>380</td>
-            <td>10.29</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>7</td>
-            <td><a href="reports/cluster_380.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.333333333333334" data-deck-count="3" data-main-pokemon="magmortar" data-secondary-pokemon="budew">
-            <td>88</td>
-            <td>10.33</td>
-            <td>magmortar</td>
-            <td>budew</td>
-            <td>3</td>
-            <td><a href="reports/cluster_88.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.333333333333334" data-deck-count="9" data-main-pokemon="greninja" data-secondary-pokemon="blaziken">
-            <td>379</td>
-            <td>10.33</td>
-            <td>greninja</td>
-            <td>blaziken</td>
-            <td>9</td>
-            <td><a href="reports/cluster_379.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.333333333333334" data-deck-count="24" data-main-pokemon="archaludon" data-secondary-pokemon="scizor">
-            <td>80</td>
-            <td>10.33</td>
-            <td>archaludon</td>
-            <td>scizor</td>
-            <td>24</td>
-            <td><a href="reports/cluster_80.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.375" data-deck-count="8" data-main-pokemon="pecharunt" data-secondary-pokemon="volcanion">
-            <td>10</td>
-            <td>10.38</td>
-            <td>pecharunt</td>
-            <td>volcanion</td>
-            <td>8</td>
-            <td><a href="reports/cluster_10.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.4" data-deck-count="5" data-main-pokemon="ogerpon" data-secondary-pokemon="clefairy">
-            <td>383</td>
-            <td>10.40</td>
-            <td>ogerpon</td>
-            <td>clefairy</td>
-            <td>5</td>
-            <td><a href="reports/cluster_383.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.4" data-deck-count="5" data-main-pokemon="dipplin" data-secondary-pokemon="dipplin">
-            <td>424</td>
-            <td>10.40</td>
-            <td>dipplin</td>
-            <td>dipplin</td>
-            <td>5</td>
-            <td><a href="reports/cluster_424.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.466666666666667" data-deck-count="15" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>342</td>
-            <td>10.47</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>15</td>
-            <td><a href="reports/cluster_342.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.75" data-deck-count="8" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>135</td>
-            <td>10.75</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>8</td>
-            <td><a href="reports/cluster_135.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.8" data-deck-count="5" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>365</td>
-            <td>10.80</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>5</td>
-            <td><a href="reports/cluster_365.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.85" data-deck-count="20" data-main-pokemon="roaring-moon" data-secondary-pokemon="flutter-mane">
-            <td>305</td>
-            <td>10.85</td>
-            <td>roaring-moon</td>
-            <td>flutter-mane</td>
-            <td>20</td>
-            <td><a href="reports/cluster_305.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="10.9" data-deck-count="10" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>24</td>
-            <td>10.90</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>10</td>
-            <td><a href="reports/cluster_24.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="glimmora" data-secondary-pokemon="okidogi">
-            <td>70</td>
-            <td>11.00</td>
-            <td>glimmora</td>
-            <td>okidogi</td>
-            <td>1</td>
-            <td><a href="reports/cluster_70.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="ting-lu">
-            <td>107</td>
-            <td>11.00</td>
-            <td>ceruledge</td>
-            <td>ting-lu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_107.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="dragapult" data-secondary-pokemon="charizard">
-            <td>119</td>
-            <td>11.00</td>
-            <td>dragapult</td>
-            <td>charizard</td>
-            <td>1</td>
-            <td><a href="reports/cluster_119.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>170</td>
-            <td>11.00</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>1</td>
-            <td><a href="reports/cluster_170.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="pikachu">
-            <td>173</td>
-            <td>11.00</td>
-            <td>noctowl</td>
-            <td>pikachu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_173.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="miraidon" data-secondary-pokemon="iron-hands">
-            <td>179</td>
-            <td>11.00</td>
-            <td>miraidon</td>
-            <td>iron-hands</td>
-            <td>1</td>
-            <td><a href="reports/cluster_179.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="froslass" data-secondary-pokemon="munkidori">
-            <td>181</td>
-            <td>11.00</td>
-            <td>froslass</td>
-            <td>munkidori</td>
-            <td>1</td>
-            <td><a href="reports/cluster_181.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="archaludon" data-secondary-pokemon="revavroom">
-            <td>197</td>
-            <td>11.00</td>
-            <td>archaludon</td>
-            <td>revavroom</td>
-            <td>1</td>
-            <td><a href="reports/cluster_197.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="clefairy" data-secondary-pokemon="ogerpon">
-            <td>248</td>
-            <td>11.00</td>
-            <td>clefairy</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_248.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="froslass" data-secondary-pokemon="munkidori">
-            <td>286</td>
-            <td>11.00</td>
-            <td>froslass</td>
-            <td>munkidori</td>
-            <td>1</td>
-            <td><a href="reports/cluster_286.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="revavroom">
-            <td>307</td>
-            <td>11.00</td>
-            <td>ceruledge</td>
-            <td>revavroom</td>
-            <td>1</td>
-            <td><a href="reports/cluster_307.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="gholdengo" data-secondary-pokemon="scizor">
-            <td>367</td>
-            <td>11.00</td>
-            <td>gholdengo</td>
-            <td>scizor</td>
-            <td>1</td>
-            <td><a href="reports/cluster_367.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="1" data-main-pokemon="zoroark" data-secondary-pokemon="pecharunt">
-            <td>393</td>
-            <td>11.00</td>
-            <td>zoroark</td>
-            <td>pecharunt</td>
-            <td>1</td>
-            <td><a href="reports/cluster_393.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="3" data-main-pokemon="blaziken" data-secondary-pokemon="blaziken">
-            <td>51</td>
-            <td>11.00</td>
-            <td>blaziken</td>
-            <td>blaziken</td>
-            <td>3</td>
-            <td><a href="reports/cluster_51.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="3" data-main-pokemon="dragapult" data-secondary-pokemon="dusknoir">
-            <td>376</td>
-            <td>11.00</td>
-            <td>dragapult</td>
-            <td>dusknoir</td>
-            <td>3</td>
-            <td><a href="reports/cluster_376.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="3" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>427</td>
-            <td>11.00</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>3</td>
-            <td><a href="reports/cluster_427.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.0" data-deck-count="5" data-main-pokemon="tyranitar" data-secondary-pokemon="dudunsparce">
-            <td>83</td>
-            <td>11.00</td>
-            <td>tyranitar</td>
-            <td>dudunsparce</td>
-            <td>5</td>
-            <td><a href="reports/cluster_83.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.2" data-deck-count="5" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>363</td>
-            <td>11.20</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>5</td>
-            <td><a href="reports/cluster_363.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.25" data-deck-count="4" data-main-pokemon="iron-crown" data-secondary-pokemon="iron-hands">
-            <td>348</td>
-            <td>11.25</td>
-            <td>iron-crown</td>
-            <td>iron-hands</td>
-            <td>4</td>
-            <td><a href="reports/cluster_348.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.25" data-deck-count="4" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>438</td>
-            <td>11.25</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>4</td>
-            <td><a href="reports/cluster_438.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.333333333333334" data-deck-count="3" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>64</td>
-            <td>11.33</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>3</td>
-            <td><a href="reports/cluster_64.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.333333333333334" data-deck-count="3" data-main-pokemon="slaking" data-secondary-pokemon="noctowl">
-            <td>82</td>
-            <td>11.33</td>
-            <td>slaking</td>
-            <td>noctowl</td>
-            <td>3</td>
-            <td><a href="reports/cluster_82.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.333333333333334" data-deck-count="3" data-main-pokemon="azumarill" data-secondary-pokemon="noctowl">
-            <td>155</td>
-            <td>11.33</td>
-            <td>azumarill</td>
-            <td>noctowl</td>
-            <td>3</td>
-            <td><a href="reports/cluster_155.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.4" data-deck-count="5" data-main-pokemon="dragapult" data-secondary-pokemon="budew">
-            <td>211</td>
-            <td>11.40</td>
-            <td>dragapult</td>
-            <td>budew</td>
-            <td>5</td>
-            <td><a href="reports/cluster_211.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.4" data-deck-count="5" data-main-pokemon="sinistcha" data-secondary-pokemon="ogerpon">
-            <td>433</td>
-            <td>11.40</td>
-            <td>sinistcha</td>
-            <td>ogerpon</td>
-            <td>5</td>
-            <td><a href="reports/cluster_433.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.5" data-deck-count="4" data-main-pokemon="feraligatr" data-secondary-pokemon="farigiraf">
-            <td>269</td>
-            <td>11.50</td>
-            <td>feraligatr</td>
-            <td>farigiraf</td>
-            <td>4</td>
-            <td><a href="reports/cluster_269.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.666666666666666" data-deck-count="3" data-main-pokemon="noctowl" data-secondary-pokemon="ogerpon">
-            <td>258</td>
-            <td>11.67</td>
-            <td>noctowl</td>
-            <td>ogerpon</td>
-            <td>3</td>
-            <td><a href="reports/cluster_258.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="11.666666666666666" data-deck-count="3" data-main-pokemon="miraidon" data-secondary-pokemon="iron-hands">
-            <td>370</td>
-            <td>11.67</td>
-            <td>miraidon</td>
-            <td>iron-hands</td>
-            <td>3</td>
-            <td><a href="reports/cluster_370.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="cinderace" data-secondary-pokemon="pidgeot">
-            <td>44</td>
-            <td>12.00</td>
-            <td>cinderace</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_44.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="milotic" data-secondary-pokemon="farigiraf">
-            <td>45</td>
-            <td>12.00</td>
-            <td>milotic</td>
-            <td>farigiraf</td>
-            <td>1</td>
-            <td><a href="reports/cluster_45.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="archaludon" data-secondary-pokemon="None">
-            <td>108</td>
-            <td>12.00</td>
-            <td>archaludon</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_108.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="dragapult" data-secondary-pokemon="None">
-            <td>111</td>
-            <td>12.00</td>
-            <td>dragapult</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_111.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="iron-hands" data-secondary-pokemon="iron-crown">
-            <td>142</td>
-            <td>12.00</td>
-            <td>iron-hands</td>
-            <td>iron-crown</td>
-            <td>1</td>
-            <td><a href="reports/cluster_142.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="palafin" data-secondary-pokemon="pecharunt">
-            <td>191</td>
-            <td>12.00</td>
-            <td>palafin</td>
-            <td>pecharunt</td>
-            <td>1</td>
-            <td><a href="reports/cluster_191.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>215</td>
-            <td>12.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_215.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="forretress" data-secondary-pokemon="noctowl">
-            <td>233</td>
-            <td>12.00</td>
-            <td>forretress</td>
-            <td>noctowl</td>
-            <td>1</td>
-            <td><a href="reports/cluster_233.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="metang" data-secondary-pokemon="archaludon">
-            <td>255</td>
-            <td>12.00</td>
-            <td>metang</td>
-            <td>archaludon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_255.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="conkeldurr" data-secondary-pokemon="pidgeot">
-            <td>297</td>
-            <td>12.00</td>
-            <td>conkeldurr</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_297.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="1" data-main-pokemon="archaludon" data-secondary-pokemon="squawkabilly">
-            <td>418</td>
-            <td>12.00</td>
-            <td>archaludon</td>
-            <td>squawkabilly</td>
-            <td>1</td>
-            <td><a href="reports/cluster_418.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="2" data-main-pokemon="ceruledge" data-secondary-pokemon="squawkabilly">
-            <td>188</td>
-            <td>12.00</td>
-            <td>ceruledge</td>
-            <td>squawkabilly</td>
-            <td>2</td>
-            <td><a href="reports/cluster_188.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="3" data-main-pokemon="ogerpon" data-secondary-pokemon="walking-wake">
-            <td>214</td>
-            <td>12.00</td>
-            <td>ogerpon</td>
-            <td>walking-wake</td>
-            <td>3</td>
-            <td><a href="reports/cluster_214.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="3" data-main-pokemon="conkeldurr" data-secondary-pokemon="brute-bonnet">
-            <td>274</td>
-            <td>12.00</td>
-            <td>conkeldurr</td>
-            <td>brute-bonnet</td>
-            <td>3</td>
-            <td><a href="reports/cluster_274.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="3" data-main-pokemon="conkeldurr" data-secondary-pokemon="dudunsparce">
-            <td>405</td>
-            <td>12.00</td>
-            <td>conkeldurr</td>
-            <td>dudunsparce</td>
-            <td>3</td>
-            <td><a href="reports/cluster_405.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.0" data-deck-count="7" data-main-pokemon="baxcalibur" data-secondary-pokemon="revavroom">
-            <td>43</td>
-            <td>12.00</td>
-            <td>baxcalibur</td>
-            <td>revavroom</td>
-            <td>7</td>
-            <td><a href="reports/cluster_43.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.375" data-deck-count="8" data-main-pokemon="flareon" data-secondary-pokemon="noctowl">
-            <td>266</td>
-            <td>12.38</td>
-            <td>flareon</td>
-            <td>noctowl</td>
-            <td>8</td>
-            <td><a href="reports/cluster_266.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.375" data-deck-count="8" data-main-pokemon="noctowl" data-secondary-pokemon="darmanitan">
-            <td>373</td>
-            <td>12.38</td>
-            <td>noctowl</td>
-            <td>darmanitan</td>
-            <td>8</td>
-            <td><a href="reports/cluster_373.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.5" data-deck-count="2" data-main-pokemon="wailord" data-secondary-pokemon="baxcalibur">
-            <td>28</td>
-            <td>12.50</td>
-            <td>wailord</td>
-            <td>baxcalibur</td>
-            <td>2</td>
-            <td><a href="reports/cluster_28.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.5" data-deck-count="2" data-main-pokemon="miraidon" data-secondary-pokemon="iron-hands">
-            <td>237</td>
-            <td>12.50</td>
-            <td>miraidon</td>
-            <td>iron-hands</td>
-            <td>2</td>
-            <td><a href="reports/cluster_237.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.5" data-deck-count="2" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>318</td>
-            <td>12.50</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_318.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.5" data-deck-count="2" data-main-pokemon="gholdengo" data-secondary-pokemon="None">
-            <td>366</td>
-            <td>12.50</td>
-            <td>gholdengo</td>
-            <td>None</td>
-            <td>2</td>
-            <td><a href="reports/cluster_366.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.5" data-deck-count="2" data-main-pokemon="clefairy" data-secondary-pokemon="ogerpon">
-            <td>406</td>
-            <td>12.50</td>
-            <td>clefairy</td>
-            <td>ogerpon</td>
-            <td>2</td>
-            <td><a href="reports/cluster_406.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="12.9" data-deck-count="10" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>319</td>
-            <td>12.90</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>10</td>
-            <td><a href="reports/cluster_319.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="tyranitar" data-secondary-pokemon="dudunsparce">
-            <td>26</td>
-            <td>13.00</td>
-            <td>tyranitar</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_26.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="incineroar" data-secondary-pokemon="pidgeot">
-            <td>35</td>
-            <td>13.00</td>
-            <td>incineroar</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_35.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="miraidon" data-secondary-pokemon="iron-hands">
-            <td>36</td>
-            <td>13.00</td>
-            <td>miraidon</td>
-            <td>iron-hands</td>
-            <td>1</td>
-            <td><a href="reports/cluster_36.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="ceruledge" data-secondary-pokemon="None">
-            <td>192</td>
-            <td>13.00</td>
-            <td>ceruledge</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_192.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="hydreigon" data-secondary-pokemon="pidgeot">
-            <td>242</td>
-            <td>13.00</td>
-            <td>hydreigon</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_242.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="palafin" data-secondary-pokemon="weavile">
-            <td>288</td>
-            <td>13.00</td>
-            <td>palafin</td>
-            <td>weavile</td>
-            <td>1</td>
-            <td><a href="reports/cluster_288.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="1" data-main-pokemon="miraidon" data-secondary-pokemon="iron-hands">
-            <td>296</td>
-            <td>13.00</td>
-            <td>miraidon</td>
-            <td>iron-hands</td>
-            <td>1</td>
-            <td><a href="reports/cluster_296.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="2" data-main-pokemon="typhlosion" data-secondary-pokemon="zacian-crowned">
-            <td>388</td>
-            <td>13.00</td>
-            <td>typhlosion</td>
-            <td>zacian-crowned</td>
-            <td>2</td>
-            <td><a href="reports/cluster_388.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.0" data-deck-count="2" data-main-pokemon="baxcalibur" data-secondary-pokemon="chien-pao">
-            <td>447</td>
-            <td>13.00</td>
-            <td>baxcalibur</td>
-            <td>chien-pao</td>
-            <td>2</td>
-            <td><a href="reports/cluster_447.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.166666666666666" data-deck-count="6" data-main-pokemon="gholdengo" data-secondary-pokemon="togekiss">
-            <td>81</td>
-            <td>13.17</td>
-            <td>gholdengo</td>
-            <td>togekiss</td>
-            <td>6</td>
-            <td><a href="reports/cluster_81.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.2" data-deck-count="5" data-main-pokemon="feraligatr" data-secondary-pokemon="munkidori">
-            <td>349</td>
-            <td>13.20</td>
-            <td>feraligatr</td>
-            <td>munkidori</td>
-            <td>5</td>
-            <td><a href="reports/cluster_349.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.25" data-deck-count="4" data-main-pokemon="ceruledge" data-secondary-pokemon="flareon">
-            <td>440</td>
-            <td>13.25</td>
-            <td>ceruledge</td>
-            <td>flareon</td>
-            <td>4</td>
-            <td><a href="reports/cluster_440.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="13.25" data-deck-count="12" data-main-pokemon="gholdengo" data-secondary-pokemon="togekiss">
-            <td>240</td>
-            <td>13.25</td>
-            <td>gholdengo</td>
-            <td>togekiss</td>
-            <td>12</td>
-            <td><a href="reports/cluster_240.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="dudunsparce" data-secondary-pokemon="yanmega">
-            <td>7</td>
-            <td>14.00</td>
-            <td>dudunsparce</td>
-            <td>yanmega</td>
-            <td>1</td>
-            <td><a href="reports/cluster_7.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="drednaw" data-secondary-pokemon="crustle">
-            <td>90</td>
-            <td>14.00</td>
-            <td>drednaw</td>
-            <td>crustle</td>
-            <td>1</td>
-            <td><a href="reports/cluster_90.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>189</td>
-            <td>14.00</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_189.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>196</td>
-            <td>14.00</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_196.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="rillaboom" data-secondary-pokemon="seaking">
-            <td>199</td>
-            <td>14.00</td>
-            <td>rillaboom</td>
-            <td>seaking</td>
-            <td>1</td>
-            <td><a href="reports/cluster_199.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="palafin" data-secondary-pokemon="munkidori">
-            <td>204</td>
-            <td>14.00</td>
-            <td>palafin</td>
-            <td>munkidori</td>
-            <td>1</td>
-            <td><a href="reports/cluster_204.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="gholdengo" data-secondary-pokemon="dudunsparce">
-            <td>230</td>
-            <td>14.00</td>
-            <td>gholdengo</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_230.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="dudunsparce">
-            <td>246</td>
-            <td>14.00</td>
-            <td>charizard</td>
-            <td>dudunsparce</td>
-            <td>1</td>
-            <td><a href="reports/cluster_246.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="terapagos">
-            <td>247</td>
-            <td>14.00</td>
-            <td>noctowl</td>
-            <td>terapagos</td>
-            <td>1</td>
-            <td><a href="reports/cluster_247.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="zoroark" data-secondary-pokemon="darmanitan">
-            <td>252</td>
-            <td>14.00</td>
-            <td>zoroark</td>
-            <td>darmanitan</td>
-            <td>1</td>
-            <td><a href="reports/cluster_252.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="xatu" data-secondary-pokemon="clefairy">
-            <td>256</td>
-            <td>14.00</td>
-            <td>xatu</td>
-            <td>clefairy</td>
-            <td>1</td>
-            <td><a href="reports/cluster_256.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="1" data-main-pokemon="terapagos" data-secondary-pokemon="pikachu">
-            <td>272</td>
-            <td>14.00</td>
-            <td>terapagos</td>
-            <td>pikachu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_272.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.0" data-deck-count="2" data-main-pokemon="dragapult" data-secondary-pokemon="pidgeot">
-            <td>333</td>
-            <td>14.00</td>
-            <td>dragapult</td>
-            <td>pidgeot</td>
-            <td>2</td>
-            <td><a href="reports/cluster_333.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.333333333333334" data-deck-count="3" data-main-pokemon="metagross" data-secondary-pokemon="revavroom">
-            <td>401</td>
-            <td>14.33</td>
-            <td>metagross</td>
-            <td>revavroom</td>
-            <td>3</td>
-            <td><a href="reports/cluster_401.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.5" data-deck-count="2" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>149</td>
-            <td>14.50</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>2</td>
-            <td><a href="reports/cluster_149.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="14.5" data-deck-count="2" data-main-pokemon="toedscruel" data-secondary-pokemon="ogerpon">
-            <td>218</td>
-            <td>14.50</td>
-            <td>toedscruel</td>
-            <td>ogerpon</td>
-            <td>2</td>
-            <td><a href="reports/cluster_218.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="espathra" data-secondary-pokemon="froslass">
-            <td>115</td>
-            <td>15.00</td>
-            <td>espathra</td>
-            <td>froslass</td>
-            <td>1</td>
-            <td><a href="reports/cluster_115.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="farigiraf" data-secondary-pokemon="espathra">
-            <td>116</td>
-            <td>15.00</td>
-            <td>farigiraf</td>
-            <td>espathra</td>
-            <td>1</td>
-            <td><a href="reports/cluster_116.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="yanmega" data-secondary-pokemon="crustle">
-            <td>118</td>
-            <td>15.00</td>
-            <td>yanmega</td>
-            <td>crustle</td>
-            <td>1</td>
-            <td><a href="reports/cluster_118.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>158</td>
-            <td>15.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_158.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="froslass" data-secondary-pokemon="lycanroc">
-            <td>165</td>
-            <td>15.00</td>
-            <td>froslass</td>
-            <td>lycanroc</td>
-            <td>1</td>
-            <td><a href="reports/cluster_165.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="okidogi" data-secondary-pokemon="None">
-            <td>172</td>
-            <td>15.00</td>
-            <td>okidogi</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_172.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="aegislash" data-secondary-pokemon="rabsca">
-            <td>203</td>
-            <td>15.00</td>
-            <td>aegislash</td>
-            <td>rabsca</td>
-            <td>1</td>
-            <td><a href="reports/cluster_203.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="zoroark" data-secondary-pokemon="reshiram">
-            <td>228</td>
-            <td>15.00</td>
-            <td>zoroark</td>
-            <td>reshiram</td>
-            <td>1</td>
-            <td><a href="reports/cluster_228.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="squawkabilly" data-secondary-pokemon="klawf">
-            <td>232</td>
-            <td>15.00</td>
-            <td>squawkabilly</td>
-            <td>klawf</td>
-            <td>1</td>
-            <td><a href="reports/cluster_232.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="ogerpon-cornerstone" data-secondary-pokemon="mimikyu">
-            <td>290</td>
-            <td>15.00</td>
-            <td>ogerpon-cornerstone</td>
-            <td>mimikyu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_290.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="gardevoir" data-secondary-pokemon="munkidori">
-            <td>337</td>
-            <td>15.00</td>
-            <td>gardevoir</td>
-            <td>munkidori</td>
-            <td>1</td>
-            <td><a href="reports/cluster_337.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>413</td>
-            <td>15.00</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_413.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="2" data-main-pokemon="gholdengo" data-secondary-pokemon="budew">
-            <td>229</td>
-            <td>15.00</td>
-            <td>gholdengo</td>
-            <td>budew</td>
-            <td>2</td>
-            <td><a href="reports/cluster_229.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.0" data-deck-count="2" data-main-pokemon="iron-crown" data-secondary-pokemon="iron-crown">
-            <td>308</td>
-            <td>15.00</td>
-            <td>iron-crown</td>
-            <td>iron-crown</td>
-            <td>2</td>
-            <td><a href="reports/cluster_308.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="15.5" data-deck-count="2" data-main-pokemon="archaludon" data-secondary-pokemon="dubwool">
-            <td>322</td>
-            <td>15.50</td>
-            <td>archaludon</td>
-            <td>dubwool</td>
-            <td>2</td>
-            <td><a href="reports/cluster_322.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="milotic" data-secondary-pokemon="noivern">
-            <td>14</td>
-            <td>16.00</td>
-            <td>milotic</td>
-            <td>noivern</td>
-            <td>1</td>
-            <td><a href="reports/cluster_14.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="ogerpon" data-secondary-pokemon="raging-bolt">
-            <td>30</td>
-            <td>16.00</td>
-            <td>ogerpon</td>
-            <td>raging-bolt</td>
-            <td>1</td>
-            <td><a href="reports/cluster_30.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="regidrago" data-secondary-pokemon="dragapult">
-            <td>42</td>
-            <td>16.00</td>
-            <td>regidrago</td>
-            <td>dragapult</td>
-            <td>1</td>
-            <td><a href="reports/cluster_42.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="lycanroc" data-secondary-pokemon="dodrio">
-            <td>63</td>
-            <td>16.00</td>
-            <td>lycanroc</td>
-            <td>dodrio</td>
-            <td>1</td>
-            <td><a href="reports/cluster_63.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="ogerpon" data-secondary-pokemon="sinistcha">
-            <td>77</td>
-            <td>16.00</td>
-            <td>ogerpon</td>
-            <td>sinistcha</td>
-            <td>1</td>
-            <td><a href="reports/cluster_77.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="iron-thorns" data-secondary-pokemon="None">
-            <td>161</td>
-            <td>16.00</td>
-            <td>iron-thorns</td>
-            <td>None</td>
-            <td>1</td>
-            <td><a href="reports/cluster_161.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>163</td>
-            <td>16.00</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_163.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="hydreigon" data-secondary-pokemon="bronzong">
-            <td>184</td>
-            <td>16.00</td>
-            <td>hydreigon</td>
-            <td>bronzong</td>
-            <td>1</td>
-            <td><a href="reports/cluster_184.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="charizard" data-secondary-pokemon="pidgeot">
-            <td>213</td>
-            <td>16.00</td>
-            <td>charizard</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_213.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="pidgeot" data-secondary-pokemon="milotic">
-            <td>267</td>
-            <td>16.00</td>
-            <td>pidgeot</td>
-            <td>milotic</td>
-            <td>1</td>
-            <td><a href="reports/cluster_267.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="ho-oh" data-secondary-pokemon="armarouge">
-            <td>298</td>
-            <td>16.00</td>
-            <td>ho-oh</td>
-            <td>armarouge</td>
-            <td>1</td>
-            <td><a href="reports/cluster_298.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="typhlosion" data-secondary-pokemon="incineroar">
-            <td>317</td>
-            <td>16.00</td>
-            <td>typhlosion</td>
-            <td>incineroar</td>
-            <td>1</td>
-            <td><a href="reports/cluster_317.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="hydreigon" data-secondary-pokemon="lapras">
-            <td>343</td>
-            <td>16.00</td>
-            <td>hydreigon</td>
-            <td>lapras</td>
-            <td>1</td>
-            <td><a href="reports/cluster_343.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="mamoswine" data-secondary-pokemon="pidgeot">
-            <td>346</td>
-            <td>16.00</td>
-            <td>mamoswine</td>
-            <td>pidgeot</td>
-            <td>1</td>
-            <td><a href="reports/cluster_346.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="magnezone" data-secondary-pokemon="miraidon">
-            <td>357</td>
-            <td>16.00</td>
-            <td>magnezone</td>
-            <td>miraidon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_357.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="slowking" data-secondary-pokemon="xatu">
-            <td>374</td>
-            <td>16.00</td>
-            <td>slowking</td>
-            <td>xatu</td>
-            <td>1</td>
-            <td><a href="reports/cluster_374.md">Link</a></td>
-        </tr>
-
-        <tr data-mean-rank="16.0" data-deck-count="1" data-main-pokemon="noctowl" data-secondary-pokemon="ogerpon">
-            <td>391</td>
-            <td>16.00</td>
-            <td>noctowl</td>
-            <td>ogerpon</td>
-            <td>1</td>
-            <td><a href="reports/cluster_391.md">Link</a></td>
-        </tr>
-
-    </tbody>
-</table>
+| Cluster | Mean Rank | Main Pokémon | Secondary Pokémon | Deck Count |
+|---------|-----------|--------------|-------------------|------------|
+| [22](reports/cluster_22.md) | 1.00 | lugia | archeops | 1 |
+| [39](reports/cluster_39.md) | 1.00 | alakazam | xatu | 1 |
+| [265](reports/cluster_265.md) | 1.00 | flareon | noctowl | 1 |
+| [91](reports/cluster_91.md) | 2.00 | pecharunt | okidogi | 1 |
+| [148](reports/cluster_148.md) | 2.00 | toedscruel | ogerpon | 1 |
+| [236](reports/cluster_236.md) | 2.00 | gardevoir | munkidori | 1 |
+| [238](reports/cluster_238.md) | 2.00 | raging-bolt | ogerpon | 1 |
+| [368](reports/cluster_368.md) | 2.00 | toedscruel | ogerpon | 1 |
+| [437](reports/cluster_437.md) | 2.00 | hydrapple | ogerpon | 1 |
+| [152](reports/cluster_152.md) | 2.50 | roaring-moon | flutter-mane | 2 |
+| [57](reports/cluster_57.md) | 3.00 | noctowl | charizard | 1 |
+| [72](reports/cluster_72.md) | 3.00 | typhlosion | skeledirge | 1 |
+| [93](reports/cluster_93.md) | 3.00 | ceruledge | None | 1 |
+| [146](reports/cluster_146.md) | 3.00 | hydrapple | thwackey | 1 |
+| [160](reports/cluster_160.md) | 3.00 | tyranitar | None | 1 |
+| [167](reports/cluster_167.md) | 3.00 | yanmega | dudunsparce | 1 |
+| [217](reports/cluster_217.md) | 3.00 | farigiraf | milotic | 1 |
+| [245](reports/cluster_245.md) | 3.00 | armarouge | ho-oh | 1 |
+| [276](reports/cluster_276.md) | 3.00 | raging-bolt | ogerpon | 1 |
+| [279](reports/cluster_279.md) | 3.00 | charizard | pidgeot | 1 |
+| [103](reports/cluster_103.md) | 3.00 | palafin | pecharunt | 2 |
+| [306](reports/cluster_306.md) | 3.00 | crustle | ogerpon-cornerstone | 3 |
+| [101](reports/cluster_101.md) | 4.00 | mamoswine | pidgeot | 1 |
+| [105](reports/cluster_105.md) | 4.00 | dragapult | None | 1 |
+| [112](reports/cluster_112.md) | 4.00 | crustle | ogerpon-cornerstone | 1 |
+| [130](reports/cluster_130.md) | 4.00 | toedscruel | ogerpon | 1 |
+| [139](reports/cluster_139.md) | 4.00 | dipplin | thwackey | 1 |
+| [159](reports/cluster_159.md) | 4.00 | charizard | pidgeot | 1 |
+| [169](reports/cluster_169.md) | 4.00 | scovillain | ogerpon | 1 |
+| [194](reports/cluster_194.md) | 4.00 | charizard | pidgeot | 1 |
+| [195](reports/cluster_195.md) | 4.00 | charizard | pidgeot | 1 |
+| [263](reports/cluster_263.md) | 4.00 | charizard | pidgeot | 1 |
+| [273](reports/cluster_273.md) | 4.00 | raging-bolt | ogerpon | 1 |
+| [311](reports/cluster_311.md) | 4.00 | conkeldurr | pidgeot | 1 |
+| [412](reports/cluster_412.md) | 4.00 | blissey | pecharunt | 1 |
+| [441](reports/cluster_441.md) | 4.00 | froslass | espathra | 1 |
+| [409](reports/cluster_409.md) | 4.50 | metagross | clefairy | 2 |
+| [446](reports/cluster_446.md) | 4.75 | toedscruel | ogerpon | 4 |
+| [37](reports/cluster_37.md) | 5.00 | flygon | pidgeot | 1 |
+| [48](reports/cluster_48.md) | 5.00 | metagross | tatsugiri | 1 |
+| [99](reports/cluster_99.md) | 5.00 | miraidon | None | 1 |
+| [187](reports/cluster_187.md) | 5.00 | glaceon | None | 1 |
+| [198](reports/cluster_198.md) | 5.00 | charizard | noctowl | 1 |
+| [200](reports/cluster_200.md) | 5.00 | noctowl | magneton | 1 |
+| [206](reports/cluster_206.md) | 5.00 | iron-thorns | None | 1 |
+| [250](reports/cluster_250.md) | 5.00 | aegislash | dodrio | 1 |
+| [254](reports/cluster_254.md) | 5.00 | zoroark | darmanitan | 1 |
+| [289](reports/cluster_289.md) | 5.00 | mimikyu | ogerpon-cornerstone | 1 |
+| [325](reports/cluster_325.md) | 5.00 | palafin | dudunsparce | 1 |
+| [326](reports/cluster_326.md) | 5.00 | miraidon | magneton | 1 |
+| [411](reports/cluster_411.md) | 5.00 | mamoswine | pidgeot | 1 |
+| [285](reports/cluster_285.md) | 5.00 | iron-valiant | ogerpon | 2 |
+| [423](reports/cluster_423.md) | 5.33 | grimmsnarl | morpeko | 3 |
+| [71](reports/cluster_71.md) | 5.50 | roaring-moon | flutter-mane | 2 |
+| [156](reports/cluster_156.md) | 5.50 | aegislash | tatsugiri | 2 |
+| [316](reports/cluster_316.md) | 5.50 | ogerpon | raging-bolt | 2 |
+| [46](reports/cluster_46.md) | 5.57 | zacian-crowned | cramorant | 7 |
+| [360](reports/cluster_360.md) | 5.60 | archaludon | dudunsparce | 10 |
+| [210](reports/cluster_210.md) | 5.62 | ogerpon | raging-bolt | 16 |
+| [144](reports/cluster_144.md) | 5.67 | great-tusk | great-tusk | 3 |
+| [225](reports/cluster_225.md) | 5.67 | zoroark | darmanitan | 3 |
+| [227](reports/cluster_227.md) | 5.69 | ogerpon | noctowl | 13 |
+| [47](reports/cluster_47.md) | 6.00 | tinkaton | dudunsparce | 1 |
+| [52](reports/cluster_52.md) | 6.00 | mamoswine | garchomp | 1 |
+| [76](reports/cluster_76.md) | 6.00 | dipplin | None | 1 |
+| [104](reports/cluster_104.md) | 6.00 | charizard | pidgeot | 1 |
+| [117](reports/cluster_117.md) | 6.00 | great-tusk | None | 1 |
+| [127](reports/cluster_127.md) | 6.00 | wugtrio | ceruledge | 1 |
+| [168](reports/cluster_168.md) | 6.00 | dodrio | ursaluna-bloodmoon | 1 |
+| [177](reports/cluster_177.md) | 6.00 | xatu | slowking | 1 |
+| [226](reports/cluster_226.md) | 6.00 | dragapult | lycanroc | 1 |
+| [241](reports/cluster_241.md) | 6.00 | milotic | ogerpon-cornerstone | 1 |
+| [341](reports/cluster_341.md) | 6.00 | ceruledge | squawkabilly | 1 |
+| [34](reports/cluster_34.md) | 6.00 | palafin | dudunsparce | 2 |
+| [87](reports/cluster_87.md) | 6.00 | greninja | pidgeot | 2 |
+| [221](reports/cluster_221.md) | 6.00 | froslass | espathra | 2 |
+| [302](reports/cluster_302.md) | 6.00 | gholdengo | scizor | 2 |
+| [402](reports/cluster_402.md) | 6.00 | armarouge | ho-oh | 2 |
+| [312](reports/cluster_312.md) | 6.00 | dipplin | thwackey | 3 |
+| [128](reports/cluster_128.md) | 6.20 | noivern | squawkabilly | 5 |
+| [126](reports/cluster_126.md) | 6.33 | mimikyu | ogerpon-cornerstone | 3 |
+| [432](reports/cluster_432.md) | 6.33 | dudunsparce | tyranitar | 3 |
+| [235](reports/cluster_235.md) | 6.43 | noctowl | azumarill | 7 |
+| [143](reports/cluster_143.md) | 6.50 | scovillain | ogerpon | 2 |
+| [208](reports/cluster_208.md) | 6.50 | espathra | xatu | 4 |
+| [434](reports/cluster_434.md) | 6.60 | okidogi | mimikyu | 5 |
+| [55](reports/cluster_55.md) | 6.60 | aegislash | squawkabilly | 10 |
+| [332](reports/cluster_332.md) | 6.67 | froslass | milotic | 3 |
+| [17](reports/cluster_17.md) | 6.67 | mamoswine | pidgeot | 12 |
+| [344](reports/cluster_344.md) | 6.80 | archaludon | scizor | 5 |
+| [362](reports/cluster_362.md) | 6.80 | mamoswine | pidgeot | 5 |
+| [95](reports/cluster_95.md) | 7.00 | forretress | noctowl | 1 |
+| [106](reports/cluster_106.md) | 7.00 | archaludon | dudunsparce | 1 |
+| [113](reports/cluster_113.md) | 7.00 | regidrago | ogerpon | 1 |
+| [136](reports/cluster_136.md) | 7.00 | dragapult | charizard | 1 |
+| [147](reports/cluster_147.md) | 7.00 | magneton | miraidon | 1 |
+| [185](reports/cluster_185.md) | 7.00 | raging-bolt | ho-oh | 1 |
+| [284](reports/cluster_284.md) | 7.00 | mimikyu | ogerpon-cornerstone | 1 |
+| [293](reports/cluster_293.md) | 7.00 | ogerpon | raging-bolt | 1 |
+| [377](reports/cluster_377.md) | 7.00 | noctowl | dudunsparce | 1 |
+| [444](reports/cluster_444.md) | 7.00 | espathra | ogerpon-cornerstone | 1 |
+| [292](reports/cluster_292.md) | 7.00 | baxcalibur | baxcalibur | 2 |
+| [304](reports/cluster_304.md) | 7.00 | charizard | cramorant | 2 |
+| [400](reports/cluster_400.md) | 7.00 | noctowl | flareon | 2 |
+| [416](reports/cluster_416.md) | 7.00 | bellibolt | kilowattrel | 2 |
+| [205](reports/cluster_205.md) | 7.00 | armarouge | clefairy | 3 |
+| [259](reports/cluster_259.md) | 7.00 | ogerpon | armarouge | 3 |
+| [282](reports/cluster_282.md) | 7.00 | ogerpon | brute-bonnet | 3 |
+| [389](reports/cluster_389.md) | 7.00 | dragapult | dudunsparce | 6 |
+| [361](reports/cluster_361.md) | 7.00 | noctowl | ogerpon | 14 |
+| [182](reports/cluster_182.md) | 7.00 | okidogi | munkidori | 16 |
+| [387](reports/cluster_387.md) | 7.05 | froslass | espathra | 21 |
+| [384](reports/cluster_384.md) | 7.06 | milotic | farigiraf | 18 |
+| [415](reports/cluster_415.md) | 7.08 | charizard | pidgeot | 13 |
+| [133](reports/cluster_133.md) | 7.10 | blissey | munkidori | 20 |
+| [219](reports/cluster_219.md) | 7.14 | iron-valiant | zacian-crowned | 7 |
+| [253](reports/cluster_253.md) | 7.14 | typhlosion | dudunsparce | 14 |
+| [61](reports/cluster_61.md) | 7.15 | mamoswine | pidgeot | 13 |
+| [209](reports/cluster_209.md) | 7.21 | flareon | noctowl | 24 |
+| [134](reports/cluster_134.md) | 7.33 | mamoswine | pidgeot | 3 |
+| [336](reports/cluster_336.md) | 7.33 | dragapult | charizard | 3 |
+| [375](reports/cluster_375.md) | 7.33 | typhlosion | dudunsparce | 12 |
+| [138](reports/cluster_138.md) | 7.40 | galvantula | miraidon | 5 |
+| [20](reports/cluster_20.md) | 7.42 | gardevoir | munkidori | 40 |
+| [281](reports/cluster_281.md) | 7.45 | archaludon | revavroom | 11 |
+| [74](reports/cluster_74.md) | 7.50 | mamoswine | pidgeot | 2 |
+| [243](reports/cluster_243.md) | 7.50 | azumarill | noctowl | 2 |
+| [430](reports/cluster_430.md) | 7.50 | ceruledge | pikachu | 2 |
+| [140](reports/cluster_140.md) | 7.50 | mimikyu | ogerpon-cornerstone | 6 |
+| [291](reports/cluster_291.md) | 7.57 | gholdengo | dudunsparce | 7 |
+| [1](reports/cluster_1.md) | 7.59 | dragapult | dusknoir | 68 |
+| [11](reports/cluster_11.md) | 7.61 | ogerpon | raging-bolt | 102 |
+| [23](reports/cluster_23.md) | 7.61 | archaludon | dubwool | 23 |
+| [395](reports/cluster_395.md) | 7.63 | charizard | pidgeot | 27 |
+| [239](reports/cluster_239.md) | 7.65 | typhlosion | typhlosion | 49 |
+| [49](reports/cluster_49.md) | 7.67 | archaludon | None | 3 |
+| [443](reports/cluster_443.md) | 7.67 | dusknoir | darmanitan | 6 |
+| [323](reports/cluster_323.md) | 7.69 | raging-bolt | ogerpon | 16 |
+| [390](reports/cluster_390.md) | 7.70 | dragapult | dusknoir | 94 |
+| [234](reports/cluster_234.md) | 7.71 | archaludon | zacian-crowned | 7 |
+| [67](reports/cluster_67.md) | 7.75 | garchomp | froslass | 20 |
+| [31](reports/cluster_31.md) | 7.75 | ogerpon | raging-bolt | 328 |
+| [40](reports/cluster_40.md) | 7.79 | milotic | farigiraf | 48 |
+| [410](reports/cluster_410.md) | 7.80 | yanmega | dudunsparce | 10 |
+| [435](reports/cluster_435.md) | 7.81 | noctowl | charizard | 75 |
+| [6](reports/cluster_6.md) | 7.87 | feraligatr | munkidori | 53 |
+| [382](reports/cluster_382.md) | 7.87 | zoroark | darmanitan | 23 |
+| [262](reports/cluster_262.md) | 7.90 | dragapult | iron-thorns | 61 |
+| [381](reports/cluster_381.md) | 7.91 | garchomp | froslass | 11 |
+| [122](reports/cluster_122.md) | 7.91 | slowking | xatu | 23 |
+| [429](reports/cluster_429.md) | 7.91 | archaludon | dudunsparce | 81 |
+| [131](reports/cluster_131.md) | 7.95 | ceruledge | squawkabilly | 19 |
+| [314](reports/cluster_314.md) | 7.98 | archaludon | dubwool | 84 |
+| [19](reports/cluster_19.md) | 8.00 | dragapult | None | 1 |
+| [97](reports/cluster_97.md) | 8.00 | magnezone | miraidon | 1 |
+| [183](reports/cluster_183.md) | 8.00 | noctowl | ogerpon | 1 |
+| [222](reports/cluster_222.md) | 8.00 | ogerpon | raging-bolt | 1 |
+| [223](reports/cluster_223.md) | 8.00 | archaludon | dubwool | 1 |
+| [244](reports/cluster_244.md) | 8.00 | ceruledge | None | 1 |
+| [303](reports/cluster_303.md) | 8.00 | flareon | jolteon | 1 |
+| [315](reports/cluster_315.md) | 8.00 | zoroark | darmanitan | 1 |
+| [436](reports/cluster_436.md) | 8.00 | metagross | dudunsparce | 1 |
+| [75](reports/cluster_75.md) | 8.00 | hydreigon | pidgeot | 2 |
+| [96](reports/cluster_96.md) | 8.00 | gardevoir | munkidori | 2 |
+| [355](reports/cluster_355.md) | 8.00 | iron-crown | iron-crown | 2 |
+| [392](reports/cluster_392.md) | 8.00 | great-tusk | squawkabilly | 2 |
+| [397](reports/cluster_397.md) | 8.00 | archaludon | dubwool | 2 |
+| [299](reports/cluster_299.md) | 8.00 | dipplin | thwackey | 4 |
+| [329](reports/cluster_329.md) | 8.00 | froslass | munkidori | 7 |
+| [347](reports/cluster_347.md) | 8.00 | archaludon | dudunsparce | 9 |
+| [29](reports/cluster_29.md) | 8.00 | milotic | noivern | 11 |
+| [56](reports/cluster_56.md) | 8.03 | ogerpon | noctowl | 212 |
+| [5](reports/cluster_5.md) | 8.04 | charizard | noctowl | 166 |
+| [271](reports/cluster_271.md) | 8.05 | gardevoir | munkidori | 65 |
+| [32](reports/cluster_32.md) | 8.06 | gardevoir | munkidori | 324 |
+| [174](reports/cluster_174.md) | 8.07 | hydrapple | ogerpon | 14 |
+| [351](reports/cluster_351.md) | 8.09 | flareon | noctowl | 33 |
+| [9](reports/cluster_9.md) | 8.11 | garchomp | roserade | 19 |
+| [407](reports/cluster_407.md) | 8.14 | feraligatr | munkidori | 28 |
+| [356](reports/cluster_356.md) | 8.15 | archaludon | squawkabilly | 151 |
+| [92](reports/cluster_92.md) | 8.16 | ogerpon | ogerpon | 406 |
+| [13](reports/cluster_13.md) | 8.19 | dragapult | dusknoir | 241 |
+| [428](reports/cluster_428.md) | 8.19 | dragapult | dusknoir | 128 |
+| [442](reports/cluster_442.md) | 8.20 | flareon | noctowl | 10 |
+| [137](reports/cluster_137.md) | 8.21 | dragapult | xatu | 141 |
+| [404](reports/cluster_404.md) | 8.25 | archaludon | budew | 4 |
+| [439](reports/cluster_439.md) | 8.25 | archaludon | revavroom | 4 |
+| [216](reports/cluster_216.md) | 8.25 | iron-crown | iron-hands | 8 |
+| [151](reports/cluster_151.md) | 8.26 | gholdengo | dudunsparce | 168 |
+| [193](reports/cluster_193.md) | 8.28 | noctowl | flareon | 40 |
+| [38](reports/cluster_38.md) | 8.29 | froslass | espathra | 21 |
+| [129](reports/cluster_129.md) | 8.29 | charizard | dudunsparce | 58 |
+| [359](reports/cluster_359.md) | 8.31 | dragapult | dusknoir | 446 |
+| [8](reports/cluster_8.md) | 8.33 | garchomp | munkidori | 15 |
+| [350](reports/cluster_350.md) | 8.35 | ogerpon | raging-bolt | 179 |
+| [257](reports/cluster_257.md) | 8.35 | roaring-moon | pecharunt | 34 |
+| [339](reports/cluster_339.md) | 8.43 | zacian-crowned | snorlax | 37 |
+| [86](reports/cluster_86.md) | 8.44 | ceruledge | revavroom | 16 |
+| [0](reports/cluster_0.md) | 8.44 | noctowl | ogerpon | 518 |
+| [278](reports/cluster_278.md) | 8.44 | aegislash | tatsugiri | 9 |
+| [313](reports/cluster_313.md) | 8.47 | froslass | munkidori | 30 |
+| [164](reports/cluster_164.md) | 8.47 | gholdengo | dudunsparce | 32 |
+| [431](reports/cluster_431.md) | 8.48 | ceruledge | revavroom | 21 |
+| [15](reports/cluster_15.md) | 8.48 | archaludon | dubwool | 67 |
+| [16](reports/cluster_16.md) | 8.48 | bellibolt | kilowattrel | 23 |
+| [275](reports/cluster_275.md) | 8.50 | gholdengo | dragapult | 2 |
+| [331](reports/cluster_331.md) | 8.50 | archaludon | dudunsparce | 2 |
+| [345](reports/cluster_345.md) | 8.50 | charizard | pidgeot | 2 |
+| [178](reports/cluster_178.md) | 8.52 | dragapult | dusknoir | 250 |
+| [294](reports/cluster_294.md) | 8.54 | ceruledge | drilbur | 13 |
+| [417](reports/cluster_417.md) | 8.62 | mimikyu | ogerpon-cornerstone | 13 |
+| [371](reports/cluster_371.md) | 8.62 | feraligatr | milotic | 29 |
+| [114](reports/cluster_114.md) | 8.67 | banette | banette | 3 |
+| [419](reports/cluster_419.md) | 8.67 | jolteon | flareon | 3 |
+| [27](reports/cluster_27.md) | 8.67 | dipplin | dipplin | 6 |
+| [202](reports/cluster_202.md) | 8.67 | noctowl | terapagos | 36 |
+| [338](reports/cluster_338.md) | 8.68 | ceruledge | noctowl | 50 |
+| [2](reports/cluster_2.md) | 8.74 | gholdengo | dragapult | 27 |
+| [260](reports/cluster_260.md) | 8.75 | slowking | xatu | 4 |
+| [62](reports/cluster_62.md) | 8.76 | flareon | sylveon | 45 |
+| [98](reports/cluster_98.md) | 8.78 | archaludon | scizor | 81 |
+| [84](reports/cluster_84.md) | 8.78 | dragapult | charizard | 135 |
+| [25](reports/cluster_25.md) | 8.80 | iron-crown | iron-hands | 49 |
+| [327](reports/cluster_327.md) | 8.80 | dragapult | dusknoir | 5 |
+| [445](reports/cluster_445.md) | 8.82 | dragapult | blaziken | 11 |
+| [58](reports/cluster_58.md) | 8.83 | gholdengo | dragapult | 181 |
+| [352](reports/cluster_352.md) | 8.88 | raging-bolt | ogerpon | 40 |
+| [320](reports/cluster_320.md) | 8.88 | dragapult | dusknoir | 17 |
+| [403](reports/cluster_403.md) | 8.91 | archaludon | scizor | 11 |
+| [190](reports/cluster_190.md) | 8.93 | slowking | xatu | 27 |
+| [73](reports/cluster_73.md) | 8.93 | charizard | pidgeot | 90 |
+| [231](reports/cluster_231.md) | 8.94 | charizard | pidgeot | 128 |
+| [283](reports/cluster_283.md) | 8.97 | gholdengo | scizor | 113 |
+| [4](reports/cluster_4.md) | 9.00 | mamoswine | quaquaval | 1 |
+| [21](reports/cluster_21.md) | 9.00 | comfey | None | 1 |
+| [54](reports/cluster_54.md) | 9.00 | chandelure | totodile | 1 |
+| [109](reports/cluster_109.md) | 9.00 | hydreigon | pidgeot | 1 |
+| [120](reports/cluster_120.md) | 9.00 | tyranitar | pidgeot | 1 |
+| [150](reports/cluster_150.md) | 9.00 | mamoswine | pidgeot | 1 |
+| [153](reports/cluster_153.md) | 9.00 | garchomp | toedscruel | 1 |
+| [176](reports/cluster_176.md) | 9.00 | ceruledge | squawkabilly | 1 |
+| [251](reports/cluster_251.md) | 9.00 | iron-crown | iron-hands | 1 |
+| [261](reports/cluster_261.md) | 9.00 | ho-oh | armarouge | 1 |
+| [287](reports/cluster_287.md) | 9.00 | ogerpon | noctowl | 1 |
+| [335](reports/cluster_335.md) | 9.00 | archaludon | dubwool | 1 |
+| [353](reports/cluster_353.md) | 9.00 | slowking | xatu | 1 |
+| [386](reports/cluster_386.md) | 9.00 | thwackey | seaking | 1 |
+| [396](reports/cluster_396.md) | 9.00 | dipplin | dipplin | 2 |
+| [340](reports/cluster_340.md) | 9.00 | charizard | charizard | 3 |
+| [121](reports/cluster_121.md) | 9.00 | froslass | lycanroc | 6 |
+| [125](reports/cluster_125.md) | 9.00 | metang | zacian | 7 |
+| [277](reports/cluster_277.md) | 9.00 | gouging-fire | pecharunt | 9 |
+| [295](reports/cluster_295.md) | 9.00 | dragapult | xatu | 12 |
+| [301](reports/cluster_301.md) | 9.00 | gholdengo | dudunsparce | 20 |
+| [378](reports/cluster_378.md) | 9.00 | hydreigon | pidgeot | 21 |
+| [171](reports/cluster_171.md) | 9.00 | slowking | xatu | 22 |
+| [154](reports/cluster_154.md) | 9.02 | zoroark | darmanitan | 179 |
+| [12](reports/cluster_12.md) | 9.05 | archaludon | zacian-crowned | 156 |
+| [201](reports/cluster_201.md) | 9.10 | flareon | noctowl | 21 |
+| [300](reports/cluster_300.md) | 9.10 | gardevoir | scream-tail | 31 |
+| [166](reports/cluster_166.md) | 9.10 | blissey | ogerpon | 10 |
+| [358](reports/cluster_358.md) | 9.10 | flareon | sylveon | 40 |
+| [3](reports/cluster_3.md) | 9.11 | zoroark | darmanitan | 28 |
+| [280](reports/cluster_280.md) | 9.14 | archaludon | dubwool | 7 |
+| [141](reports/cluster_141.md) | 9.17 | dodrio | dodrio | 6 |
+| [385](reports/cluster_385.md) | 9.17 | noctowl | charizard | 88 |
+| [53](reports/cluster_53.md) | 9.23 | conkeldurr | pidgeot | 13 |
+| [364](reports/cluster_364.md) | 9.25 | iron-thorns | None | 4 |
+| [369](reports/cluster_369.md) | 9.25 | magcargo | ho-oh | 4 |
+| [310](reports/cluster_310.md) | 9.25 | crustle | munkidori | 24 |
+| [354](reports/cluster_354.md) | 9.33 | zoroark | darmanitan | 6 |
+| [421](reports/cluster_421.md) | 9.33 | garchomp | froslass | 12 |
+| [398](reports/cluster_398.md) | 9.34 | garchomp | roserade | 29 |
+| [65](reports/cluster_65.md) | 9.38 | gholdengo | typhlosion | 78 |
+| [180](reports/cluster_180.md) | 9.47 | hydreigon | pidgeot | 19 |
+| [123](reports/cluster_123.md) | 9.50 | mamoswine | pidgeot | 2 |
+| [372](reports/cluster_372.md) | 9.50 | froslass | munkidori | 2 |
+| [18](reports/cluster_18.md) | 9.50 | miraidon | pikachu | 6 |
+| [41](reports/cluster_41.md) | 9.50 | grimmsnarl | morpeko | 10 |
+| [94](reports/cluster_94.md) | 9.57 | gholdengo | togekiss | 14 |
+| [422](reports/cluster_422.md) | 9.60 | archaludon | dudunsparce | 5 |
+| [426](reports/cluster_426.md) | 9.60 | armarouge | ho-oh | 5 |
+| [399](reports/cluster_399.md) | 9.60 | archaludon | dudunsparce | 10 |
+| [33](reports/cluster_33.md) | 9.67 | dudunsparce | roaring-moon | 3 |
+| [59](reports/cluster_59.md) | 9.67 | slowking | xatu | 3 |
+| [89](reports/cluster_89.md) | 9.67 | toedscruel | ogerpon | 3 |
+| [157](reports/cluster_157.md) | 9.67 | metagross | munkidori | 3 |
+| [249](reports/cluster_249.md) | 9.67 | charizard | pidgeot | 3 |
+| [124](reports/cluster_124.md) | 9.71 | blaziken | munkidori | 7 |
+| [328](reports/cluster_328.md) | 9.71 | milotic | farigiraf | 7 |
+| [85](reports/cluster_85.md) | 9.75 | tyranitar | budew | 4 |
+| [425](reports/cluster_425.md) | 9.82 | magneton | miraidon | 11 |
+| [175](reports/cluster_175.md) | 9.88 | archaludon | dubwool | 16 |
+| [414](reports/cluster_414.md) | 9.92 | archaludon | scizor | 12 |
+| [50](reports/cluster_50.md) | 10.00 | tinkaton | gardevoir | 1 |
+| [60](reports/cluster_60.md) | 10.00 | gholdengo | None | 1 |
+| [68](reports/cluster_68.md) | 10.00 | slaking | pidgeot | 1 |
+| [78](reports/cluster_78.md) | 10.00 | meowscarada | pidgeot | 1 |
+| [100](reports/cluster_100.md) | 10.00 | raging-bolt | ogerpon | 1 |
+| [102](reports/cluster_102.md) | 10.00 | dudunsparce | exeggutor-alola | 1 |
+| [110](reports/cluster_110.md) | 10.00 | armarouge | ho-oh | 1 |
+| [132](reports/cluster_132.md) | 10.00 | ursaluna-bloodmoon | maractus | 1 |
+| [145](reports/cluster_145.md) | 10.00 | greninja | noctowl | 1 |
+| [162](reports/cluster_162.md) | 10.00 | aegislash | iron-thorns | 1 |
+| [186](reports/cluster_186.md) | 10.00 | noctowl | ogerpon | 1 |
+| [220](reports/cluster_220.md) | 10.00 | seaking | thwackey | 1 |
+| [224](reports/cluster_224.md) | 10.00 | okidogi | ogerpon-cornerstone | 1 |
+| [264](reports/cluster_264.md) | 10.00 | toedscruel | ogerpon | 1 |
+| [324](reports/cluster_324.md) | 10.00 | greninja | xatu | 1 |
+| [394](reports/cluster_394.md) | 10.00 | maractus | froslass | 1 |
+| [207](reports/cluster_207.md) | 10.00 | milotic | noivern | 2 |
+| [334](reports/cluster_334.md) | 10.00 | froslass | munkidori | 2 |
+| [212](reports/cluster_212.md) | 10.00 | gholdengo | dudunsparce | 3 |
+| [321](reports/cluster_321.md) | 10.00 | roaring-moon | munkidori | 3 |
+| [66](reports/cluster_66.md) | 10.00 | magcargo | ho-oh | 4 |
+| [408](reports/cluster_408.md) | 10.07 | dipplin | dipplin | 14 |
+| [309](reports/cluster_309.md) | 10.12 | clefairy | ogerpon | 34 |
+| [330](reports/cluster_330.md) | 10.15 | grimmsnarl | morpeko | 13 |
+| [268](reports/cluster_268.md) | 10.20 | raging-bolt | ogerpon | 10 |
+| [69](reports/cluster_69.md) | 10.22 | hydrapple | ogerpon | 9 |
+| [79](reports/cluster_79.md) | 10.22 | armarouge | ho-oh | 9 |
+| [270](reports/cluster_270.md) | 10.22 | bellibolt | kilowattrel | 40 |
+| [420](reports/cluster_420.md) | 10.25 | charizard | pidgeot | 24 |
+| [380](reports/cluster_380.md) | 10.29 | charizard | pidgeot | 7 |
+| [88](reports/cluster_88.md) | 10.33 | magmortar | budew | 3 |
+| [379](reports/cluster_379.md) | 10.33 | greninja | blaziken | 9 |
+| [80](reports/cluster_80.md) | 10.33 | archaludon | scizor | 24 |
+| [10](reports/cluster_10.md) | 10.38 | pecharunt | volcanion | 8 |
+| [383](reports/cluster_383.md) | 10.40 | ogerpon | clefairy | 5 |
+| [424](reports/cluster_424.md) | 10.40 | dipplin | dipplin | 5 |
+| [342](reports/cluster_342.md) | 10.47 | flareon | noctowl | 15 |
+| [135](reports/cluster_135.md) | 10.75 | gholdengo | dudunsparce | 8 |
+| [365](reports/cluster_365.md) | 10.80 | slowking | xatu | 5 |
+| [305](reports/cluster_305.md) | 10.85 | roaring-moon | flutter-mane | 20 |
+| [24](reports/cluster_24.md) | 10.90 | zoroark | darmanitan | 10 |
+| [70](reports/cluster_70.md) | 11.00 | glimmora | okidogi | 1 |
+| [107](reports/cluster_107.md) | 11.00 | ceruledge | ting-lu | 1 |
+| [119](reports/cluster_119.md) | 11.00 | dragapult | charizard | 1 |
+| [170](reports/cluster_170.md) | 11.00 | zoroark | darmanitan | 1 |
+| [173](reports/cluster_173.md) | 11.00 | noctowl | pikachu | 1 |
+| [179](reports/cluster_179.md) | 11.00 | miraidon | iron-hands | 1 |
+| [181](reports/cluster_181.md) | 11.00 | froslass | munkidori | 1 |
+| [197](reports/cluster_197.md) | 11.00 | archaludon | revavroom | 1 |
+| [248](reports/cluster_248.md) | 11.00 | clefairy | ogerpon | 1 |
+| [286](reports/cluster_286.md) | 11.00 | froslass | munkidori | 1 |
+| [307](reports/cluster_307.md) | 11.00 | ceruledge | revavroom | 1 |
+| [367](reports/cluster_367.md) | 11.00 | gholdengo | scizor | 1 |
+| [393](reports/cluster_393.md) | 11.00 | zoroark | pecharunt | 1 |
+| [51](reports/cluster_51.md) | 11.00 | blaziken | blaziken | 3 |
+| [376](reports/cluster_376.md) | 11.00 | dragapult | dusknoir | 3 |
+| [427](reports/cluster_427.md) | 11.00 | zoroark | darmanitan | 3 |
+| [83](reports/cluster_83.md) | 11.00 | tyranitar | dudunsparce | 5 |
+| [363](reports/cluster_363.md) | 11.20 | mamoswine | pidgeot | 5 |
+| [348](reports/cluster_348.md) | 11.25 | iron-crown | iron-hands | 4 |
+| [438](reports/cluster_438.md) | 11.25 | mamoswine | pidgeot | 4 |
+| [64](reports/cluster_64.md) | 11.33 | mamoswine | pidgeot | 3 |
+| [82](reports/cluster_82.md) | 11.33 | slaking | noctowl | 3 |
+| [155](reports/cluster_155.md) | 11.33 | azumarill | noctowl | 3 |
+| [211](reports/cluster_211.md) | 11.40 | dragapult | budew | 5 |
+| [433](reports/cluster_433.md) | 11.40 | sinistcha | ogerpon | 5 |
+| [269](reports/cluster_269.md) | 11.50 | feraligatr | farigiraf | 4 |
+| [258](reports/cluster_258.md) | 11.67 | noctowl | ogerpon | 3 |
+| [370](reports/cluster_370.md) | 11.67 | miraidon | iron-hands | 3 |
+| [448](reports/cluster_448.md) | 11.80 | zoroark | darmanitan | 5 |
+| [44](reports/cluster_44.md) | 12.00 | cinderace | pidgeot | 1 |
+| [45](reports/cluster_45.md) | 12.00 | milotic | farigiraf | 1 |
+| [108](reports/cluster_108.md) | 12.00 | archaludon | None | 1 |
+| [111](reports/cluster_111.md) | 12.00 | dragapult | None | 1 |
+| [142](reports/cluster_142.md) | 12.00 | iron-hands | iron-crown | 1 |
+| [191](reports/cluster_191.md) | 12.00 | palafin | pecharunt | 1 |
+| [215](reports/cluster_215.md) | 12.00 | charizard | pidgeot | 1 |
+| [233](reports/cluster_233.md) | 12.00 | forretress | noctowl | 1 |
+| [255](reports/cluster_255.md) | 12.00 | metang | archaludon | 1 |
+| [297](reports/cluster_297.md) | 12.00 | conkeldurr | pidgeot | 1 |
+| [418](reports/cluster_418.md) | 12.00 | archaludon | squawkabilly | 1 |
+| [188](reports/cluster_188.md) | 12.00 | ceruledge | squawkabilly | 2 |
+| [214](reports/cluster_214.md) | 12.00 | ogerpon | walking-wake | 3 |
+| [274](reports/cluster_274.md) | 12.00 | conkeldurr | brute-bonnet | 3 |
+| [405](reports/cluster_405.md) | 12.00 | conkeldurr | dudunsparce | 3 |
+| [43](reports/cluster_43.md) | 12.00 | baxcalibur | revavroom | 7 |
+| [266](reports/cluster_266.md) | 12.38 | flareon | noctowl | 8 |
+| [373](reports/cluster_373.md) | 12.38 | noctowl | darmanitan | 8 |
+| [28](reports/cluster_28.md) | 12.50 | wailord | baxcalibur | 2 |
+| [237](reports/cluster_237.md) | 12.50 | miraidon | iron-hands | 2 |
+| [318](reports/cluster_318.md) | 12.50 | charizard | pidgeot | 2 |
+| [366](reports/cluster_366.md) | 12.50 | gholdengo | None | 2 |
+| [406](reports/cluster_406.md) | 12.50 | clefairy | ogerpon | 2 |
+| [319](reports/cluster_319.md) | 12.90 | slowking | xatu | 10 |
+| [26](reports/cluster_26.md) | 13.00 | tyranitar | dudunsparce | 1 |
+| [35](reports/cluster_35.md) | 13.00 | incineroar | pidgeot | 1 |
+| [36](reports/cluster_36.md) | 13.00 | miraidon | iron-hands | 1 |
+| [192](reports/cluster_192.md) | 13.00 | ceruledge | None | 1 |
+| [242](reports/cluster_242.md) | 13.00 | hydreigon | pidgeot | 1 |
+| [288](reports/cluster_288.md) | 13.00 | palafin | weavile | 1 |
+| [296](reports/cluster_296.md) | 13.00 | miraidon | iron-hands | 1 |
+| [388](reports/cluster_388.md) | 13.00 | typhlosion | zacian-crowned | 2 |
+| [447](reports/cluster_447.md) | 13.00 | baxcalibur | chien-pao | 2 |
+| [81](reports/cluster_81.md) | 13.17 | gholdengo | togekiss | 6 |
+| [349](reports/cluster_349.md) | 13.20 | feraligatr | munkidori | 5 |
+| [440](reports/cluster_440.md) | 13.25 | ceruledge | flareon | 4 |
+| [240](reports/cluster_240.md) | 13.25 | gholdengo | togekiss | 12 |
+| [7](reports/cluster_7.md) | 14.00 | dudunsparce | yanmega | 1 |
+| [90](reports/cluster_90.md) | 14.00 | drednaw | crustle | 1 |
+| [189](reports/cluster_189.md) | 14.00 | mamoswine | pidgeot | 1 |
+| [196](reports/cluster_196.md) | 14.00 | slowking | xatu | 1 |
+| [199](reports/cluster_199.md) | 14.00 | rillaboom | seaking | 1 |
+| [204](reports/cluster_204.md) | 14.00 | palafin | munkidori | 1 |
+| [230](reports/cluster_230.md) | 14.00 | gholdengo | dudunsparce | 1 |
+| [246](reports/cluster_246.md) | 14.00 | charizard | dudunsparce | 1 |
+| [247](reports/cluster_247.md) | 14.00 | noctowl | terapagos | 1 |
+| [252](reports/cluster_252.md) | 14.00 | zoroark | darmanitan | 1 |
+| [256](reports/cluster_256.md) | 14.00 | xatu | clefairy | 1 |
+| [272](reports/cluster_272.md) | 14.00 | terapagos | pikachu | 1 |
+| [333](reports/cluster_333.md) | 14.00 | dragapult | pidgeot | 2 |
+| [401](reports/cluster_401.md) | 14.33 | metagross | revavroom | 3 |
+| [149](reports/cluster_149.md) | 14.50 | slowking | xatu | 2 |
+| [218](reports/cluster_218.md) | 14.50 | toedscruel | ogerpon | 2 |
+| [115](reports/cluster_115.md) | 15.00 | espathra | froslass | 1 |
+| [116](reports/cluster_116.md) | 15.00 | farigiraf | espathra | 1 |
+| [118](reports/cluster_118.md) | 15.00 | yanmega | crustle | 1 |
+| [158](reports/cluster_158.md) | 15.00 | charizard | pidgeot | 1 |
+| [165](reports/cluster_165.md) | 15.00 | froslass | lycanroc | 1 |
+| [172](reports/cluster_172.md) | 15.00 | okidogi | None | 1 |
+| [203](reports/cluster_203.md) | 15.00 | aegislash | rabsca | 1 |
+| [228](reports/cluster_228.md) | 15.00 | zoroark | reshiram | 1 |
+| [232](reports/cluster_232.md) | 15.00 | squawkabilly | klawf | 1 |
+| [290](reports/cluster_290.md) | 15.00 | ogerpon-cornerstone | mimikyu | 1 |
+| [337](reports/cluster_337.md) | 15.00 | gardevoir | munkidori | 1 |
+| [413](reports/cluster_413.md) | 15.00 | mamoswine | pidgeot | 1 |
+| [229](reports/cluster_229.md) | 15.00 | gholdengo | budew | 2 |
+| [308](reports/cluster_308.md) | 15.00 | iron-crown | iron-crown | 2 |
+| [322](reports/cluster_322.md) | 15.50 | archaludon | dubwool | 2 |
+| [14](reports/cluster_14.md) | 16.00 | milotic | noivern | 1 |
+| [30](reports/cluster_30.md) | 16.00 | ogerpon | raging-bolt | 1 |
+| [42](reports/cluster_42.md) | 16.00 | regidrago | dragapult | 1 |
+| [63](reports/cluster_63.md) | 16.00 | lycanroc | dodrio | 1 |
+| [77](reports/cluster_77.md) | 16.00 | ogerpon | sinistcha | 1 |
+| [161](reports/cluster_161.md) | 16.00 | iron-thorns | None | 1 |
+| [163](reports/cluster_163.md) | 16.00 | slowking | xatu | 1 |
+| [184](reports/cluster_184.md) | 16.00 | hydreigon | bronzong | 1 |
+| [213](reports/cluster_213.md) | 16.00 | charizard | pidgeot | 1 |
+| [267](reports/cluster_267.md) | 16.00 | pidgeot | milotic | 1 |
+| [298](reports/cluster_298.md) | 16.00 | ho-oh | armarouge | 1 |
+| [317](reports/cluster_317.md) | 16.00 | typhlosion | incineroar | 1 |
+| [343](reports/cluster_343.md) | 16.00 | hydreigon | lapras | 1 |
+| [346](reports/cluster_346.md) | 16.00 | mamoswine | pidgeot | 1 |
+| [357](reports/cluster_357.md) | 16.00 | magnezone | miraidon | 1 |
+| [374](reports/cluster_374.md) | 16.00 | slowking | xatu | 1 |
+| [391](reports/cluster_391.md) | 16.00 | noctowl | ogerpon | 1 |
