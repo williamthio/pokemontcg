@@ -6,6 +6,14 @@ on:
       end_tournament_id:
         description: 'End Tournament ID'
         required: true
+      start_clusters:
+        description: 'Start Clusters'
+        required: true
+        default: '300'
+      end_clusters:
+        description: 'End Clusters'
+        required: true
+        default: '600'
 
 permissions:
   contents: write
@@ -34,7 +42,7 @@ jobs:
       run: python scrape.py ${{ github.event.inputs.end_tournament_id }}
 
     - name: Run cluster.py
-      run: python cluster.py
+      run: python cluster.py ${{ github.event.inputs.start_clusters }} ${{ github.event.inputs.end_clusters }}
 
     - name: Generate reports from CSV
       run: python analyze.py
