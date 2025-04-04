@@ -39,22 +39,21 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run scrape.py
-      run: python scrape.py ${{ github.event.inputs.end_tournament_id }}
+      run: python src/scrape.py ${{ github.event.inputs.end_tournament_id }}
 
     - name: Run cluster.py
-      run: python cluster.py ${{ github.event.inputs.start_clusters }} ${{ github.event.inputs.end_clusters }}
+      run: python src/cluster.py ${{ github.event.inputs.start_clusters }} ${{ github.event.inputs.end_clusters }}
 
     - name: Generate reports from CSV
-      run: python analyze.py
+      run: python src/analyze.py
 
     - name: Commit and push changes
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add tournament_decks.csv progress.txt
-        git add clustered_tournament_decks.csv silhouette_wcss.png
-        git add README.md
-        git add -A reports/
+        git add -A data/
+        git add -A docs/
+        git add silhouette_wcss.png
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push
