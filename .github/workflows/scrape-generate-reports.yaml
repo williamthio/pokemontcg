@@ -1,19 +1,8 @@
 name: Scrape and Generate Reports
 
 on:
-  workflow_dispatch:
-    inputs:
-      end_tournament_id:
-        description: 'End Tournament ID'
-        required: true
-      start_clusters:
-        description: 'Start Clusters'
-        required: true
-        default: '300'
-      end_clusters:
-        description: 'End Clusters'
-        required: true
-        default: '600'
+  schedule:
+    - cron: "0 */3 * * *" # Runs every 3 hours
 
 permissions:
   contents: write
@@ -39,10 +28,7 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Run scrape.py
-      run: python src/scrape.py ${{ github.event.inputs.end_tournament_id }}
-
-    - name: Run cluster.py
-      run: python src/cluster.py ${{ github.event.inputs.start_clusters }} ${{ github.event.inputs.end_clusters }}
+      run: python src/scrape.py
 
     - name: Generate reports from CSV
       run: python src/analyze.py
@@ -53,7 +39,6 @@ jobs:
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
         git add -A data/
         git add -A docs/
-        git add silhouette_wcss.png
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
           git push

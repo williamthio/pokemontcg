@@ -13,7 +13,7 @@ def parse_deck_section(cards):
         parsed_cards.append((section_type, card_name, int(count), card_url))
     return parsed_cards
 
-def parse_decks(file_content, cluster=None):
+def parse_decks(file_content, main_pokemon=None, secondary_pokemon=None, min_rank=None):
     reader = csv.DictReader(file_content.splitlines())
     all_cards = {
         "Pokémon": defaultdict(list),
@@ -24,7 +24,11 @@ def parse_decks(file_content, cluster=None):
     deck_info = []
 
     for row in reader:
-        if cluster is not None and int(row['cluster']) != cluster:
+        if main_pokemon is not None and row['mainpokemon'] != main_pokemon:
+            continue
+        if secondary_pokemon is not None and row['secondarypokemon'] != secondary_pokemon:
+            continue
+        if min_rank is not None and int(row['rank']) > min_rank:
             continue
 
         deck_info.append([v for k, v in row.items() if k != 'cards'])
@@ -45,6 +49,8 @@ def parse_decks(file_content, cluster=None):
                 count = deck_cards[section_type][card_name]
                 all_cards[section_type][card_name].append(count)
     
+    print(f"main_pokemon: {main_pokemon}, secondary_pokemon: {secondary_pokemon}, min_rank: {min_rank}, deck_count: {deck_count}")
+
     return all_cards, deck_count, deck_info
 
 def calculate_card_distribution(all_cards, deck_count):
@@ -67,51 +73,61 @@ def calculate_card_distribution(all_cards, deck_count):
             }
     return distributions
 
-def generate_html_report(card_distributions, deck_info, cluster):
+def get_top_combinations(deck_info, top_n=50):
+     combination_counts = Counter((info[2], info[3]) for info in deck_info)
+     return combination_counts.most_common(top_n)
+
+def clean_docs_folder():
+    if os.path.exists("docs"):
+        for item in os.listdir("docs"):
+            if item not in ["css", "js"]:
+                item_path = os.path.join("docs", item)
+                if os.path.isdir(item_path):
+                    shutil.rmtree(item_path)
+                else:
+                    os.remove(item_path)
+    os.makedirs("docs", exist_ok=True)
+
+def generate_html_report(card_distributions, deck_info):
     env = Environment(loader=FileSystemLoader('src/templates'))
     template = env.get_template('cluster_report.html')
-    return template.render(card_distributions=card_distributions, deck_info=deck_info, cluster=cluster)
+    return template.render(card_distributions=card_distributions, deck_info=deck_info)
 
-def generate_index_html(cluster_summary):
+def generate_index_html(summaries):
     env = Environment(loader=FileSystemLoader('src/templates'))
     template = env.get_template('index.html')
-    return template.render(cluster_summary=cluster_summary)
+    return template.render(summaries=summaries)
 
 if __name__ == "__main__":
-    if os.path.exists("docs"):
-        shutil.rmtree("docs")
-    else:
-        os.makedirs("docs")
+    clean_docs_folder()
 
-    with open("src/data/clustered_tournament_decks.csv", "r", encoding="utf-8") as f:
+    with open("src/data/tournament_decks.csv", "r", encoding="utf-8") as f:
         file_content = f.read()
 
-    data = pd.read_csv("src/data/clustered_tournament_decks.csv")
+    all_cards, deck_count, deck_info = parse_decks(file_content)
+    top_combinations = get_top_combinations(deck_info)
 
-    cluster_summary = data.groupby('cluster').agg(
-        mean_rank=('rank', 'mean'),
-        cluster_size=('cluster', 'size'),
-        main_pokemon=('mainpokemon', lambda x: x.mode()[0] if not x.mode().empty else None),
-        secondary_pokemon=('secondarypokemon', lambda x: x.mode()[0] if not x.mode().empty else None),
-    ).reset_index()
+    summaries = []
+    for rank, ((main, secondary), count) in enumerate(top_combinations, start=1):
+        report_links = {}
+        for min_rank in [1, 4, 8, 16]:
+            filtered_cards, filtered_count, filtered_info = parse_decks(file_content, main_pokemon=main, secondary_pokemon=secondary, min_rank=min_rank)
+            filtered_distributions = calculate_card_distribution(filtered_cards, filtered_count)
+            filtered_report = generate_html_report(filtered_distributions, filtered_info)
 
-    cluster_summary = cluster_summary.sort_values(by=['mean_rank', 'cluster_size'])
+            report_filename = f"{main}_{secondary}_top_{min_rank}.html".replace(" ", "_")
+            with open("docs/" + report_filename, "w", encoding="utf-8") as f:
+                f.write(filtered_report)
+            report_links[min_rank] = report_filename
+        
+        summaries.append({
+            "rank": rank,
+            "main": main,
+            "secondary": secondary,
+            "count": count,
+            "report_links": report_links
+        })
 
-    for _, row in cluster_summary.iterrows():
-        cluster = row['cluster']
-        mean_rank = row['mean_rank']
-        main_pokemon = row['main_pokemon']
-        secondary_pokemon = row['secondary_pokemon']
-        cluster_size = row['cluster_size']
-
-        filtered_cards, filtered_count, filtered_info = parse_decks(file_content, cluster=cluster)
-        filtered_distributions = calculate_card_distribution(filtered_cards, filtered_count)
-        filtered_report = generate_html_report(filtered_distributions, filtered_info, cluster)
-
-        report_filename = f"docs/cluster_{cluster}.html"
-        with open(report_filename, "w", encoding="utf-8") as f:
-            f.write(filtered_report)
-
-    index_html = generate_index_html(cluster_summary)
+    index_html = generate_index_html(summaries)
     with open("docs/index.html", "w", encoding="utf-8") as f:
         f.write(index_html)

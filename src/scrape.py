@@ -12,6 +12,16 @@ def get_with_retry(url):
     response.raise_for_status()
     return response
 
+def get_latest_tournament_id():
+    url = "https://limitlesstcg.com/tournaments/jp"
+    response = get_with_retry(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    first_tournament_link = soup.select_one("table.data-table a[href*='/tournaments/jp/']")
+    if not first_tournament_link:
+        raise ValueError("Could not find the latest tournament link.")
+    latest_tournament_id = int(first_tournament_link['href'].split('/')[-1])
+    return latest_tournament_id
+
 def scrape_tournament(tournament_id):
     base_url = "https://limitlesstcg.com/tournaments/jp/{}"
     tournament_url = base_url.format(tournament_id)
@@ -96,11 +106,7 @@ def sort_csv(file_path):
         writer.writerows(sorted_rows)
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python scrape.py <end_tournament_id>")
-        sys.exit(1)
-    
-    end_tournament_id = int(sys.argv[1])
+    end_tournament_id = get_latest_tournament_id()
     start_tournament_id = 1839
     num_threads = os.cpu_count() or 5  # Use max threads available
 
