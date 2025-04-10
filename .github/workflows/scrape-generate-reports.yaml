@@ -39,7 +39,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add -A data/
+        git add -A src/data/
         git add -A docs/
         if [ -n "$(git status --porcelain)" ]; then
           git commit -m "Add or update markdown files and README"
