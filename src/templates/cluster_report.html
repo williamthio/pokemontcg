@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}Card Distributions{% endblock %}
-{% block content%}
-    <h2 class="mb-4">Card Distributions</h2>
-    <div class="row">
-        <div class="col-lg-4">
-            <h4>Pokémon</h4>
-            <table class="table table-striped table-bordered table-sm">
+{% block content %}
+    <h2 class="ui header">Card Distributions</h2>
+    <div class="ui three column grid">
+        <div class="column">
+            <h4 class="ui header">Pokémon</h4>
+            <table class="ui striped table">
                 <thead>
                     <tr>
                         <th>Card</th>
@@ -33,9 +33,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-4">
-            <h4>Trainer</h4>
-            <table class="table table-striped table-bordered table-sm">
+        <div class="column">
+            <h4 class="ui header">Trainer</h4>
+            <table class="ui striped table">
                 <thead>
                     <tr>
                         <th>Card</th>
@@ -63,9 +63,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-4">
-            <h4>Energy</h4>
-            <table class="table table-striped table-bordered table-sm">
+        <div class="column">
+            <h4 class="ui header">Energy</h4>
+            <table class="ui striped table">
                 <thead>
                     <tr>
                         <th>Card</th>
@@ -95,8 +95,8 @@
         </div>
     </div>
 
-    <h3>Deck Information</h3>
-    <table class="table table-striped table-bordered">
+    <h3 class="ui header">Deck Information</h3>
+    <table class="ui striped table">
         <thead>
             <tr>
                 <th>TID</th>
