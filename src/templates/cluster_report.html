@@ -106,7 +106,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for info in deck_info %}
+            {% for info in deck_info|reverse %}
                 <tr>
                     <td><a href="{{ info[0] }}">{{ info[0].split('/')[-1] }}</a></td>
                     <td>{{ info[5] }}</td>
