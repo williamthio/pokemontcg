@@ -3,8 +3,8 @@ name: Scrape and Generate Reports
 on:
   workflow_dispatch:
 
-  schedule:
-    - cron: "0 */3 * * *" # Runs every 3 hours
+  # schedule:
+  #   - cron: "0 */3 * * *" # Runs every 3 hours
 
 permissions:
   contents: write
