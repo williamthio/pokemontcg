@@ -1,6 +1,5 @@
 import os
 import csv
-import pandas as pd
 from collections import defaultdict, Counter
 from jinja2 import Environment, FileSystemLoader
 import shutil
@@ -89,9 +88,18 @@ def clean_docs_folder():
     os.makedirs("docs", exist_ok=True)
 
 def generate_html_report(card_distributions, deck_info):
+    sorted_distributions = {}
+    for section_type, cards in card_distributions.items():
+        card_sums = {}
+        for card, dist in cards.items():
+            sum_non_zero = sum(perc for count, perc in dist.items() if count > 0)
+            card_sums[card] = sum_non_zero
+        sorted_cards = sorted(cards.items(), key=lambda x: card_sums[x[0]], reverse=True)
+        sorted_distributions[section_type] = dict(sorted_cards)
+    
     env = Environment(loader=FileSystemLoader('src/templates'))
     template = env.get_template('cluster_report.html')
-    return template.render(card_distributions=card_distributions, deck_info=deck_info)
+    return template.render(card_distributions=sorted_distributions, deck_info=deck_info)
 
 def generate_index_html(summaries):
     env = Environment(loader=FileSystemLoader('src/templates'))
