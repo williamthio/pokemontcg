@@ -8,3 +8,10 @@ __pycache__/
 
 # Local environment files
 .env
+
+# Playwright
+.playwright-mcp/
+
+# General
+.DS_Store
+Thumbs.db

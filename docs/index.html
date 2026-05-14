@@ -1,839 +1,2557 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <title>Home - Pokémon TCG Deck Analysis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-    
+    <title>Top Archetypes - Meta Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0c;
+            --bg-surface: #131316;
+            --accent-primary: #7c3aed;
+            --text-main: #f8fafc;
+        }
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.08), transparent 25%);
+            background-attachment: fixed;
+        }
+        .data-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(19, 19, 22, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .neon-text { text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .gradient-text {
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .table-row-hover { transition: all 0.2s ease; }
+        .table-row-hover:hover {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
+            transform: translateX(4px);
+            border-left: 2px solid var(--accent-primary);
+        }
+    </style>
 </head>
-<body>
-    <nav class="ui menu">
-        <a class="header item" href="index.html">Pokémon TCG Analysis</a>
+<body class="min-h-screen flex flex-col antialiased pb-20">
+    <nav class="border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-lg">TCG</div>
+                    <span class="text-xl font-black tracking-tight gradient-text">Pokémon Meta Analytics</span>
+                </a>
+            </div>
+            <div class="flex gap-6 text-sm font-medium text-slate-400">
+                <a href="index.html" class="text-white">Top Decks</a>
+            </div>
+        </div>
     </nav>
-    <main class="ui container">
-    <h1 class="ui header">Pokémon TCG Deck Analysis</h1>
-    <h2 class="ui dividing header mt-4">Top Decks Analysis</h2>
-    <table class="ui striped table unstackable mt-3">
-        <thead>
-            <tr>
-                <th>Rank</th>
-                <th>Main Pokémon</th>
-                <th>Secondary Pokémon</th>
-                <th>Deck Count</th>
-                <th>Top 1</th>
-                <th>Top 4</th>
-                <th>Top 8</th>
-                <th>Top 16</th>
-            </tr>
-        </thead>
-        <tbody>
+    <main class="max-w-7xl mx-auto px-6 mt-12 w-full">
+        
+<header class="mb-12 flex justify-between items-end">
+    <div>
+        <h1 class="text-5xl font-black mb-3 tracking-tight neon-text">Global Metagame <span class="font-light text-slate-500">Overview</span></h1>
+        <p class="text-slate-400 max-w-2xl text-lg">Analysis of competitive deck performance, ranking top-performing archetypes across regional and global events.</p>
+    </div>
+</header>
+
+<section class="glass-panel rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 via-pink-500 to-orange-400"></div>
+    <div class="p-6 border-b border-white/5 flex justify-between items-center">
+        <h2 class="text-2xl font-bold">Tier 1 & 2 Archetypes</h2>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="text-xs uppercase tracking-widest text-slate-500 border-b border-white/5 bg-black/20">
+                    <th class="py-4 px-6 font-semibold w-16 text-center">Rank</th>
+                    <th class="py-4 px-6 font-semibold">Archetype / Core Engine</th>
+                    <th class="py-4 px-6 font-semibold text-right">Meta Share</th>
+                    <th class="py-4 px-6 font-semibold text-center" colspan="4">Tournament Placements</th>
+                </tr>
+                <tr class="text-xs uppercase tracking-widest text-slate-600 border-b border-white/5 bg-black/40">
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th class="py-2 px-3 text-center text-yellow-500 font-bold border-l border-white/5">1st</th>
+                    <th class="py-2 px-3 text-center border-l border-white/5">Top 4</th>
+                    <th class="py-2 px-3 text-center border-l border-white/5">Top 8</th>
+                    <th class="py-2 px-3 text-center border-l border-white/5">Top 16</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm divide-y divide-white/5">
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-yellow-500">
+                            1
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult_meowth_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ meowth</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">1359 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 100.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_meowth_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_meowth_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_meowth_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_meowth_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-orange-400">
+                            2
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="lucario-mega_hariyama_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                lucario-mega <span class="text-slate-500 font-light">+ hariyama</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">1071 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 79.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_hariyama_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_hariyama_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_hariyama_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_hariyama_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-orange-400">
+                            3
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult_dusknoir_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ dusknoir</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">921 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 68.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dusknoir_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dusknoir_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dusknoir_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dusknoir_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            4
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="alakazam_dudunsparce_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                alakazam <span class="text-slate-500 font-light">+ dudunsparce</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">721 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 53.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="alakazam_dudunsparce_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="alakazam_dudunsparce_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="alakazam_dudunsparce_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="alakazam_dudunsparce_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            5
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="garchomp_roserade_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                garchomp <span class="text-slate-500 font-light">+ roserade</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">655 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 48.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="garchomp_roserade_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="garchomp_roserade_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="garchomp_roserade_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="garchomp_roserade_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            6
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult_blaziken_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ blaziken</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">601 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 44.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_blaziken_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_blaziken_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_blaziken_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_blaziken_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            7
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="spidops_mewtwo_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                spidops <span class="text-slate-500 font-light">+ mewtwo</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">531 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 39.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="spidops_mewtwo_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="spidops_mewtwo_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="spidops_mewtwo_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="spidops_mewtwo_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            8
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_arboliva_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ arboliva</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">439 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 32.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_arboliva_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_arboliva_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_arboliva_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_arboliva_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            9
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="grimmsnarl_munkidori_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                grimmsnarl <span class="text-slate-500 font-light">+ munkidori</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">406 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 30.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_munkidori_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_munkidori_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_munkidori_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_munkidori_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            10
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="zoroark_darmanitan_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                zoroark <span class="text-slate-500 font-light">+ darmanitan</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">393 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 29.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark_darmanitan_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark_darmanitan_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark_darmanitan_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark_darmanitan_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            11
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_raging-bolt_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ raging-bolt</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">306 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 23.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_raging-bolt_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_raging-bolt_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_raging-bolt_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_raging-bolt_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            12
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult_dudunsparce_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ dudunsparce</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">304 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 22.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dudunsparce_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dudunsparce_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dudunsparce_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_dudunsparce_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            13
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult__top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ </span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">288 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 21.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult__top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult__top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult__top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult__top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            14
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="lucario-mega_solrock_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                lucario-mega <span class="text-slate-500 font-light">+ solrock</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">254 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 19.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_solrock_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_solrock_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_solrock_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="lucario-mega_solrock_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            15
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="barbaracle_okidogi_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                barbaracle <span class="text-slate-500 font-light">+ okidogi</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">232 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 17.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="barbaracle_okidogi_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="barbaracle_okidogi_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="barbaracle_okidogi_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="barbaracle_okidogi_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            16
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="grimmsnarl_froslass_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                grimmsnarl <span class="text-slate-500 font-light">+ froslass</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">218 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 16.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_froslass_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_froslass_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_froslass_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="grimmsnarl_froslass_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            17
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="zoroark__top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                zoroark <span class="text-slate-500 font-light">+ </span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">213 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 16.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark__top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark__top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark__top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="zoroark__top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            18
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="starmie-mega_froslass-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                starmie-mega <span class="text-slate-500 font-light">+ froslass-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">203 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 15.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="starmie-mega_froslass-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="starmie-mega_froslass-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="starmie-mega_froslass-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="starmie-mega_froslass-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            19
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="venusaur-mega_ogerpon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                venusaur-mega <span class="text-slate-500 font-light">+ ogerpon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">198 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 15.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="venusaur-mega_ogerpon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="venusaur-mega_ogerpon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="venusaur-mega_ogerpon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="venusaur-mega_ogerpon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            20
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="raging-bolt_ogerpon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                raging-bolt <span class="text-slate-500 font-light">+ ogerpon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">189 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 14.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="raging-bolt_ogerpon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="raging-bolt_ogerpon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="raging-bolt_ogerpon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="raging-bolt_ogerpon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            21
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="honchkrow_porygon-z_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                honchkrow <span class="text-slate-500 font-light">+ porygon-z</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">178 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 13.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon-z_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon-z_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon-z_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon-z_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            22
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="honchkrow_porygon2_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                honchkrow <span class="text-slate-500 font-light">+ porygon2</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">175 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 13.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon2_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon2_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon2_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="honchkrow_porygon2_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            23
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_kangaskhan-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ kangaskhan-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">173 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 13.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_kangaskhan-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_kangaskhan-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_kangaskhan-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_kangaskhan-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            24
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="metagross_genesect_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                metagross <span class="text-slate-500 font-light">+ genesect</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">164 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 12.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_genesect_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_genesect_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_genesect_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_genesect_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            25
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dipplin_thwackey_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dipplin <span class="text-slate-500 font-light">+ thwackey</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">161 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 12.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dipplin_thwackey_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dipplin_thwackey_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dipplin_thwackey_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dipplin_thwackey_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            26
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="meganium-mega_ogerpon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                meganium-mega <span class="text-slate-500 font-light">+ ogerpon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">147 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 11.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="meganium-mega_ogerpon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="meganium-mega_ogerpon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="meganium-mega_ogerpon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="meganium-mega_ogerpon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            27
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="archaludon__top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                archaludon <span class="text-slate-500 font-light">+ </span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">143 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 11.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="archaludon__top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="archaludon__top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="archaludon__top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="archaludon__top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            28
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="crustle_munkidori_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                crustle <span class="text-slate-500 font-light">+ munkidori</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">138 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 10.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="crustle_munkidori_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="crustle_munkidori_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="crustle_munkidori_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="crustle_munkidori_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            29
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ceruledge__top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ceruledge <span class="text-slate-500 font-light">+ </span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">130 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 10.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ceruledge__top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ceruledge__top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ceruledge__top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ceruledge__top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            30
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="greninja_dusknoir_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                greninja <span class="text-slate-500 font-light">+ dusknoir</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">123 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 9.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja_dusknoir_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja_dusknoir_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja_dusknoir_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja_dusknoir_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            31
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_hydrapple_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ hydrapple</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">122 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 9.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_hydrapple_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_hydrapple_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_hydrapple_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_hydrapple_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            32
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="greninja-mega_dragapult_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                greninja-mega <span class="text-slate-500 font-light">+ dragapult</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">120 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 9.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dragapult_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dragapult_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dragapult_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dragapult_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            33
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_venusaur-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ venusaur-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">118 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 9.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_venusaur-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_venusaur-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_venusaur-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_venusaur-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            34
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dusknoir_diancie-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dusknoir <span class="text-slate-500 font-light">+ diancie-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">117 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 9.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dusknoir_diancie-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dusknoir_diancie-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dusknoir_diancie-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dusknoir_diancie-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            35
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_noctowl_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ noctowl</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">113 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 8.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_noctowl_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_noctowl_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_noctowl_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_noctowl_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            36
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="kangaskhan-mega_ogerpon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                kangaskhan-mega <span class="text-slate-500 font-light">+ ogerpon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">113 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 8.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="kangaskhan-mega_ogerpon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="kangaskhan-mega_ogerpon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="kangaskhan-mega_ogerpon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="kangaskhan-mega_ogerpon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            37
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult_noctowl_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ noctowl</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">112 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 8.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_noctowl_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_noctowl_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_noctowl_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_noctowl_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            38
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="greninja-mega_dudunsparce_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                greninja-mega <span class="text-slate-500 font-light">+ dudunsparce</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">110 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 8.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dudunsparce_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dudunsparce_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dudunsparce_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="greninja-mega_dudunsparce_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            39
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="clefairy_ogerpon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                clefairy <span class="text-slate-500 font-light">+ ogerpon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">108 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 8.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="clefairy_ogerpon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="clefairy_ogerpon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="clefairy_ogerpon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="clefairy_ogerpon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            40
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="toxtricity_munkidori_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                toxtricity <span class="text-slate-500 font-light">+ munkidori</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">106 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 8.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="toxtricity_munkidori_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="toxtricity_munkidori_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="toxtricity_munkidori_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="toxtricity_munkidori_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            41
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_meowth_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ meowth</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">96 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 7.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_meowth_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_meowth_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_meowth_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_meowth_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            42
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="noctowl_flareon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                noctowl <span class="text-slate-500 font-light">+ flareon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">95 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 7.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_flareon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_flareon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_flareon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_flareon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            43
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="ogerpon_clefairy_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                ogerpon <span class="text-slate-500 font-light">+ clefairy</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">81 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 6.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_clefairy_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_clefairy_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_clefairy_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="ogerpon_clefairy_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            44
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="metagross_empoleon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                metagross <span class="text-slate-500 font-light">+ empoleon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">79 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 6.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_empoleon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_empoleon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_empoleon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="metagross_empoleon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            45
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="froslass-mega_starmie-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                froslass-mega <span class="text-slate-500 font-light">+ starmie-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">76 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 6.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="froslass-mega_starmie-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="froslass-mega_starmie-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="froslass-mega_starmie-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="froslass-mega_starmie-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            46
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="noctowl_ogerpon_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                noctowl <span class="text-slate-500 font-light">+ ogerpon</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">71 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 5.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_ogerpon_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_ogerpon_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_ogerpon_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="noctowl_ogerpon_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            47
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="rillaboom_dipplin_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                rillaboom <span class="text-slate-500 font-light">+ dipplin</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">61 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 4.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="rillaboom_dipplin_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="rillaboom_dipplin_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="rillaboom_dipplin_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="rillaboom_dipplin_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            48
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="slowking_latias_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                slowking <span class="text-slate-500 font-light">+ latias</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">60 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 4.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_latias_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_latias_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_latias_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_latias_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            49
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="dragapult_kangaskhan-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                dragapult <span class="text-slate-500 font-light">+ kangaskhan-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">59 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 4.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_kangaskhan-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_kangaskhan-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_kangaskhan-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="dragapult_kangaskhan-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+                
+                <tr class="table-row-hover group border-l-2 border-transparent">
+                    <td class="py-5 px-6 text-center">
+                        <span class="data-font text-xl font-bold text-slate-400">
+                            50
+                        </span>
+                    </td>
+                    <td class="py-5 px-6">
+                        <a href="slowking_slowbro-mega_top_16.html" class="block group-hover:translate-x-1 transition-transform">
+                            <div class="font-bold text-lg text-white group-hover:text-purple-400 transition-colors capitalize">
+                                slowking <span class="text-slate-500 font-light">+ slowbro-mega</span>
+                            </div>
+                            <div class="text-[10px] text-slate-600 uppercase tracking-tighter group-hover:text-purple-500/50 transition-colors">View Detailed Archetype Report &rarr;</div>
+                        </a>
+                    </td>
+                    <td class="py-5 px-6 text-right">
+                        <div class="data-font text-lg font-bold text-white">57 <span class="text-xs text-slate-500 font-normal">decks</span></div>
+                        <div class="w-32 ml-auto bg-slate-800 rounded-full h-1 mt-2 overflow-hidden">
+                            <div class="bg-gradient-to-r from-purple-500 to-pink-500 h-1 rounded-full" style="width: 4.0%"></div>
+                        </div>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_slowbro-mega_top_1.html" class="inline-block px-3 py-1 bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500 hover:text-black rounded transition-colors data-font font-bold">
+                            Top 1
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_slowbro-mega_top_4.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 4
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_slowbro-mega_top_8.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 8
+                        </a>
+                    </td>
+                    
+                    <td class="py-5 px-3 text-center border-l border-white/5">
+                        <a href="slowking_slowbro-mega_top_16.html" class="inline-block px-3 py-1 bg-white/5 text-slate-300 hover:bg-white/20 rounded transition-colors data-font font-bold">
+                            Top 16
+                        </a>
+                    </td>
+                    
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Global Card Preview -->
+    <div id="global-preview" class="fixed hidden z-[100] pointer-events-none rounded-xl shadow-2xl transition-opacity duration-150 opacity-0 bg-black/80 backdrop-blur-sm p-1 border border-white/10" style="width: 320px;">
+        <img id="global-preview-img" class="w-full rounded-lg" src="" alt="Card Preview">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preview = document.getElementById('global-preview');
+            const previewImg = document.getElementById('global-preview-img');
             
-            <tr>
-                <td>1</td>
-                <td>dragapult</td>
-                <td>meowth</td>
-                <td>1359</td>
-                
-                <td><a href="dragapult_meowth_top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult_meowth_top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult_meowth_top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult_meowth_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>2</td>
-                <td>lucario-mega</td>
-                <td>hariyama</td>
-                <td>1071</td>
-                
-                <td><a href="lucario-mega_hariyama_top_1.html">Top 1</a></td>
-                
-                <td><a href="lucario-mega_hariyama_top_4.html">Top 4</a></td>
-                
-                <td><a href="lucario-mega_hariyama_top_8.html">Top 8</a></td>
-                
-                <td><a href="lucario-mega_hariyama_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>3</td>
-                <td>dragapult</td>
-                <td>dusknoir</td>
-                <td>921</td>
-                
-                <td><a href="dragapult_dusknoir_top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult_dusknoir_top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult_dusknoir_top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult_dusknoir_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>4</td>
-                <td>alakazam</td>
-                <td>dudunsparce</td>
-                <td>721</td>
-                
-                <td><a href="alakazam_dudunsparce_top_1.html">Top 1</a></td>
-                
-                <td><a href="alakazam_dudunsparce_top_4.html">Top 4</a></td>
-                
-                <td><a href="alakazam_dudunsparce_top_8.html">Top 8</a></td>
-                
-                <td><a href="alakazam_dudunsparce_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>5</td>
-                <td>garchomp</td>
-                <td>roserade</td>
-                <td>655</td>
-                
-                <td><a href="garchomp_roserade_top_1.html">Top 1</a></td>
-                
-                <td><a href="garchomp_roserade_top_4.html">Top 4</a></td>
-                
-                <td><a href="garchomp_roserade_top_8.html">Top 8</a></td>
-                
-                <td><a href="garchomp_roserade_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>6</td>
-                <td>dragapult</td>
-                <td>blaziken</td>
-                <td>601</td>
-                
-                <td><a href="dragapult_blaziken_top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult_blaziken_top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult_blaziken_top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult_blaziken_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>7</td>
-                <td>spidops</td>
-                <td>mewtwo</td>
-                <td>531</td>
-                
-                <td><a href="spidops_mewtwo_top_1.html">Top 1</a></td>
-                
-                <td><a href="spidops_mewtwo_top_4.html">Top 4</a></td>
-                
-                <td><a href="spidops_mewtwo_top_8.html">Top 8</a></td>
-                
-                <td><a href="spidops_mewtwo_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>8</td>
-                <td>ogerpon</td>
-                <td>arboliva</td>
-                <td>439</td>
-                
-                <td><a href="ogerpon_arboliva_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_arboliva_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_arboliva_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_arboliva_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>9</td>
-                <td>grimmsnarl</td>
-                <td>munkidori</td>
-                <td>406</td>
-                
-                <td><a href="grimmsnarl_munkidori_top_1.html">Top 1</a></td>
-                
-                <td><a href="grimmsnarl_munkidori_top_4.html">Top 4</a></td>
-                
-                <td><a href="grimmsnarl_munkidori_top_8.html">Top 8</a></td>
-                
-                <td><a href="grimmsnarl_munkidori_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>10</td>
-                <td>zoroark</td>
-                <td>darmanitan</td>
-                <td>393</td>
-                
-                <td><a href="zoroark_darmanitan_top_1.html">Top 1</a></td>
-                
-                <td><a href="zoroark_darmanitan_top_4.html">Top 4</a></td>
-                
-                <td><a href="zoroark_darmanitan_top_8.html">Top 8</a></td>
-                
-                <td><a href="zoroark_darmanitan_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>11</td>
-                <td>ogerpon</td>
-                <td>raging-bolt</td>
-                <td>306</td>
-                
-                <td><a href="ogerpon_raging-bolt_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_raging-bolt_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_raging-bolt_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_raging-bolt_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>12</td>
-                <td>dragapult</td>
-                <td>dudunsparce</td>
-                <td>304</td>
-                
-                <td><a href="dragapult_dudunsparce_top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult_dudunsparce_top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult_dudunsparce_top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult_dudunsparce_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>13</td>
-                <td>dragapult</td>
-                <td></td>
-                <td>288</td>
-                
-                <td><a href="dragapult__top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult__top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult__top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult__top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>14</td>
-                <td>lucario-mega</td>
-                <td>solrock</td>
-                <td>254</td>
-                
-                <td><a href="lucario-mega_solrock_top_1.html">Top 1</a></td>
-                
-                <td><a href="lucario-mega_solrock_top_4.html">Top 4</a></td>
-                
-                <td><a href="lucario-mega_solrock_top_8.html">Top 8</a></td>
-                
-                <td><a href="lucario-mega_solrock_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>15</td>
-                <td>barbaracle</td>
-                <td>okidogi</td>
-                <td>232</td>
-                
-                <td><a href="barbaracle_okidogi_top_1.html">Top 1</a></td>
-                
-                <td><a href="barbaracle_okidogi_top_4.html">Top 4</a></td>
-                
-                <td><a href="barbaracle_okidogi_top_8.html">Top 8</a></td>
-                
-                <td><a href="barbaracle_okidogi_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>16</td>
-                <td>grimmsnarl</td>
-                <td>froslass</td>
-                <td>218</td>
-                
-                <td><a href="grimmsnarl_froslass_top_1.html">Top 1</a></td>
-                
-                <td><a href="grimmsnarl_froslass_top_4.html">Top 4</a></td>
-                
-                <td><a href="grimmsnarl_froslass_top_8.html">Top 8</a></td>
-                
-                <td><a href="grimmsnarl_froslass_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>17</td>
-                <td>zoroark</td>
-                <td></td>
-                <td>213</td>
-                
-                <td><a href="zoroark__top_1.html">Top 1</a></td>
-                
-                <td><a href="zoroark__top_4.html">Top 4</a></td>
-                
-                <td><a href="zoroark__top_8.html">Top 8</a></td>
-                
-                <td><a href="zoroark__top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>18</td>
-                <td>starmie-mega</td>
-                <td>froslass-mega</td>
-                <td>203</td>
-                
-                <td><a href="starmie-mega_froslass-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="starmie-mega_froslass-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="starmie-mega_froslass-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="starmie-mega_froslass-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>19</td>
-                <td>venusaur-mega</td>
-                <td>ogerpon</td>
-                <td>198</td>
-                
-                <td><a href="venusaur-mega_ogerpon_top_1.html">Top 1</a></td>
-                
-                <td><a href="venusaur-mega_ogerpon_top_4.html">Top 4</a></td>
-                
-                <td><a href="venusaur-mega_ogerpon_top_8.html">Top 8</a></td>
-                
-                <td><a href="venusaur-mega_ogerpon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>20</td>
-                <td>raging-bolt</td>
-                <td>ogerpon</td>
-                <td>189</td>
-                
-                <td><a href="raging-bolt_ogerpon_top_1.html">Top 1</a></td>
-                
-                <td><a href="raging-bolt_ogerpon_top_4.html">Top 4</a></td>
-                
-                <td><a href="raging-bolt_ogerpon_top_8.html">Top 8</a></td>
-                
-                <td><a href="raging-bolt_ogerpon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>21</td>
-                <td>honchkrow</td>
-                <td>porygon-z</td>
-                <td>178</td>
-                
-                <td><a href="honchkrow_porygon-z_top_1.html">Top 1</a></td>
-                
-                <td><a href="honchkrow_porygon-z_top_4.html">Top 4</a></td>
-                
-                <td><a href="honchkrow_porygon-z_top_8.html">Top 8</a></td>
-                
-                <td><a href="honchkrow_porygon-z_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>22</td>
-                <td>honchkrow</td>
-                <td>porygon2</td>
-                <td>175</td>
-                
-                <td><a href="honchkrow_porygon2_top_1.html">Top 1</a></td>
-                
-                <td><a href="honchkrow_porygon2_top_4.html">Top 4</a></td>
-                
-                <td><a href="honchkrow_porygon2_top_8.html">Top 8</a></td>
-                
-                <td><a href="honchkrow_porygon2_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>23</td>
-                <td>ogerpon</td>
-                <td>kangaskhan-mega</td>
-                <td>173</td>
-                
-                <td><a href="ogerpon_kangaskhan-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_kangaskhan-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_kangaskhan-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_kangaskhan-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>24</td>
-                <td>metagross</td>
-                <td>genesect</td>
-                <td>164</td>
-                
-                <td><a href="metagross_genesect_top_1.html">Top 1</a></td>
-                
-                <td><a href="metagross_genesect_top_4.html">Top 4</a></td>
-                
-                <td><a href="metagross_genesect_top_8.html">Top 8</a></td>
-                
-                <td><a href="metagross_genesect_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>25</td>
-                <td>dipplin</td>
-                <td>thwackey</td>
-                <td>161</td>
-                
-                <td><a href="dipplin_thwackey_top_1.html">Top 1</a></td>
-                
-                <td><a href="dipplin_thwackey_top_4.html">Top 4</a></td>
-                
-                <td><a href="dipplin_thwackey_top_8.html">Top 8</a></td>
-                
-                <td><a href="dipplin_thwackey_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>26</td>
-                <td>meganium-mega</td>
-                <td>ogerpon</td>
-                <td>147</td>
-                
-                <td><a href="meganium-mega_ogerpon_top_1.html">Top 1</a></td>
-                
-                <td><a href="meganium-mega_ogerpon_top_4.html">Top 4</a></td>
-                
-                <td><a href="meganium-mega_ogerpon_top_8.html">Top 8</a></td>
-                
-                <td><a href="meganium-mega_ogerpon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>27</td>
-                <td>archaludon</td>
-                <td></td>
-                <td>143</td>
-                
-                <td><a href="archaludon__top_1.html">Top 1</a></td>
-                
-                <td><a href="archaludon__top_4.html">Top 4</a></td>
-                
-                <td><a href="archaludon__top_8.html">Top 8</a></td>
-                
-                <td><a href="archaludon__top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>28</td>
-                <td>crustle</td>
-                <td>munkidori</td>
-                <td>138</td>
-                
-                <td><a href="crustle_munkidori_top_1.html">Top 1</a></td>
-                
-                <td><a href="crustle_munkidori_top_4.html">Top 4</a></td>
-                
-                <td><a href="crustle_munkidori_top_8.html">Top 8</a></td>
-                
-                <td><a href="crustle_munkidori_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>29</td>
-                <td>ceruledge</td>
-                <td></td>
-                <td>130</td>
-                
-                <td><a href="ceruledge__top_1.html">Top 1</a></td>
-                
-                <td><a href="ceruledge__top_4.html">Top 4</a></td>
-                
-                <td><a href="ceruledge__top_8.html">Top 8</a></td>
-                
-                <td><a href="ceruledge__top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>30</td>
-                <td>greninja</td>
-                <td>dusknoir</td>
-                <td>123</td>
-                
-                <td><a href="greninja_dusknoir_top_1.html">Top 1</a></td>
-                
-                <td><a href="greninja_dusknoir_top_4.html">Top 4</a></td>
-                
-                <td><a href="greninja_dusknoir_top_8.html">Top 8</a></td>
-                
-                <td><a href="greninja_dusknoir_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>31</td>
-                <td>ogerpon</td>
-                <td>hydrapple</td>
-                <td>122</td>
-                
-                <td><a href="ogerpon_hydrapple_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_hydrapple_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_hydrapple_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_hydrapple_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>32</td>
-                <td>greninja-mega</td>
-                <td>dragapult</td>
-                <td>120</td>
-                
-                <td><a href="greninja-mega_dragapult_top_1.html">Top 1</a></td>
-                
-                <td><a href="greninja-mega_dragapult_top_4.html">Top 4</a></td>
-                
-                <td><a href="greninja-mega_dragapult_top_8.html">Top 8</a></td>
-                
-                <td><a href="greninja-mega_dragapult_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>33</td>
-                <td>ogerpon</td>
-                <td>venusaur-mega</td>
-                <td>118</td>
-                
-                <td><a href="ogerpon_venusaur-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_venusaur-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_venusaur-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_venusaur-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>34</td>
-                <td>dusknoir</td>
-                <td>diancie-mega</td>
-                <td>117</td>
-                
-                <td><a href="dusknoir_diancie-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="dusknoir_diancie-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="dusknoir_diancie-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="dusknoir_diancie-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>35</td>
-                <td>ogerpon</td>
-                <td>noctowl</td>
-                <td>113</td>
-                
-                <td><a href="ogerpon_noctowl_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_noctowl_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_noctowl_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_noctowl_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>36</td>
-                <td>kangaskhan-mega</td>
-                <td>ogerpon</td>
-                <td>113</td>
-                
-                <td><a href="kangaskhan-mega_ogerpon_top_1.html">Top 1</a></td>
-                
-                <td><a href="kangaskhan-mega_ogerpon_top_4.html">Top 4</a></td>
-                
-                <td><a href="kangaskhan-mega_ogerpon_top_8.html">Top 8</a></td>
-                
-                <td><a href="kangaskhan-mega_ogerpon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>37</td>
-                <td>dragapult</td>
-                <td>noctowl</td>
-                <td>112</td>
-                
-                <td><a href="dragapult_noctowl_top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult_noctowl_top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult_noctowl_top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult_noctowl_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>38</td>
-                <td>greninja-mega</td>
-                <td>dudunsparce</td>
-                <td>110</td>
-                
-                <td><a href="greninja-mega_dudunsparce_top_1.html">Top 1</a></td>
-                
-                <td><a href="greninja-mega_dudunsparce_top_4.html">Top 4</a></td>
-                
-                <td><a href="greninja-mega_dudunsparce_top_8.html">Top 8</a></td>
-                
-                <td><a href="greninja-mega_dudunsparce_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>39</td>
-                <td>clefairy</td>
-                <td>ogerpon</td>
-                <td>108</td>
-                
-                <td><a href="clefairy_ogerpon_top_1.html">Top 1</a></td>
-                
-                <td><a href="clefairy_ogerpon_top_4.html">Top 4</a></td>
-                
-                <td><a href="clefairy_ogerpon_top_8.html">Top 8</a></td>
-                
-                <td><a href="clefairy_ogerpon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>40</td>
-                <td>toxtricity</td>
-                <td>munkidori</td>
-                <td>106</td>
-                
-                <td><a href="toxtricity_munkidori_top_1.html">Top 1</a></td>
-                
-                <td><a href="toxtricity_munkidori_top_4.html">Top 4</a></td>
-                
-                <td><a href="toxtricity_munkidori_top_8.html">Top 8</a></td>
-                
-                <td><a href="toxtricity_munkidori_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>41</td>
-                <td>ogerpon</td>
-                <td>meowth</td>
-                <td>96</td>
-                
-                <td><a href="ogerpon_meowth_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_meowth_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_meowth_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_meowth_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>42</td>
-                <td>noctowl</td>
-                <td>flareon</td>
-                <td>95</td>
-                
-                <td><a href="noctowl_flareon_top_1.html">Top 1</a></td>
-                
-                <td><a href="noctowl_flareon_top_4.html">Top 4</a></td>
-                
-                <td><a href="noctowl_flareon_top_8.html">Top 8</a></td>
-                
-                <td><a href="noctowl_flareon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>43</td>
-                <td>ogerpon</td>
-                <td>clefairy</td>
-                <td>81</td>
-                
-                <td><a href="ogerpon_clefairy_top_1.html">Top 1</a></td>
-                
-                <td><a href="ogerpon_clefairy_top_4.html">Top 4</a></td>
-                
-                <td><a href="ogerpon_clefairy_top_8.html">Top 8</a></td>
-                
-                <td><a href="ogerpon_clefairy_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>44</td>
-                <td>metagross</td>
-                <td>empoleon</td>
-                <td>79</td>
-                
-                <td><a href="metagross_empoleon_top_1.html">Top 1</a></td>
-                
-                <td><a href="metagross_empoleon_top_4.html">Top 4</a></td>
-                
-                <td><a href="metagross_empoleon_top_8.html">Top 8</a></td>
-                
-                <td><a href="metagross_empoleon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>45</td>
-                <td>froslass-mega</td>
-                <td>starmie-mega</td>
-                <td>76</td>
-                
-                <td><a href="froslass-mega_starmie-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="froslass-mega_starmie-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="froslass-mega_starmie-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="froslass-mega_starmie-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>46</td>
-                <td>noctowl</td>
-                <td>ogerpon</td>
-                <td>71</td>
-                
-                <td><a href="noctowl_ogerpon_top_1.html">Top 1</a></td>
-                
-                <td><a href="noctowl_ogerpon_top_4.html">Top 4</a></td>
-                
-                <td><a href="noctowl_ogerpon_top_8.html">Top 8</a></td>
-                
-                <td><a href="noctowl_ogerpon_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>47</td>
-                <td>rillaboom</td>
-                <td>dipplin</td>
-                <td>61</td>
-                
-                <td><a href="rillaboom_dipplin_top_1.html">Top 1</a></td>
-                
-                <td><a href="rillaboom_dipplin_top_4.html">Top 4</a></td>
-                
-                <td><a href="rillaboom_dipplin_top_8.html">Top 8</a></td>
-                
-                <td><a href="rillaboom_dipplin_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>48</td>
-                <td>slowking</td>
-                <td>latias</td>
-                <td>60</td>
-                
-                <td><a href="slowking_latias_top_1.html">Top 1</a></td>
-                
-                <td><a href="slowking_latias_top_4.html">Top 4</a></td>
-                
-                <td><a href="slowking_latias_top_8.html">Top 8</a></td>
-                
-                <td><a href="slowking_latias_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>49</td>
-                <td>dragapult</td>
-                <td>kangaskhan-mega</td>
-                <td>59</td>
-                
-                <td><a href="dragapult_kangaskhan-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="dragapult_kangaskhan-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="dragapult_kangaskhan-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="dragapult_kangaskhan-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-            <tr>
-                <td>50</td>
-                <td>slowking</td>
-                <td>slowbro-mega</td>
-                <td>57</td>
-                
-                <td><a href="slowking_slowbro-mega_top_1.html">Top 1</a></td>
-                
-                <td><a href="slowking_slowbro-mega_top_4.html">Top 4</a></td>
-                
-                <td><a href="slowking_slowbro-mega_top_8.html">Top 8</a></td>
-                
-                <td><a href="slowking_slowbro-mega_top_16.html">Top 16</a></td>
-                
-            </tr>
-            
-        </tbody>
-    </table>
-</main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+            document.querySelectorAll('.card-preview-trigger').forEach(trigger => {
+                trigger.addEventListener('mouseenter', (e) => {
+                    const imgUrl = e.target.dataset.image;
+                    const fallbackUrl = e.target.dataset.fallback;
+                    
+                    previewImg.src = imgUrl;
+                    previewImg.onerror = () => { 
+                        if(previewImg.src !== fallbackUrl) {
+                            previewImg.src = fallbackUrl; 
+                        }
+                    };
+                    
+                    preview.style.display = 'block';
+                    setTimeout(() => preview.classList.remove('opacity-0'), 10);
+                    
+                    const rect = e.target.getBoundingClientRect();
+                    const previewHeight = 446; // Approx height of standard pokemon card at 320px width
+                    
+                    let top = rect.top - (previewHeight / 2) + (rect.height / 2);
+                    top = Math.max(20, Math.min(top, window.innerHeight - previewHeight - 20));
+                    
+                    let left = rect.right + 20;
+                    if (left + 320 > window.innerWidth) {
+                        left = rect.left - 320 - 20;
+                    }
+                    
+                    preview.style.top = `${top}px`;
+                    preview.style.left = `${left}px`;
+                });
+                
+                trigger.addEventListener('mouseleave', () => {
+                    preview.classList.add('opacity-0');
+                    setTimeout(() => {
+                        if(preview.classList.contains('opacity-0')) preview.style.display = 'none';
+                    }, 150);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

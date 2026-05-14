@@ -1,1022 +1,2157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
-    <title>Card Distributions - Pokémon TCG Deck Analysis</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css">
-    
+    <title>Card Distributions - Analytics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #0a0a0c;
+            --bg-surface: #131316;
+            --accent-primary: #7c3aed;
+            --text-main: #f8fafc;
+        }
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.08), transparent 25%);
+            background-attachment: fixed;
+        }
+        .data-font { font-family: 'JetBrains Mono', monospace; }
+        .glass-panel {
+            background: rgba(19, 19, 22, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .neon-text { text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+        .gradient-text {
+            background: linear-gradient(to right, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .table-row-hover { transition: all 0.2s ease; }
+        .table-row-hover:hover {
+            background: linear-gradient(90deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
+            transform: translateX(4px);
+            border-left: 2px solid var(--accent-primary);
+        }
+    </style>
 </head>
-<body>
-    <nav class="ui menu">
-        <a class="header item" href="index.html">Pokémon TCG Analysis</a>
+<body class="min-h-screen flex flex-col antialiased pb-20">
+    <nav class="border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-lg">TCG</div>
+                    <span class="text-xl font-black tracking-tight gradient-text">Pokémon Meta Analytics</span>
+                </a>
+            </div>
+            <div class="flex gap-6 text-sm font-medium text-slate-400">
+                <a href="index.html" class="text-white">Top Decks</a>
+            </div>
+        </div>
     </nav>
-    <main class="ui container">
-    <h2 class="ui header">Card Distributions</h2>
-    <div class="ui three column stackable grid">
-        <div class="column">
-            <h4 class="ui header">Pokémon</h4>
-            <table class="ui striped table unstackable">
-                <thead>
-                    <tr>
-                        <th>Card</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/SSP/36">Ceruledge ex</a></td>
-                                <td>3</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="1"><a href="https://limitlesstcg.com/cards/MEG/74">Lunatone</a></td>
-                                <td>2</td>
-                                <td>1.0</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="1"><a href="https://limitlesstcg.com/cards/MEG/75">Solrock</a></td>
-                                <td>2</td>
-                                <td>1.0</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/SSP/32">Charcadet</a></td>
-                                <td>0</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.2</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.533</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/TEF/85">Drilbur</a></td>
-                                <td>0</td>
-                                <td>0.267</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.733</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/ASC/142">Fezandipiti ex</a></td>
-                                <td>0</td>
-                                <td>0.4</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.6</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/jp/M3/61?translate=en">Meowth ex</a></td>
-                                <td>0</td>
-                                <td>0.6</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.4</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/POR/62">Meowth ex</a></td>
-                                <td>0</td>
-                                <td>0.6</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.4</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/SSP/33">Charcadet</a></td>
-                                <td>0</td>
-                                <td>0.733</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="3"><a href="https://limitlesstcg.com/cards/PFL/19">Charcadet</a></td>
-                                <td>0</td>
-                                <td>0.8</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/DRI/10">Shaymin</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                </tbody>
-            </table>
+    <main class="max-w-7xl mx-auto px-6 mt-12 w-full">
+        
+<header class="mb-12">
+    <h2 class="text-3xl font-black neon-text uppercase tracking-tight">Card <span class="font-light text-slate-500">Distributions</span></h2>
+    <div class="h-1 w-20 bg-purple-600 mt-2"></div>
+</header>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="glass-panel rounded-2xl border border-white/10 shadow-xl">
+        <div class="bg-black/40 px-6 py-4 border-b border-white/5 rounded-t-2xl">
+            <h4 class="text-xl font-bold text-white flex items-center gap-3">
+                
+                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-3.31 0-6-2.69-6-6h12c0 3.31-2.69 6-6 6z"/></svg>
+                
+                Pokémon
+            </h4>
         </div>
-        <div class="column">
-            <h4 class="ui header">Trainer</h4>
-            <table class="ui striped table unstackable">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr>
-                        <th>Card</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
+                    <tr class="text-[10px] uppercase tracking-widest text-slate-500 bg-black/20">
+                        <th class="py-3 px-6 font-semibold">Card Name</th>
+                        <th class="py-3 px-4 font-semibold text-center w-12">#</th>
+                        <th class="py-3 px-6 font-semibold text-right w-20">%</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-xs divide-y divide-white/5">
                     
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/TWM/145">Carmine</a></td>
-                                <td>3</td>
-                                <td>0.067</td>
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/SSP/36" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SSP/SSP_036_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/SSP-36.webp">
+                                        Ceruledge ex
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.933</td>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/MEG/114">Boss's Orders</a></td>
-                                <td>2</td>
-                                <td>0.467</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.533</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/MEG/131">Ultra Ball</a></td>
-                                <td>3</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.933</td>
-                            </tr>
-                            
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/MEG/116">Fighting Gong</a></td>
-                                <td>3</td>
-                                <td>0.2</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.8</td>
-                            </tr>
-                            
                         
-                    
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/ASC/196">Night Stretcher</a></td>
-                                <td>2</td>
-                                <td>0.333</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.667</td>
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="1" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/74" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_074_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-74.webp">
+                                        Lunatone
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">100.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 100.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/SSP/164">Brilliant Blender</a></td>
-                                <td>0</td>
-                                <td>0.067</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.933</td>
-                            </tr>
-                            
                         
-                    
                         
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/TEF/147">Explorer's Guidance</a></td>
-                                <td>0</td>
-                                <td>0.467</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.267</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.2</td>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="1" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/75" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_075_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-75.webp">
+                                        Solrock
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">100.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 100.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/ASC/198">Poké Pad</a></td>
-                                <td>0</td>
-                                <td>0.467</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.2</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.2</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.133</td>
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/SSP/32" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SSP/SSP_032_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/SSP-32.webp">
+                                        Charcadet
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">53.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 53.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="3"><a href="https://limitlesstcg.com/cards/jp/M4/80?translate=en">Prism Tower</a></td>
-                                <td>0</td>
-                                <td>0.467</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.4</td>
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TEF/85" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TEF/TEF_085_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TEF-85.webp">
+                                        Drilbur
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">26.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 27.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">73.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 73.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/POR/81">Poké Pad</a></td>
-                                <td>0</td>
-                                <td>0.533</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.133</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.2</td>
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/ASC/142" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/ASC/ASC_142_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/ASC-142.webp">
+                                        Fezandipiti ex
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">60.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 60.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/SCR/132">Briar</a></td>
-                                <td>0</td>
-                                <td>0.6</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.4</td>
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/jp/M3/61?translate=en" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/M3/M3_61?translate=en_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/M3-61?translate=en.webp">
+                                        Meowth ex
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">60.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 60.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/PFL/86">Blowtorch</a></td>
-                                <td>0</td>
-                                <td>0.6</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.4</td>
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/POR/62" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/POR/POR_062_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/POR-62.webp">
+                                        Meowth ex
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">60.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 60.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/MEG/119">Lillie's Determination</a></td>
-                                <td>0</td>
-                                <td>0.6</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.067</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.267</td>
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/SSP/33" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SSP/SSP_033_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/SSP-33.webp">
+                                        Charcadet
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">73.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 73.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="3"><a href="https://limitlesstcg.com/cards/jp/M3/74?translate=en">Naveen</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.067</td>
-                            </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.067</td>
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="3" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/PFL/19" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/PFL/PFL_019_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/PFL-19.webp">
+                                        Charcadet
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">80.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 80.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
                         
                     
                         
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/TWM/153">Jamming Tower</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/DRI/10" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DRI/DRI_010_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/DRI-10.webp">
+                                        Shaymin
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
                         
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="3"><a href="https://limitlesstcg.com/cards/jp/M4/72?translate=en">Special Red Card</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/TEF/144">Buddy-Buddy Poffin</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/POR/76">Judge</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/POR/79">Naveen</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/DRI/176">Team Rocket's Petrel</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/DRI/180">Team Rocket's Watchtower</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/MEG/130">Switch</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/TEF/154">Maximum Belt</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/SCR/133">Crispin</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                </tbody>
-            </table>
-        </div>
-        <div class="column">
-            <h4 class="ui header">Energy</h4>
-            <table class="ui striped table unstackable">
-                <thead>
-                    <tr>
-                        <th>Card</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="7"><a href="https://limitlesstcg.com/cards/MEE/6">Fighting Energy</a></td>
-                                <td>9</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>10</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>11</td>
-                                <td>0.2</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>12</td>
-                                <td>0.267</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>13</td>
-                                <td>0.2</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>14</td>
-                                <td>0.133</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>15</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/MEE/2">Fire Energy</a></td>
-                                <td>6</td>
-                                <td>0.333</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>7</td>
-                                <td>0.667</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="4"><a href="https://limitlesstcg.com/cards/TEF/161">Mist Energy</a></td>
-                                <td>0</td>
-                                <td>0.467</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>3</td>
-                                <td>0.4</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>4</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="3"><a href="https://limitlesstcg.com/cards/jp/M3/80?translate=en">Rock Fighting Energy</a></td>
-                                <td>0</td>
-                                <td>0.867</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>1</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.067</td>
-                            </tr>
-                            
-                        
-                    
-                        
-                            
-                            <tr>
-                                <td rowspan="2"><a href="https://limitlesstcg.com/cards/jp/M4/81?translate=en">Nitro Fire Energy</a></td>
-                                <td>0</td>
-                                <td>0.933</td>
-                            </tr>
-                            
-                        
-                            
-                            <tr>
-                                <td>2</td>
-                                <td>0.067</td>
-                            </tr>
-                            
                         
                     
                 </tbody>
             </table>
         </div>
     </div>
+    
+    <div class="glass-panel rounded-2xl border border-white/10 shadow-xl">
+        <div class="bg-black/40 px-6 py-4 border-b border-white/5 rounded-t-2xl">
+            <h4 class="text-xl font-bold text-white flex items-center gap-3">
+                
+                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                
+                Trainer
+            </h4>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-[10px] uppercase tracking-widest text-slate-500 bg-black/20">
+                        <th class="py-3 px-6 font-semibold">Card Name</th>
+                        <th class="py-3 px-4 font-semibold text-center w-12">#</th>
+                        <th class="py-3 px-6 font-semibold text-right w-20">%</th>
+                    </tr>
+                </thead>
+                <tbody class="text-xs divide-y divide-white/5">
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TWM/145" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TWM/TWM_145_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TWM-145.webp">
+                                        Carmine
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/114" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_114_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-114.webp">
+                                        Boss's Orders
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">46.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 47.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">53.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 53.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/131" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_131_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-131.webp">
+                                        Ultra Ball
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/116" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_116_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-116.webp">
+                                        Fighting Gong
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">80.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 80.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/ASC/196" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/ASC/ASC_196_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/ASC-196.webp">
+                                        Night Stretcher
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">33.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 33.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">66.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 67.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/SSP/164" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SSP/SSP_164_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/SSP-164.webp">
+                                        Brilliant Blender
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TEF/147" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TEF/TEF_147_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TEF-147.webp">
+                                        Explorer's Guidance
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">46.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 47.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">26.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 27.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/ASC/198" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/ASC/ASC_198_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/ASC-198.webp">
+                                        Poké Pad
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">46.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 47.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="3" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/jp/M4/80?translate=en" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/M4/M4_80?translate=en_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/M4-80?translate=en.webp">
+                                        Prism Tower
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">46.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 47.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/POR/81" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/POR/POR_081_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/POR-81.webp">
+                                        Poké Pad
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">53.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 53.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/SCR/132" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SCR/SCR_132_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/SCR-132.webp">
+                                        Briar
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">60.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 60.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/PFL/86" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/PFL/PFL_086_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/PFL-86.webp">
+                                        Blowtorch
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">60.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 60.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/119" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_119_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-119.webp">
+                                        Lillie's Determination
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">60.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 60.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">26.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 27.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="3" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/jp/M3/74?translate=en" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/M3/M3_74?translate=en_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/M3-74?translate=en.webp">
+                                        Naveen
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TWM/153" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TWM/TWM_153_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TWM-153.webp">
+                                        Jamming Tower
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="3" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/jp/M4/72?translate=en" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/M4/M4_72?translate=en_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/M4-72?translate=en.webp">
+                                        Special Red Card
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TEF/144" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TEF/TEF_144_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TEF-144.webp">
+                                        Buddy-Buddy Poffin
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/POR/76" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/POR/POR_076_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/POR-76.webp">
+                                        Judge
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/POR/79" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/POR/POR_079_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/POR-79.webp">
+                                        Naveen
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/DRI/176" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DRI/DRI_176_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/DRI-176.webp">
+                                        Team Rocket's Petrel
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/DRI/180" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/DRI/DRI_180_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/DRI-180.webp">
+                                        Team Rocket's Watchtower
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEG/130" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEG/MEG_130_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEG-130.webp">
+                                        Switch
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TEF/154" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TEF/TEF_154_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TEF-154.webp">
+                                        Maximum Belt
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/SCR/133" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/SCR/SCR_133_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/SCR-133.webp">
+                                        Crispin
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="glass-panel rounded-2xl border border-white/10 shadow-xl">
+        <div class="bg-black/40 px-6 py-4 border-b border-white/5 rounded-t-2xl">
+            <h4 class="text-xl font-bold text-white flex items-center gap-3">
+                
+                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                
+                Energy
+            </h4>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-[10px] uppercase tracking-widest text-slate-500 bg-black/20">
+                        <th class="py-3 px-6 font-semibold">Card Name</th>
+                        <th class="py-3 px-4 font-semibold text-center w-12">#</th>
+                        <th class="py-3 px-6 font-semibold text-right w-20">%</th>
+                    </tr>
+                </thead>
+                <tbody class="text-xs divide-y divide-white/5">
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="7" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEE/6" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEE/MEE_006_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEE-6.webp">
+                                        Fighting Energy
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">9</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">10</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">11</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">12</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">26.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 27.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">13</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">20.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 20.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">14</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">13.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 13.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">15</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/MEE/2" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/MEE/MEE_002_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/MEE-2.webp">
+                                        Fire Energy
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">6</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">33.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 33.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">7</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">66.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 67.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="4" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/TEF/161" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/TEF/TEF_161_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/TEF-161.webp">
+                                        Mist Energy
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">46.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 47.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">3</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">40.0%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 40.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">4</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="3" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/jp/M3/80?translate=en" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/M3/M3_80?translate=en_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/M3-80?translate=en.webp">
+                                        Rock Fighting Energy
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">86.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 87.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">1</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td rowspan="2" class="py-4 px-6 align-top">
+                                    <a href="https://limitlesstcg.com/cards/jp/M4/81?translate=en" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/M4/M4_81?translate=en_R_EN.png" data-fallback="https://limitlesstcg.com/cards/en/M4-81?translate=en.webp">
+                                        Nitro Fire Energy
+                                    </a>
+                                </td>
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">0</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">93.3%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 93.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                            <tr class="hover:bg-white/5 transition-colors">
+                                
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">2</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">6.7%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: 7.0%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
 
-    <h3 class="ui header">Deck Information</h3>
-    <table class="ui striped table unstackable">
-        <thead>
-            <tr>
-                <th>TID</th>
-                <th>#</th>
-                <th>Main</th>
-                <th>Secondary</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4799">4799</a></td>
-                    <td>2</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/71709">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/71709"></a></td>
+<section class="mt-16">
+    <h3 class="text-2xl font-black mb-6 neon-text uppercase tracking-tight">Deck <span class="font-light text-slate-500">Log</span></h3>
+    <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="text-xs uppercase tracking-widest text-slate-500 bg-black/20 border-b border-white/5">
+                    <th class="py-4 px-6 font-semibold">Tournament ID</th>
+                    <th class="py-4 px-6 font-semibold text-center">Rank</th>
+                    <th class="py-4 px-6 font-semibold">Core Archetype</th>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4771">4771</a></td>
-                    <td>2</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/71344">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/71344"></a></td>
+            </thead>
+            <tbody class="text-sm divide-y divide-white/5">
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4799" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4799
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">2</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4707">4707</a></td>
-                    <td>4</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/70517">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/70517"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4771" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4771
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">2</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4695">4695</a></td>
-                    <td>1</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/70356">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/70356"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4707" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4707
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">4</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4572">4572</a></td>
-                    <td>3</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/68748">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/68748"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4695" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4695
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">1</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4515">4515</a></td>
-                    <td>4</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/67974">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/67974"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4572" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4572
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">3</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4426">4426</a></td>
-                    <td>1</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/66728">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/66728"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4515" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4515
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">4</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4366">4366</a></td>
-                    <td>4</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65862">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65862"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4426" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4426
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">1</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4352">4352</a></td>
-                    <td>1</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65672">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65672"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4366" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4366
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">4</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4351">4351</a></td>
-                    <td>1</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65657">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65657"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4352" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4352
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">1</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4335">4335</a></td>
-                    <td>3</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65439">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/65439"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4351" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4351
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">1</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4297">4297</a></td>
-                    <td>2</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/64929">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/64929"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4335" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4335
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">3</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4279">4279</a></td>
-                    <td>3</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/64688">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/64688"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4297" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4297
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">2</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4225">4225</a></td>
-                    <td>2</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/63982">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/63982"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4279" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4279
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">3</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
-            
-                <tr>
-                    <td><a href="https://limitlesstcg.com/tournaments/jp/4190">4190</a></td>
-                    <td>2</td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/63503">ceruledge</a></td>
-                    <td><a href="https://limitlesstcg.com/decks/list/jp/63503"></a></td>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4225" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4225
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">2</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
                 </tr>
+                
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="https://limitlesstcg.com/tournaments/jp/4190" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #4190
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">2</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">ceruledge</span>
+                            
+                        </div>
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+    </div>
+</section>
+
+    </main>
+
+    <!-- Global Card Preview -->
+    <div id="global-preview" class="fixed hidden z-[100] pointer-events-none rounded-xl shadow-2xl transition-opacity duration-150 opacity-0 bg-black/80 backdrop-blur-sm p-1 border border-white/10" style="width: 320px;">
+        <img id="global-preview-img" class="w-full rounded-lg" src="" alt="Card Preview">
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const preview = document.getElementById('global-preview');
+            const previewImg = document.getElementById('global-preview-img');
             
-        </tbody>
-    </table>
-</main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+            document.querySelectorAll('.card-preview-trigger').forEach(trigger => {
+                trigger.addEventListener('mouseenter', (e) => {
+                    const imgUrl = e.target.dataset.image;
+                    const fallbackUrl = e.target.dataset.fallback;
+                    
+                    previewImg.src = imgUrl;
+                    previewImg.onerror = () => { 
+                        if(previewImg.src !== fallbackUrl) {
+                            previewImg.src = fallbackUrl; 
+                        }
+                    };
+                    
+                    preview.style.display = 'block';
+                    setTimeout(() => preview.classList.remove('opacity-0'), 10);
+                    
+                    const rect = e.target.getBoundingClientRect();
+                    const previewHeight = 446; // Approx height of standard pokemon card at 320px width
+                    
+                    let top = rect.top - (previewHeight / 2) + (rect.height / 2);
+                    top = Math.max(20, Math.min(top, window.innerHeight - previewHeight - 20));
+                    
+                    let left = rect.right + 20;
+                    if (left + 320 > window.innerWidth) {
+                        left = rect.left - 320 - 20;
+                    }
+                    
+                    preview.style.top = `${top}px`;
+                    preview.style.left = `${left}px`;
+                });
+                
+                trigger.addEventListener('mouseleave', () => {
+                    preview.classList.add('opacity-0');
+                    setTimeout(() => {
+                        if(preview.classList.contains('opacity-0')) preview.style.display = 'none';
+                    }, 150);
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -89,17 +89,33 @@ def clean_docs_folder():
 
 def generate_html_report(card_distributions, deck_info):
     sorted_distributions = {}
+    card_images = {}
+    
     for section_type, cards in card_distributions.items():
         card_sums = {}
         for card, dist in cards.items():
             sum_non_zero = sum(perc for count, perc in dist.items() if count > 0)
             card_sums[card] = sum_non_zero
+            
+            # Extract image URL from card URL
+            # Format: https://limitlesstcg.com/cards/TWM/130
+            try:
+                card_url = card.split(' (')[1].rstrip(')')
+                parts = card_url.split('/')
+                set_code = parts[-2]
+                card_num = parts[-1].zfill(3)
+                # Pattern confirmed by user: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/[SET]/[SET]_[NUM]_R_EN.png
+                img_url = f"https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/{set_code}/{set_code}_{card_num}_R_EN.png"
+                card_images[card] = img_url
+            except Exception:
+                card_images[card] = ""
+
         sorted_cards = sorted(cards.items(), key=lambda x: card_sums[x[0]], reverse=True)
         sorted_distributions[section_type] = dict(sorted_cards)
     
     env = Environment(loader=FileSystemLoader('src/templates'))
     template = env.get_template('cluster_report.html')
-    return template.render(card_distributions=sorted_distributions, deck_info=deck_info)
+    return template.render(card_distributions=sorted_distributions, deck_info=deck_info, card_images=card_images)
 
 def generate_index_html(summaries):
     env = Environment(loader=FileSystemLoader('src/templates'))

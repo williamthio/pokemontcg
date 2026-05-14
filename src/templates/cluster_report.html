@@ -1,119 +1,104 @@
 {% extends 'base.html' %}
-{% block title %}Card Distributions{% endblock %}
+{% block title %}Card Distributions - Analytics{% endblock %}
 {% block content %}
-    <h2 class="ui header">Card Distributions</h2>
-    <div class="ui three column stackable grid">
-        <div class="column">
-            <h4 class="ui header">Pokémon</h4>
-            <table class="ui striped table unstackable">
-                <thead>
-                    <tr>
-                        <th>Card</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for card, distribution in card_distributions['Pokémon'].items() %}
-                        {% for count, percentage in distribution.items() %}
-                            {% if loop.first %}
-                            <tr>
-                                <td rowspan="{{ distribution|length }}"><a href="{{ card.split(' (')[1].rstrip(')') }}">{{ card.split(' (')[0] }}</a></td>
-                                <td>{{ count }}</td>
-                                <td>{{ percentage | round(3) }}</td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td>{{ count }}</td>
-                                <td>{{ percentage | round(3) }}</td>
-                            </tr>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
+<header class="mb-12">
+    <h2 class="text-3xl font-black neon-text uppercase tracking-tight">Card <span class="font-light text-slate-500">Distributions</span></h2>
+    <div class="h-1 w-20 bg-purple-600 mt-2"></div>
+</header>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    {% for section in ['Pokémon', 'Trainer', 'Energy'] %}
+    <div class="glass-panel rounded-2xl border border-white/10 shadow-xl">
+        <div class="bg-black/40 px-6 py-4 border-b border-white/5 rounded-t-2xl">
+            <h4 class="text-xl font-bold text-white flex items-center gap-3">
+                {% if section == 'Pokémon' %}
+                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-3.31 0-6-2.69-6-6h12c0 3.31-2.69 6-6 6z"/></svg>
+                {% elif section == 'Trainer' %}
+                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                {% else %}
+                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
+                {% endif %}
+                {{ section }}
+            </h4>
         </div>
-        <div class="column">
-            <h4 class="ui header">Trainer</h4>
-            <table class="ui striped table unstackable">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr>
-                        <th>Card</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
+                    <tr class="text-[10px] uppercase tracking-widest text-slate-500 bg-black/20">
+                        <th class="py-3 px-6 font-semibold">Card Name</th>
+                        <th class="py-3 px-4 font-semibold text-center w-12">#</th>
+                        <th class="py-3 px-6 font-semibold text-right w-20">%</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for card, distribution in card_distributions['Trainer'].items() %}
+                <tbody class="text-xs divide-y divide-white/5">
+                    {% for card_data, distribution in card_distributions[section].items() %}
+                        {% set card_name = card_data.split(' (')[0] %}
+                        {% set card_url = card_data.split(' (')[1].rstrip(')') %}
+                        {% set card_image = card_images[card_data] %}
+                        {% set set_code = card_url.split('/')[-2] %}
+                        {% set card_num = card_url.split('/')[-1] %}
+                        {% set fallback_image = "https://limitlesstcg.com/cards/en/" ~ set_code ~ "-" ~ card_num ~ ".webp" %}
                         {% for count, percentage in distribution.items() %}
-                            {% if loop.first %}
-                            <tr>
-                                <td rowspan="{{ distribution|length }}"><a href="{{ card.split(' (')[1].rstrip(')') }}">{{ card.split(' (')[0] }}</a></td>
-                                <td>{{ count }}</td>
-                                <td>{{ percentage | round(3) }}</td>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                {% if loop.first %}
+                                <td rowspan="{{ distribution|length }}" class="py-4 px-6 align-top">
+                                    <a href="{{ card_url }}" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="{{ card_image }}" data-fallback="{{ fallback_image }}">
+                                        {{ card_name }}
+                                    </a>
+                                </td>
+                                {% endif %}
+                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">{{ count }}</td>
+                                <td class="py-3 px-6 text-right">
+                                    <div class="data-font font-bold text-white">{{ (percentage * 100) | round(1) }}%</div>
+                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500" style="width: {{ (percentage * 100) | round }}%"></div>
+                                    </div>
+                                </td>
                             </tr>
-                            {% else %}
-                            <tr>
-                                <td>{{ count }}</td>
-                                <td>{{ percentage | round(3) }}</td>
-                            </tr>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <div class="column">
-            <h4 class="ui header">Energy</h4>
-            <table class="ui striped table unstackable">
-                <thead>
-                    <tr>
-                        <th>Card</th>
-                        <th>Count</th>
-                        <th>Percentage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for card, distribution in card_distributions['Energy'].items() %}
-                        {% for count, percentage in distribution.items() %}
-                            {% if loop.first %}
-                            <tr>
-                                <td rowspan="{{ distribution|length }}"><a href="{{ card.split(' (')[1].rstrip(')') }}">{{ card.split(' (')[0] }}</a></td>
-                                <td>{{ count }}</td>
-                                <td>{{ percentage | round(3) }}</td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td>{{ count }}</td>
-                                <td>{{ percentage | round(3) }}</td>
-                            </tr>
-                            {% endif %}
                         {% endfor %}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+    {% endfor %}
+</div>
 
-    <h3 class="ui header">Deck Information</h3>
-    <table class="ui striped table unstackable">
-        <thead>
-            <tr>
-                <th>TID</th>
-                <th>#</th>
-                <th>Main</th>
-                <th>Secondary</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for info in deck_info|reverse %}
-                <tr>
-                    <td><a href="{{ info[0] }}">{{ info[0].split('/')[-1] }}</a></td>
-                    <td>{{ info[5] }}</td>
-                    <td><a href="{{ info[4] }}">{{ info[2] }}</a></td>
-                    <td><a href="{{ info[4] }}">{{ info[3] }}</a></td>
+<section class="mt-16">
+    <h3 class="text-2xl font-black mb-6 neon-text uppercase tracking-tight">Deck <span class="font-light text-slate-500">Log</span></h3>
+    <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="text-xs uppercase tracking-widest text-slate-500 bg-black/20 border-b border-white/5">
+                    <th class="py-4 px-6 font-semibold">Tournament ID</th>
+                    <th class="py-4 px-6 font-semibold text-center">Rank</th>
+                    <th class="py-4 px-6 font-semibold">Core Archetype</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody class="text-sm divide-y divide-white/5">
+                {% for info in deck_info|reverse %}
+                <tr class="hover:bg-white/5 transition-colors">
+                    <td class="py-4 px-6">
+                        <a href="{{ info[0] }}" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                            #{{ info[0].split('/')[-1] }}
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-center">
+                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">{{ info[5] }}</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-white capitalize">{{ info[2] }}</span>
+                            {% if info[3] %}
+                            <span class="text-slate-500 text-xs">+</span>
+                            <span class="text-slate-400 capitalize">{{ info[3] }}</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
 {% endblock %}
