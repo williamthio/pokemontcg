@@ -99,13 +99,21 @@ def generate_html_report(card_distributions, deck_info):
             
             # Extract image URL from card URL
             # Format: https://limitlesstcg.com/cards/TWM/130
+            # Japanese: https://limitlesstcg.com/cards/jp/SV6/79
             try:
                 card_url = card.split(' (')[1].rstrip(')')
                 parts = card_url.split('/')
                 set_code = parts[-2]
-                card_num = parts[-1].zfill(3)
-                # Pattern confirmed by user: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/[SET]/[SET]_[NUM]_R_EN.png
-                img_url = f"https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/{set_code}/{set_code}_{card_num}_R_EN.png"
+                card_num = parts[-1]
+                
+                if "/jp/" in card_url:
+                    # Japanese pattern: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/[SET]/[SET]_[NUM]_R_JP_LG.png
+                    img_url = f"https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/{set_code}/{set_code}_{card_num}_R_JP_LG.png"
+                else:
+                    # English pattern: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/[SET]/[SET]_[NUM]_R_EN.png (zero-padded)
+                    card_num_padded = card_num.zfill(3)
+                    img_url = f"https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/{set_code}/{set_code}_{card_num_padded}_R_EN.png"
+                
                 card_images[card] = img_url
             except Exception:
                 card_images[card] = ""

@@ -42,9 +42,16 @@
                             <tr class="hover:bg-white/5 transition-colors">
                                 {% if loop.first %}
                                 <td rowspan="{{ distribution|length }}" class="py-4 px-6 align-top">
-                                    <a href="{{ card_url }}" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="{{ card_image }}" data-fallback="{{ fallback_image }}">
-                                        {{ card_name }}
-                                    </a>
+                                    <div class="flex flex-col gap-1">
+                                        <a href="{{ card_url }}" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="{{ card_image }}" data-fallback="{{ fallback_image }}">
+                                            {{ card_name }}
+                                        </a>
+                                        {% if '/jp/' in card_url %}
+                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 w-fit uppercase tracking-tighter">
+                                            Unreleased (JP)
+                                        </span>
+                                        {% endif %}
+                                    </div>
                                 </td>
                                 {% endif %}
                                 <td class="py-3 px-4 text-center data-font font-bold text-slate-400">{{ count }}</td>
