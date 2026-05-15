@@ -102,13 +102,15 @@ def generate_html_report(card_distributions, deck_info):
             # Japanese: https://limitlesstcg.com/cards/jp/SV6/79
             try:
                 card_url = card.split(' (')[1].rstrip(')')
-                parts = card_url.split('/')
+                # Strip parameters like ?translate=en
+                base_card_url = card_url.split('?')[0]
+                parts = base_card_url.split('/')
                 set_code = parts[-2]
                 card_num = parts[-1]
                 
                 if "/jp/" in card_url:
-                    # Japanese pattern: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/[SET]/[SET]_[NUM]_R_JP_LG.png
-                    img_url = f"https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/{set_code}/{set_code}_{card_num}_R_JP_LG.png"
+                    # Japanese pattern: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/[SET]/[SET]_[NUM]_R_JP.png
+                    img_url = f"https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpc/{set_code}/{set_code}_{card_num}_R_JP.png"
                 else:
                     # English pattern: https://limitlesstcg.nyc3.cdn.digitaloceanspaces.com/tpci/[SET]/[SET]_[NUM]_R_EN.png (zero-padded)
                     card_num_padded = card_num.zfill(3)
