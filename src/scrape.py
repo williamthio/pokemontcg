@@ -35,35 +35,23 @@ def get_canonical_url(card_url):
         response = get_with_retry(card_url)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        all_print_urls = set()
-        # Ensure the current URL's path is included
-        current_path = card_url.replace("https://limitlesstcg.com", "")
-        all_print_urls.add(current_path)
+        # The user wants to use the 'card-prints-versions' class to find the table
+        table = soup.select_one('table.card-prints-versions')
+        canonical_url = None
         
-        # Look for the Prints or Int. Prints section
-        for header in soup.find_all(['h2', 'h3']):
-            if "Prints" in header.text:
-                table = header.find_next('table')
-                if table:
-                    for link in table.find_all('a', href=True):
-                        # Filter for card links (e.g., /cards/ABC/123)
-                        parts = link['href'].split('/')
-                        if len(parts) >= 4 and parts[1] == 'cards':
-                            all_print_urls.add(link['href'])
+        if table:
+            # Find all rows, find the first one that has a link to a card
+            for row in table.find_all('tr'):
+                link = row.find('a', href=True)
+                if link and link['href'].startswith('/cards/'):
+                    canonical_url = "https://limitlesstcg.com" + link['href']
+                    break
         
-        # Filter for valid card paths and resolve to a canonical one
-        # We sort alphabetically to ensure a deterministic canonical URL
-        valid_paths = sorted([path for path in all_print_urls if len(path.split('/')) >= 4])
-        
-        if not valid_paths:
-            return card_url
+        if not canonical_url:
+            canonical_url = card_url
             
-        canonical_url = "https://limitlesstcg.com" + valid_paths[0]
-        
         with cache_lock:
-            for path in valid_paths:
-                full_url = "https://limitlesstcg.com" + path
-                card_cache[full_url] = canonical_url
+            card_cache[card_url] = canonical_url
             save_cache()
             
         return canonical_url
