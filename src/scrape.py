@@ -35,20 +35,37 @@ def get_canonical_url(card_url):
         response = get_with_retry(card_url)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # The user wants to use the 'card-prints-versions' class to find the table
         table = soup.select_one('table.card-prints-versions')
         canonical_url = None
         
         if table:
-            # Find all rows, find the first one that has a link to a card
+            # Find all data rows (excluding headers)
+            # Filter out "not released internationally" informational rows
+            data_rows = []
             for row in table.find_all('tr'):
-                link = row.find('a', href=True)
-                if link and link['href'].startswith('/cards/'):
-                    canonical_url = "https://limitlesstcg.com" + link['href']
-                    break
+                if row.find('th'):
+                    continue
+                row_text = row.get_text().strip()
+                if "not been released internationally" in row_text:
+                    continue
+                data_rows.append(row)
+            
+            if data_rows:
+                first_data_row = data_rows[0]
+                card_link = first_data_row.find('a', href=lambda h: h and h.startswith('/cards/'))
+                
+                if card_link:
+                    canonical_url = "https://limitlesstcg.com" + card_link['href']
+                else:
+                    # Current card is the first valid printing listed
+                    canonical_url = card_url
         
         if not canonical_url:
             canonical_url = card_url
+            
+        # Clean up URL (remove translation params)
+        if '?' in canonical_url:
+            canonical_url = canonical_url.split('?')[0]
             
         with cache_lock:
             card_cache[card_url] = canonical_url
