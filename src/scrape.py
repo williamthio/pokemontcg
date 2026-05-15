@@ -27,9 +27,12 @@ def save_cache():
         json.dump(card_cache, f, indent=2)
 
 def get_canonical_url(card_url):
+    prefix = "https://limitlesstcg.com/cards/"
+    cache_key = card_url.replace(prefix, "")
+
     with cache_lock:
-        if card_url in card_cache:
-            return card_cache[card_url]
+        if cache_key in card_cache:
+            return prefix + card_cache[cache_key]
     
     try:
         response = get_with_retry(card_url)
@@ -37,24 +40,25 @@ def get_canonical_url(card_url):
         
         table = soup.select_one('table.card-prints-versions')
         
-        all_print_urls = set()
+        all_print_keys = set()
         if table:
             for row in table.find_all('tr'):
                 # Extract all alternative print URLs from the table
                 card_link = row.find('a', href=lambda h: h and h.startswith('/cards/'))
                 if card_link:
-                    url = "https://limitlesstcg.com" + card_link['href']
-                    all_print_urls.add(url)
+                    # Store only minimal path key in cache
+                    key = card_link['href'].replace("/cards/", "")
+                    all_print_keys.add(key)
                     
-        all_print_urls.add(card_url)
+        all_print_keys.add(cache_key)
         
         with cache_lock:
-            # First-encountered wins: if any alternate prints aren't in cache, map them to current URL
-            for u in all_print_urls:
-                if u not in card_cache:
-                    card_cache[u] = card_url
-            # Explicitly ensure current URL maps to itself to handle the case where it might have been missed
-            card_cache[card_url] = card_url
+            # First-encountered wins: if any alternate prints aren't in cache, map them to current key
+            for k in all_print_keys:
+                if k not in card_cache:
+                    card_cache[k] = cache_key
+            # Explicitly ensure current key maps to itself
+            card_cache[cache_key] = cache_key
             save_cache()
             
         return card_url
