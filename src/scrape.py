@@ -36,42 +36,28 @@ def get_canonical_url(card_url):
         soup = BeautifulSoup(response.text, 'html.parser')
         
         table = soup.select_one('table.card-prints-versions')
-        canonical_url = None
         
+        all_print_urls = set()
         if table:
-            # Find all data rows (excluding headers)
-            # Filter out "not released internationally" informational rows
-            data_rows = []
             for row in table.find_all('tr'):
-                if row.find('th'):
-                    continue
-                row_text = row.get_text().strip()
-                if "not been released internationally" in row_text:
-                    continue
-                data_rows.append(row)
-            
-            if data_rows:
-                first_data_row = data_rows[0]
-                card_link = first_data_row.find('a', href=lambda h: h and h.startswith('/cards/'))
-                
+                # Extract all alternative print URLs from the table
+                card_link = row.find('a', href=lambda h: h and h.startswith('/cards/'))
                 if card_link:
-                    canonical_url = "https://limitlesstcg.com" + card_link['href']
-                else:
-                    # Current card is the first valid printing listed
-                    canonical_url = card_url
+                    url = "https://limitlesstcg.com" + card_link['href']
+                    all_print_urls.add(url)
+                    
+        all_print_urls.add(card_url)
         
-        if not canonical_url:
-            canonical_url = card_url
-            
-        # Clean up URL (remove translation params)
-        if '?' in canonical_url:
-            canonical_url = canonical_url.split('?')[0]
-            
         with cache_lock:
-            card_cache[card_url] = canonical_url
+            # First-encountered wins: if any alternate prints aren't in cache, map them to current URL
+            for u in all_print_urls:
+                if u not in card_cache:
+                    card_cache[u] = card_url
+            # Explicitly ensure current URL maps to itself to handle the case where it might have been missed
+            card_cache[card_url] = card_url
             save_cache()
             
-        return canonical_url
+        return card_url
     except Exception as e:
         print(f"Error resolving canonical URL for {card_url}: {e}")
         return card_url
