@@ -5,6 +5,71 @@ from concurrent.futures import ThreadPoolExecutor
 import os
 from tenacity import retry, stop_after_attempt, wait_fixed
 import sys
+import json
+import threading
+
+CARD_CACHE_FILE = "src/data/card_cache.json"
+card_cache = {}
+cache_lock = threading.Lock()
+
+def load_cache():
+    global card_cache
+    if os.path.exists(CARD_CACHE_FILE):
+        try:
+            with open(CARD_CACHE_FILE, "r") as f:
+                card_cache = json.load(f)
+        except Exception:
+            card_cache = {}
+
+def save_cache():
+    # Called within a locked context in get_canonical_url
+    with open(CARD_CACHE_FILE, "w") as f:
+        json.dump(card_cache, f, indent=2)
+
+def get_canonical_url(card_url):
+    with cache_lock:
+        if card_url in card_cache:
+            return card_cache[card_url]
+    
+    try:
+        response = get_with_retry(card_url)
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        all_print_urls = set()
+        # Ensure the current URL's path is included
+        current_path = card_url.replace("https://limitlesstcg.com", "")
+        all_print_urls.add(current_path)
+        
+        # Look for the Prints or Int. Prints section
+        for header in soup.find_all(['h2', 'h3']):
+            if "Prints" in header.text:
+                table = header.find_next('table')
+                if table:
+                    for link in table.find_all('a', href=True):
+                        # Filter for card links (e.g., /cards/ABC/123)
+                        parts = link['href'].split('/')
+                        if len(parts) >= 4 and parts[1] == 'cards':
+                            all_print_urls.add(link['href'])
+        
+        # Filter for valid card paths and resolve to a canonical one
+        # We sort alphabetically to ensure a deterministic canonical URL
+        valid_paths = sorted([path for path in all_print_urls if len(path.split('/')) >= 4])
+        
+        if not valid_paths:
+            return card_url
+            
+        canonical_url = "https://limitlesstcg.com" + valid_paths[0]
+        
+        with cache_lock:
+            for path in valid_paths:
+                full_url = "https://limitlesstcg.com" + path
+                card_cache[full_url] = canonical_url
+            save_cache()
+            
+        return canonical_url
+    except Exception as e:
+        print(f"Error resolving canonical URL for {card_url}: {e}")
+        return card_url
 
 @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))
 def get_with_retry(url):
@@ -78,7 +143,8 @@ def scrape_tournament(tournament_id):
                 card_url = "https://limitlesstcg.com" + card.find("a", {"class": "card-link"})['href']
                 
                 if card_count and card_name and card_url:
-                    deck_cards.append(f"{types[idx]}#{card_name}#{card_count}#{card_url}")
+                    canonical_url = get_canonical_url(card_url)
+                    deck_cards.append(f"{types[idx]}#{card_name}#{card_count}#{canonical_url}")
         
         results.append([tournament_url, player_name, main_pokemon, secondary_pokemon, deck_url, ranking, '|'.join(deck_cards)])
     
@@ -106,6 +172,7 @@ def sort_csv(file_path):
         writer.writerows(sorted_rows)
 
 def main():
+    load_cache()
     end_tournament_id = get_latest_tournament_id()
     start_tournament_id = 1839
     num_threads = os.cpu_count() or 5  # Use max threads available
