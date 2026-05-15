@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -7,98 +7,159 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,900&family=Cabin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-base: #0a0a0c;
-            --bg-surface: #131316;
-            --accent-primary: #7c3aed;
-            --text-main: #f8fafc;
+            --bg-body: #9ca3af;
+            --bg-card-inner: #ffffff;
+            --text-main: #1f2937;
+            --accent-supporter: #e11d48;
+            --border-card: #4b5563;
         }
         body {
-            background-color: var(--bg-base);
+            background-color: var(--bg-body);
             color: var(--text-main);
-            font-family: 'Outfit', sans-serif;
+            font-family: 'Cabin', sans-serif;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(124, 58, 237, 0.08), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.08), transparent 25%);
+                radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0),
+                radial-gradient(circle at center, #cbd5e1 0%, #9ca3af 100%);
+            background-size: 20px 20px, 100% 100%;
             background-attachment: fixed;
+            overflow-y: scroll;
+        }
+        h1, h2, h3, h4, .card-title-font {
+            font-family: 'Archivo Narrow', sans-serif;
+            font-weight: 700;
         }
         .data-font { font-family: 'JetBrains Mono', monospace; }
-        .glass-panel {
-            background: rgba(19, 19, 22, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        
+        .card-panel {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 2px;
+            box-shadow: 
+                0 15px 25px -5px rgba(0, 0, 0, 0.05), 
+                0 8px 10px -6px rgba(0, 0, 0, 0.05),
+                inset 0 0 40px rgba(0,0,0,0.01);
+            position: relative;
         }
-        .neon-text { text-shadow: 0 0 10px rgba(255,255,255,0.3); }
-        .gradient-text {
-            background: linear-gradient(to right, #a78bfa, #f472b6);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+        
+        /* Standardized Card Accent Line */
+        .card-accent-line {
+            height: 4px;
+            background-color: var(--accent-supporter);
+            width: 100%;
+            border-radius: 2px 2px 0 0;
         }
-        .table-row-hover { transition: all 0.2s ease; }
+        
+        .table-row-hover { transition: background-color 0.15s ease; }
         .table-row-hover:hover {
-            background: linear-gradient(90deg, rgba(124, 58, 237, 0.1) 0%, transparent 100%);
-            transform: translateX(4px);
-            border-left: 2px solid var(--accent-primary);
+            background-color: #f9fafb;
+        }
+        
+        .badge-jp {
+            background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
+            color: #713f12;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .trainer-header-bar {
+            background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 4px solid var(--border-card);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        .slanted-divider {
+            width: 3px;
+            height: 2rem;
+            background-color: #94a3b8;
+            transform: rotate(25deg);
+            margin: 0 1rem;
+        }
+
+        .supporter-label {
+            font-family: 'Archivo', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            text-transform: uppercase;
+            letter-spacing: -0.05em;
+            color: var(--accent-supporter);
+            font-size: 1.5rem;
+            line-height: 1;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased pb-20">
-    <nav class="border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <a href="index.html" class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-purple-600 to-pink-500 flex items-center justify-center font-bold text-lg">TCG</div>
-                    <span class="text-xl font-black tracking-tight gradient-text">Pokémon Meta Analytics</span>
+<body class="min-h-screen flex flex-col antialiased pb-24">
+    <nav class="trainer-header-bar sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center">
+                <span class="supporter-label">Supporter</span>
+                <div class="slanted-divider"></div>
+                <a href="index.html" class="flex items-center gap-2">
+                    <span class="text-3xl font-black tracking-tighter text-gray-700 card-title-font">TRAINER</span>
                 </a>
             </div>
-            <div class="flex gap-6 text-sm font-medium text-slate-400">
-                <a href="index.html" class="text-white">Top Decks</a>
+            <div class="flex items-center gap-8">
+                <div class="hidden md:flex items-center bg-white/60 px-4 py-1.5 rounded-sm border border-gray-300 shadow-inner">
+                    <span class="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">Source: Japanese City Leagues</span>
+                </div>
+                <div class="h-6 w-[1px] bg-gray-300"></div>
+                <a href="index.html" class="text-sm font-extrabold text-gray-600 hover:text-rose-600 transition-colors uppercase tracking-widest">Home</a>
             </div>
         </div>
     </nav>
-    <main class="max-w-7xl mx-auto px-6 mt-12 w-full">
+    <main class="max-w-7xl mx-auto px-8 mt-12 w-full">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Global Card Preview -->
-    <div id="global-preview" class="fixed hidden z-[100] pointer-events-none rounded-xl shadow-2xl transition-opacity duration-150 opacity-0 bg-black/80 backdrop-blur-sm p-1 border border-white/10" style="width: 320px;">
-        <img id="global-preview-img" class="w-full rounded-lg" src="" alt="Card Preview">
+    <div id="global-preview" class="fixed hidden z-[100] pointer-events-none rounded-xl shadow-2xl transition-all duration-200 opacity-0 bg-white p-1.5 border-4 border-gray-800" style="width: 320px;">
+        <div class="relative w-full aspect-[2.5/3.5] bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+             <img id="global-preview-img" class="w-full h-full object-contain" src="" alt="Card Preview">
+             <div id="preview-loader" class="absolute inset-0 flex items-center justify-center bg-white/80">
+                 <div class="w-8 h-8 border-4 border-rose-600 border-t-transparent rounded-full animate-spin"></div>
+             </div>
+        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const preview = document.getElementById('global-preview');
             const previewImg = document.getElementById('global-preview-img');
+            const loader = document.getElementById('preview-loader');
             
             document.querySelectorAll('.card-preview-trigger').forEach(trigger => {
                 trigger.addEventListener('mouseenter', (e) => {
                     const imgUrl = e.target.dataset.image;
                     const fallbackUrl = e.target.dataset.fallback;
                     
+                    loader.style.display = 'flex';
                     previewImg.src = imgUrl;
+                    
+                    previewImg.onload = () => { loader.style.display = 'none'; };
                     previewImg.onerror = () => { 
                         if(previewImg.src !== fallbackUrl) {
                             previewImg.src = fallbackUrl; 
+                        } else {
+                            loader.style.display = 'none';
                         }
                     };
                     
                     preview.style.display = 'block';
-                    setTimeout(() => preview.classList.remove('opacity-0'), 10);
+                    setTimeout(() => {
+                        preview.classList.remove('opacity-0');
+                        preview.style.transform = 'scale(1) translateY(0)';
+                    }, 10);
                     
                     const rect = e.target.getBoundingClientRect();
-                    const previewHeight = 446; // Approx height of standard pokemon card at 320px width
+                    const previewHeight = 446;
                     
                     let top = rect.top - (previewHeight / 2) + (rect.height / 2);
                     top = Math.max(20, Math.min(top, window.innerHeight - previewHeight - 20));
                     
-                    let left = rect.right + 20;
+                    let left = rect.right + 24;
                     if (left + 320 > window.innerWidth) {
-                        left = rect.left - 320 - 20;
+                        left = rect.left - 320 - 24;
                     }
                     
                     preview.style.top = `${top}px`;
@@ -107,9 +168,10 @@
                 
                 trigger.addEventListener('mouseleave', () => {
                     preview.classList.add('opacity-0');
+                    preview.style.transform = 'scale(0.95) translateY(10px)';
                     setTimeout(() => {
                         if(preview.classList.contains('opacity-0')) preview.style.display = 'none';
-                    }, 150);
+                    }, 200);
                 });
             });
         });

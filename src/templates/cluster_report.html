@@ -2,35 +2,41 @@
 {% block title %}Card Distributions - Analytics{% endblock %}
 {% block content %}
 <header class="mb-12">
-    <h2 class="text-3xl font-black neon-text uppercase tracking-tight">Card <span class="font-light text-slate-500">Distributions</span></h2>
-    <div class="h-1 w-20 bg-purple-600 mt-2"></div>
+    <div class="flex items-baseline gap-4 mb-3">
+        <h1 class="text-6xl font-black text-gray-800 tracking-tighter card-title-font leading-none uppercase">CARD</h1>
+        <span class="text-4xl font-light text-gray-500 uppercase tracking-widest leading-none">Distributions</span>
+    </div>
+    <div class="h-1.5 w-full bg-gradient-to-r from-rose-600 via-gray-400 to-transparent mb-6 rounded-full opacity-80"></div>
 </header>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
     {% for section in ['Pokémon', 'Trainer', 'Energy'] %}
-    <div class="glass-panel rounded-2xl border border-white/10 shadow-xl">
-        <div class="bg-black/40 px-6 py-4 border-b border-white/5 rounded-t-2xl">
-            <h4 class="text-xl font-bold text-white flex items-center gap-3">
-                {% if section == 'Pokémon' %}
-                <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-3.31 0-6-2.69-6-6h12c0 3.31-2.69 6-6 6z"/></svg>
-                {% elif section == 'Trainer' %}
-                <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-2 .9-2 2v16l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
-                {% else %}
-                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>
-                {% endif %}
+    <div class="card-panel flex flex-col overflow-hidden">
+        <div class="card-accent-line"></div>
+        <div class="bg-gray-50 px-8 py-6 border-b-2 border-gray-200 flex justify-between items-center">
+            <h4 class="text-2xl font-black text-gray-800 tracking-tight card-title-font">
                 {{ section }}
             </h4>
+            <div class="flex items-center gap-2">
+                {% if section == 'Pokémon' %}
+                <span class="text-[10px] font-black uppercase tracking-widest text-yellow-700 bg-yellow-400/20 px-3 py-1 rounded border border-yellow-400/30">Basic</span>
+                {% elif section == 'Trainer' %}
+                <span class="text-[10px] font-black uppercase tracking-widest text-rose-700 bg-rose-400/20 px-3 py-1 rounded border border-rose-400/30">Item</span>
+                {% else %}
+                <span class="text-[10px] font-black uppercase tracking-widest text-teal-700 bg-teal-400/20 px-3 py-1 rounded border border-teal-400/30">Special</span>
+                {% endif %}
+            </div>
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto flex-grow">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="text-[10px] uppercase tracking-widest text-slate-500 bg-black/20">
-                        <th class="py-3 px-6 font-semibold">Card Name</th>
-                        <th class="py-3 px-4 font-semibold text-center w-12">#</th>
-                        <th class="py-3 px-6 font-semibold text-right w-20">%</th>
+                    <tr class="text-[10px] uppercase tracking-[0.25em] text-gray-400 bg-gray-50/30 font-black border-b border-gray-100">
+                        <th class="py-4 px-8">Card Identity</th>
+                        <th class="py-4 px-4 text-center w-16">Qty</th>
+                        <th class="py-4 px-8 text-right w-24">Freq</th>
                     </tr>
                 </thead>
-                <tbody class="text-xs divide-y divide-white/5">
+                <tbody class="text-xs divide-y divide-gray-50">
                     {% for card_data, distribution in card_distributions[section].items() %}
                         {% set card_name = card_data.split(' (')[0] %}
                         {% set card_url = card_data.split(' (')[1].rstrip(')') %}
@@ -39,26 +45,26 @@
                         {% set card_num = card_url.split('/')[-1] %}
                         {% set fallback_image = "https://limitlesstcg.com/cards/en/" ~ set_code ~ "-" ~ card_num ~ ".webp" %}
                         {% for count, percentage in distribution.items() %}
-                            <tr class="hover:bg-white/5 transition-colors">
+                            <tr class="hover:bg-gray-50/80 transition-colors">
                                 {% if loop.first %}
-                                <td rowspan="{{ distribution|length }}" class="py-4 px-6 align-top">
-                                    <div class="flex flex-col gap-1">
-                                        <a href="{{ card_url }}" class="card-preview-trigger text-slate-200 hover:text-purple-400 font-bold transition-colors" data-image="{{ card_image }}" data-fallback="{{ fallback_image }}">
+                                <td rowspan="{{ distribution|length }}" class="py-6 px-8 align-top border-r border-gray-50">
+                                    <div class="flex flex-col gap-2">
+                                        <a href="{{ card_url }}" class="card-preview-trigger text-gray-900 hover:text-rose-600 font-black transition-colors text-lg card-title-font leading-tight tracking-tight" data-image="{{ card_image }}" data-fallback="{{ fallback_image }}">
                                             {{ card_name }}
                                         </a>
                                         {% if '/jp/' in card_url %}
-                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 w-fit uppercase tracking-tighter">
-                                            Unreleased (JP)
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded badge-jp w-fit shadow-sm text-[9px] font-black">
+                                            UNRELEASED (JP)
                                         </span>
                                         {% endif %}
                                     </div>
                                 </td>
                                 {% endif %}
-                                <td class="py-3 px-4 text-center data-font font-bold text-slate-400">{{ count }}</td>
-                                <td class="py-3 px-6 text-right">
-                                    <div class="data-font font-bold text-white">{{ (percentage * 100) | round(1) }}%</div>
-                                    <div class="w-full bg-slate-800 h-1 mt-1 rounded-full overflow-hidden">
-                                        <div class="h-full bg-purple-500" style="width: {{ (percentage * 100) | round }}%"></div>
+                                <td class="py-4 px-4 text-center data-font font-bold text-gray-400 text-sm">{{ count }}</td>
+                                <td class="py-4 px-8 text-right">
+                                    <div class="data-font font-black text-gray-900 text-sm">{{ (percentage * 100) | round(1) }}%</div>
+                                    <div class="w-full bg-gray-100 h-1.5 mt-2 rounded-full overflow-hidden border border-gray-200 shadow-inner">
+                                        <div class="h-full bg-rose-600" style="width: {{ (percentage * 100) | round }}%"></div>
                                     </div>
                                 </td>
                             </tr>
@@ -71,34 +77,38 @@
     {% endfor %}
 </div>
 
-<section class="mt-16">
-    <h3 class="text-2xl font-black mb-6 neon-text uppercase tracking-tight">Deck <span class="font-light text-slate-500">Log</span></h3>
-    <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 shadow-xl">
+<section class="mt-20">
+    <div class="flex items-center gap-4 mb-8">
+        <div class="w-2 h-10 bg-gray-800 rounded-full"></div>
+        <h3 class="text-4xl font-black text-gray-800 tracking-tighter uppercase card-title-font leading-none">Deck Archive</h3>
+    </div>
+    <div class="card-panel overflow-hidden">
+        <div class="card-accent-line opacity-50"></div>
         <table class="w-full text-left border-collapse">
             <thead>
-                <tr class="text-xs uppercase tracking-widest text-slate-500 bg-black/20 border-b border-white/5">
-                    <th class="py-4 px-6 font-semibold">Tournament ID</th>
-                    <th class="py-4 px-6 font-semibold text-center">Rank</th>
-                    <th class="py-4 px-6 font-semibold">Core Archetype</th>
+                <tr class="text-[11px] uppercase tracking-[0.25em] text-gray-500 bg-gray-50 font-black border-b-2 border-gray-200">
+                    <th class="py-6 px-10">Tournament Reference</th>
+                    <th class="py-6 px-10 text-center w-40">Final Position</th>
+                    <th class="py-6 px-10 border-l border-gray-200">Deck Archetype</th>
                 </tr>
             </thead>
-            <tbody class="text-sm divide-y divide-white/5">
+            <tbody class="text-sm divide-y divide-gray-100">
                 {% for info in deck_info|reverse %}
-                <tr class="hover:bg-white/5 transition-colors">
-                    <td class="py-4 px-6">
-                        <a href="{{ info[0] }}" class="data-font text-purple-400 hover:text-purple-300 font-bold underline decoration-purple-500/30 underline-offset-4">
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="py-6 px-10">
+                        <a href="{{ info[0] }}" class="data-font text-rose-600 hover:text-rose-700 font-black underline decoration-rose-200 decoration-2 underline-offset-4 text-base">
                             #{{ info[0].split('/')[-1] }}
                         </a>
                     </td>
-                    <td class="py-4 px-6 text-center">
-                        <span class="data-font font-bold px-3 py-1 bg-white/5 rounded text-slate-300">{{ info[5] }}</span>
+                    <td class="py-6 px-10 text-center">
+                        <span class="data-font font-black px-4 py-1.5 bg-gray-100 rounded text-gray-600 text-sm border border-gray-200 shadow-sm">{{ info[5] }}</span>
                     </td>
-                    <td class="py-4 px-6">
-                        <div class="flex items-center gap-2">
-                            <span class="font-bold text-white capitalize">{{ info[2] }}</span>
+                    <td class="py-6 px-10 border-l border-gray-200">
+                        <div class="flex items-center gap-3">
+                            <span class="font-black text-gray-900 capitalize card-title-font text-2xl tracking-tighter leading-none">{{ info[2] }}</span>
                             {% if info[3] %}
-                            <span class="text-slate-500 text-xs">+</span>
-                            <span class="text-slate-400 capitalize">{{ info[3] }}</span>
+                            <span class="text-gray-300 font-light text-3xl italic">/</span>
+                            <span class="text-gray-500 capitalize font-bold text-xl tracking-tight">{{ info[3] }}</span>
                             {% endif %}
                         </div>
                     </td>
