@@ -87,7 +87,7 @@ def clean_docs_folder():
                     os.remove(item_path)
     os.makedirs("docs", exist_ok=True)
 
-def generate_html_report(card_distributions, deck_info):
+def generate_html_report(card_distributions, deck_info, main_pokemon, secondary_pokemon, min_rank, deck_count):
     sorted_distributions = {}
     card_images = {}
     
@@ -125,7 +125,15 @@ def generate_html_report(card_distributions, deck_info):
     
     env = Environment(loader=FileSystemLoader('src/templates'))
     template = env.get_template('cluster_report.html')
-    return template.render(card_distributions=sorted_distributions, deck_info=deck_info, card_images=card_images)
+    return template.render(
+        card_distributions=sorted_distributions, 
+        deck_info=deck_info, 
+        card_images=card_images,
+        main_pokemon=main_pokemon,
+        secondary_pokemon=secondary_pokemon,
+        min_rank=min_rank,
+        deck_count=deck_count
+    )
 
 def generate_index_html(summaries):
     env = Environment(loader=FileSystemLoader('src/templates'))
@@ -148,7 +156,7 @@ if __name__ == "__main__":
         for min_rank in [1, 4, 8, 16]:
             filtered_cards, filtered_count, filtered_info = parse_decks(file_content, main_pokemon=main, secondary_pokemon=secondary, min_rank=min_rank)
             filtered_distributions = calculate_card_distribution(filtered_cards, filtered_count)
-            filtered_report = generate_html_report(filtered_distributions, filtered_info)
+            filtered_report = generate_html_report(filtered_distributions, filtered_info, main, secondary, min_rank, filtered_count)
 
             report_filename = f"{main}_{secondary}_top_{min_rank}.html".replace(" ", "_")
             with open("docs/" + report_filename, "w", encoding="utf-8") as f:
