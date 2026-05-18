@@ -144,6 +144,7 @@ if __name__ == "__main__":
     summaries = []
     for rank, ((main, secondary), count) in enumerate(top_combinations, start=1):
         report_links = {}
+        placement_counts = {}
         for min_rank in [1, 4, 8, 16]:
             filtered_cards, filtered_count, filtered_info = parse_decks(file_content, main_pokemon=main, secondary_pokemon=secondary, min_rank=min_rank)
             filtered_distributions = calculate_card_distribution(filtered_cards, filtered_count)
@@ -153,13 +154,15 @@ if __name__ == "__main__":
             with open("docs/" + report_filename, "w", encoding="utf-8") as f:
                 f.write(filtered_report)
             report_links[min_rank] = report_filename
+            placement_counts[min_rank] = filtered_count
         
         summaries.append({
             "rank": rank,
             "main": main,
             "secondary": secondary,
             "count": count,
-            "report_links": report_links
+            "report_links": report_links,
+            "placement_counts": placement_counts
         })
 
     index_html = generate_index_html(summaries)

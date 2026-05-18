@@ -2,122 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{% block title %}Pokémon TCG Analysis{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Pokémon TCG Deck Analytics{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:wght@600;700&family=Archivo:ital,wght@0,400;0,700;0,900;1,900&family=Cabin:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #9ca3af;
-            --bg-card-inner: #ffffff;
-            --text-main: #1f2937;
-            --accent-supporter: #e11d48;
-            --border-card: #4b5563;
+            --bg-body: #f8fafc;
+            --accent-primary: #3b82f6;
+            --accent-secondary: #0ea5e9;
         }
         body {
             background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: 'Cabin', sans-serif;
-            background-image: 
-                radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0),
-                radial-gradient(circle at center, #cbd5e1 0%, #9ca3af 100%);
-            background-size: 20px 20px, 100% 100%;
-            background-attachment: fixed;
-            overflow-y: scroll;
+            font-family: 'Inter', sans-serif;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
         }
-        h1, h2, h3, h4, .card-title-font {
-            font-family: 'Archivo Narrow', sans-serif;
-            font-weight: 700;
+        h1, h2, h3, h4, h5, h6, .heading-font {
+            font-family: 'Outfit', sans-serif;
         }
-        .data-font { font-family: 'JetBrains Mono', monospace; }
-        
-        .card-panel {
-            background: #ffffff;
-            border: 1px solid #d1d5db;
-            border-radius: 2px;
-            box-shadow: 
-                0 15px 25px -5px rgba(0, 0, 0, 0.05), 
-                0 8px 10px -6px rgba(0, 0, 0, 0.05),
-                inset 0 0 40px rgba(0,0,0,0.01);
-            position: relative;
+        .data-font {
+            font-family: 'JetBrains Mono', monospace;
         }
-        
-        /* Standardized Card Accent Line */
-        .card-accent-line {
-            height: 4px;
-            background-color: var(--accent-supporter);
-            width: 100%;
-            border-radius: 2px 2px 0 0;
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-radius: 1rem;
         }
-        
-        .table-row-hover { transition: background-color 0.15s ease; }
         .table-row-hover:hover {
-            background-color: #f9fafb;
+            background-color: rgba(241, 245, 249, 0.6);
         }
-        
         .badge-jp {
-            background: linear-gradient(135deg, #fde047 0%, #facc15 100%);
-            color: #713f12;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #fef08a 0%, #facc15 100%);
+            color: #854d0e;
         }
-        
-        .trainer-header-bar {
-            background: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
-            border-bottom: 4px solid var(--border-card);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-
-        .slanted-divider {
-            width: 3px;
-            height: 2rem;
-            background-color: #94a3b8;
-            transform: rotate(25deg);
-            margin: 0 1rem;
-        }
-
-        .supporter-label {
-            font-family: 'Archivo', sans-serif;
-            font-weight: 900;
-            font-style: italic;
-            text-transform: uppercase;
-            letter-spacing: -0.05em;
-            color: var(--accent-supporter);
-            font-size: 1.5rem;
-            line-height: 1;
+        .accent-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased pb-24">
-    <nav class="trainer-header-bar sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center">
-                <span class="supporter-label">Supporter</span>
-                <div class="slanted-divider"></div>
-                <a href="index.html" class="flex items-center gap-2">
-                    <span class="text-3xl font-black tracking-tighter text-gray-700 card-title-font">TRAINER</span>
-                </a>
-            </div>
-            <div class="flex items-center gap-8">
-                <div class="hidden md:flex items-center bg-white/60 px-4 py-1.5 rounded-sm border border-gray-300 shadow-inner">
-                    <span class="text-[10px] font-black uppercase tracking-[0.15em] text-gray-500">Source: Japanese City Leagues</span>
+<body class="min-h-screen flex flex-col pb-12 md:pb-24">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold heading-font text-lg shadow-md group-hover:shadow-lg transition-all">
+                    TCG
                 </div>
-                <div class="h-6 w-[1px] bg-gray-300"></div>
-                <a href="index.html" class="text-sm font-extrabold text-gray-600 hover:text-rose-600 transition-colors uppercase tracking-widest">Home</a>
+                <span class="text-xl font-bold heading-font text-slate-800 tracking-tight group-hover:opacity-80 transition-opacity">Meta<span class="text-indigo-600">Analyzer</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <div class="hidden md:flex items-center bg-slate-100 px-3 py-1 rounded-full text-xs font-medium text-slate-600 border border-slate-200">
+                    Source: Limitless TCG (JP)
+                </div>
+                <a href="index.html" class="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors">Dashboard</a>
             </div>
         </div>
     </nav>
-    <main class="max-w-7xl mx-auto px-8 mt-12 w-full">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 md:mt-12 w-full">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Global Card Preview -->
-    <div id="global-preview" class="fixed hidden z-[100] pointer-events-none rounded-xl shadow-2xl transition-all duration-200 opacity-0 bg-white p-1.5 border-4 border-gray-800" style="width: 320px;">
-        <div class="relative w-full aspect-[2.5/3.5] bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+    <div id="global-preview" class="fixed hidden z-[100] pointer-events-none rounded-xl shadow-2xl transition-all duration-200 opacity-0 bg-white p-1.5 border border-slate-200" style="width: 280px;">
+        <div class="relative w-full aspect-[2.5/3.5] bg-slate-100 rounded-lg overflow-hidden flex items-center justify-center">
              <img id="global-preview-img" class="w-full h-full object-contain" src="" alt="Card Preview">
              <div id="preview-loader" class="absolute inset-0 flex items-center justify-center bg-white/80">
-                 <div class="w-8 h-8 border-4 border-rose-600 border-t-transparent rounded-full animate-spin"></div>
+                 <div class="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
              </div>
         </div>
     </div>
@@ -128,8 +84,16 @@
             const previewImg = document.getElementById('global-preview-img');
             const loader = document.getElementById('preview-loader');
             
+            // Adjust preview width for larger screens
+            if(window.innerWidth >= 640) {
+                preview.style.width = '320px';
+            }
+            
             document.querySelectorAll('.card-preview-trigger').forEach(trigger => {
                 trigger.addEventListener('mouseenter', (e) => {
+                    // Disable hover images on mobile devices
+                    if (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768) return;
+
                     const imgUrl = e.target.dataset.image;
                     const fallbackUrl = e.target.dataset.fallback;
                     
@@ -152,14 +116,15 @@
                     }, 10);
                     
                     const rect = e.target.getBoundingClientRect();
-                    const previewHeight = 446;
+                    const previewHeight = window.innerWidth >= 640 ? 446 : 392; // Approximate heights based on width aspect ratio
+                    const previewWidth = window.innerWidth >= 640 ? 320 : 280;
                     
                     let top = rect.top - (previewHeight / 2) + (rect.height / 2);
                     top = Math.max(20, Math.min(top, window.innerHeight - previewHeight - 20));
                     
                     let left = rect.right + 24;
-                    if (left + 320 > window.innerWidth) {
-                        left = rect.left - 320 - 24;
+                    if (left + previewWidth > window.innerWidth) {
+                        left = rect.left - previewWidth - 24;
                     }
                     
                     preview.style.top = `${top}px`;
